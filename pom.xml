@@ -11,7 +11,8 @@
 	<groupId>com.online.shop</groupId>
 	<artifactId>online_shop</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>online_shop</name>
+    <packaging>pom</packaging>
+    <name>online_shop</name>
 	<description>Online shop for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -20,7 +21,14 @@
 	<developers>
 		<developer/>
 	</developers>
-	<scm>
+    <modules>
+        <module>repository</module>
+		<module>facade</module>
+		<module>service</module>
+		<module>liquibase</module>
+		<module>ui</module>
+	</modules>
+    <scm>
 		<connection/>
 		<developerConnection/>
 		<tag/>
