@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.28.xsd">
+
+    <changeSet id="create-table-goods" author="Kick704">
+        <createTable tableName="goods" remarks="Таблица товаров интернет-магазина">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="decimal(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="count" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="discount" type="decimal(3,2)"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="goods"
+                                 baseColumnNames="category_id"
+                                 constraintName="goods_category_id_goods_categories_id"
+                                 referencedTableName="goods_categories"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
