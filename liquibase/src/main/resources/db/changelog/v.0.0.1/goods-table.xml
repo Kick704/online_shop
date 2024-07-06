@@ -3,7 +3,7 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.28.xsd">
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
 
     <changeSet id="create-table-goods" author="Kick704">
         <createTable tableName="goods" remarks="Таблица товаров интернет-магазина">
@@ -16,13 +16,13 @@
             <column name="category_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="price" type="decimal(10,2)">
+            <column name="price" type="double">
                 <constraints nullable="false"/>
             </column>
             <column name="count" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="discount" type="decimal(3,2)"/>
+            <column name="discount" type="double"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="goods"
                                  baseColumnNames="category_id"
