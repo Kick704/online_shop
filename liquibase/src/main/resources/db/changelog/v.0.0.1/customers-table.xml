@@ -28,6 +28,9 @@
             <column name="balance" type="double" defaultValue="0">
                 <constraints nullable="false"/>
             </column>
+            <column name="registration_datetime" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
             <column name="enabled" type="tinyint(1)" defaultValue="1">
                 <constraints nullable="false"/>
             </column>

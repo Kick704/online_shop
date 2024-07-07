@@ -2,6 +2,7 @@ package entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -51,6 +52,13 @@ public class Customer {
      */
     @Column(name = "balance")
     private double balance;
+
+    /**
+     * Дата и время регистрации покупателя
+     * <p>Устанавливается на уровне БД в момент создания записи о покупателе
+     */
+    @Column(name = "registration_datetime")
+    private LocalDateTime registrationDateTime;
 
     /**
      * Статус аккаунта покупателя:
