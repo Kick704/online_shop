@@ -1,13 +1,15 @@
-package DAO;
+package com.online.shop.dao;
 
-import entity.Order;
+import com.online.shop.entity.Order;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     /**
@@ -34,5 +36,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
      */
     @Query(value = "SELECT o FROM Order o WHERE o.status = :status")
     List<Order> findAllOrdersByStatus(@Param("status") String status, Sort sort);
+
+    /**
+     * Удаление заказа по id
+     * @param id идентификатор заказа {@link int}
+     */
+    @Query(value = "DELETE o FROM Order o WHERE o.id = :id")
+    void deleteOrderById(@Param("id") int id);
 
 }

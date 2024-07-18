@@ -7,16 +7,19 @@
 
     <changeSet id="create-table-orders" author="Kick704">
         <createTable tableName="orders" remarks="Таблица заказов интернет-магазина">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" unique="true" nullable="false"/>
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="customer_id" type="bigint">
+            <column name="customer_id" type="UUID">
                 <constraints nullable="false"/>
             </column>
             <column name="amount" type="double">
                 <constraints nullable="false"/>
             </column>
-            <column name="creation_datetime" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="timestamp">
                 <constraints nullable="false"/>
             </column>
             <column name="delivery_address" type="varchar(255)">

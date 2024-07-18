@@ -1,13 +1,15 @@
-package DAO;
+package com.online.shop.dao;
 
-import entity.Goods;
+import com.online.shop.entity.Goods;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface GoodsRepository extends JpaRepository<Goods, Long> {
 
     /**
@@ -29,10 +31,16 @@ public interface GoodsRepository extends JpaRepository<Goods, Long> {
     /**
      * Выборка товаров по названию с сортировкой
      * @param name наименование товара {@link String}
-     * @param sort критерий сортировки {@link Sort}
      * @return {@link List} - список товаров по указанному наименованию, или {@code null}, если такого товара нет
      */
     @Query(value = "SELECT g FROM Goods g WHERE g.name = :name")
-    List<Goods> findAllGoodsByName(@Param("name") String name, Sort sort);
+    List<Goods> findAllGoodsByName(@Param("name") String name);
+
+    /**
+     * Удаление товара по id
+     * @param id идентификатор товара {@link int}
+     */
+    @Query(value = "DELETE g FROM Goods g WHERE g.id = :id")
+    void deleteGoodsById(@Param("id") int id);
 
 }

@@ -1,21 +1,27 @@
-package entity;
+package com.online.shop.entity;
 
+import com.online.shop.enums.OrderStatus;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Класс-сущность заказа из интернет-магазина
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "orders")
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private long id;
+    private UUID id;
 
     /**
      * Покупатель
@@ -31,11 +37,20 @@ public class Order {
     private double amount;
 
     /**
-     * Дата и время создания заказа
-     * <p>Устанавливается на уровне БД в момент создания записи о заказе
+     * Дата и время создания записи о заказе
+     * <p>Устанавливается на уровне БД в момент создания записи, неизменно
      */
-    @Column(name = "creation_datetime")
-    private LocalDateTime creationDateTime;
+    @CreatedDate
+    @Column(name = "created", updatable = false)
+    private LocalDateTime created;
+
+    /**
+     * Дата и время обновления записи о заказе
+     * <p>Устанавливается в момент обновления записи
+     */
+    @LastModifiedDate
+    @Column(name = "modified")
+    private LocalDateTime modified;
 
     /**
      * Адрес доставки товара, указанный покупателем
@@ -52,8 +67,9 @@ public class Order {
     /**
      * Статус заказа
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private OrderStatus status;
 
     /**
      * Список товаров в заказе
@@ -67,19 +83,19 @@ public class Order {
     public Order() {
     }
 
-    public Order(Customer customer, double amount, String deliveryAddress, String status, int receiptCode) {
+    public Order(Customer customer, double amount, String deliveryAddress, int receiptCode) {
         this.customer = customer;
         this.amount = amount;
         this.deliveryAddress = deliveryAddress;
-        this.status = status;
+        this.status = OrderStatus.CREATED;
         this.receiptCode = receiptCode;
     }
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -99,14 +115,6 @@ public class Order {
         this.amount = amount;
     }
 
-    public LocalDateTime getCreationDateTime() {
-        return creationDateTime;
-    }
-
-    public void setCreationDateTime(LocalDateTime creationDateTime) {
-        this.creationDateTime = creationDateTime;
-    }
-
     public String getDeliveryAddress() {
         return deliveryAddress;
     }
@@ -123,11 +131,11 @@ public class Order {
         this.receiptCode = receiptCode;
     }
 
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
@@ -139,4 +147,19 @@ public class Order {
         this.goodsInOrder = goodsInOrder;
     }
 
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public LocalDateTime getModified() {
+        return modified;
+    }
+
+    public void setModified(LocalDateTime modified) {
+        this.modified = modified;
+    }
 }

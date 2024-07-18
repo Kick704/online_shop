@@ -7,11 +7,17 @@
 
     <changeSet id="create-table-goods_categories" author="Kick704">
         <createTable tableName="goods_categories" remarks="Таблица категорий товаров интернет-магазина">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" unique="true" nullable="false"/>
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="category_name" type="varchar(255)">
                 <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="timestamp">
+                <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>

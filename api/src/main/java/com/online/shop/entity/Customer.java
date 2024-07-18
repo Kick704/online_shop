@@ -1,21 +1,32 @@
-package entity;
+package com.online.shop.entity;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Класс-сущность покупателя интернет-магазина
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "customers")
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private long id;
+    private UUID id;
+
+    /**
+     * Фамилия покупателя
+     */
+    @Column(name = "surname")
+    private String surname;
 
     /**
      * Имя покупателя
@@ -24,10 +35,10 @@ public class Customer {
     private String firstname;
 
     /**
-     * Фамилия покупателя
+     * Отчество покупателя
      */
-    @Column(name = "surname")
-    private String surname;
+    @Column(name = "patronymic")
+    private String patronymic;
 
     /**
      * Номер телефона покупателя
@@ -54,11 +65,20 @@ public class Customer {
     private double balance;
 
     /**
-     * Дата и время регистрации покупателя
-     * <p>Устанавливается на уровне БД в момент создания записи о покупателе
+     * Дата и время создания записи о покупателе
+     * <p>Устанавливается на уровне БД в момент создания записи, неизменно
      */
-    @Column(name = "registration_datetime")
-    private LocalDateTime registrationDateTime;
+    @CreatedDate
+    @Column(name = "created", updatable = false)
+    private LocalDateTime created;
+
+    /**
+     * Дата и время обновления записи о покупателе
+     * <p>Устанавливается в момент обновления записи
+     */
+    @LastModifiedDate
+    @Column(name = "modified")
+    private LocalDateTime modified;
 
     /**
      * Статус аккаунта покупателя:
@@ -95,11 +115,11 @@ public class Customer {
         this.password = password;
     }
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -175,4 +195,27 @@ public class Customer {
         this.cart = cart;
     }
 
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public LocalDateTime getModified() {
+        return modified;
+    }
+
+    public void setModified(LocalDateTime modified) {
+        this.modified = modified;
+    }
 }

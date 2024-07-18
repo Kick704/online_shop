@@ -1,13 +1,15 @@
-package DAO;
+package com.online.shop.dao;
 
-import entity.GoodsCategory;
+import com.online.shop.entity.GoodsCategory;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface GoodsCategoryRepository extends JpaRepository<GoodsCategory, Long> {
 
     /**
@@ -38,5 +40,12 @@ public interface GoodsCategoryRepository extends JpaRepository<GoodsCategory, Lo
      */
     @Query(value = "SELECT gc FROM GoodsCategory gc WHERE gc.name = :name")
     GoodsCategory findGoodsCategoryByName(@Param("name") String name);
+
+    /**
+     * Удаление категории товара по id
+     * @param id идентификатор категории товара {@link int}
+     */
+    @Query(value = "DELETE gc FROM GoodsCategory gc WHERE gc.id = :id")
+    void deleteGoodsCategoryById(@Param("id") int id);
 
 }

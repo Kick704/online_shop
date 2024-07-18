@@ -7,13 +7,16 @@
 
     <changeSet id="create-table-customers" author="Kick704">
         <createTable tableName="customers" remarks="Таблица покупателей интернет-магазина">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" unique="true" nullable="false"/>
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="surname" type="varchar(255)">
+                <constraints nullable="false"/>
             </column>
             <column name="firstname" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="surname" type="varchar(255)">
+            <column name="patronymic" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="phone_number" type="varchar(255)">
@@ -28,7 +31,10 @@
             <column name="balance" type="double" defaultValue="0">
                 <constraints nullable="false"/>
             </column>
-            <column name="registration_datetime" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="timestamp">
                 <constraints nullable="false"/>
             </column>
             <column name="enabled" type="tinyint(1)" defaultValue="1">

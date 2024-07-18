@@ -1,20 +1,26 @@
-package entity;
+package com.online.shop.entity;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Класс-сущность товара интернет-магазина
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "goods")
 public class Goods {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private long id;
+    private UUID id;
 
     /**
      * Наименование товара
@@ -25,7 +31,7 @@ public class Goods {
     /**
      * Категория товара
      */
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private GoodsCategory goodsCategory;
 
@@ -48,6 +54,22 @@ public class Goods {
     private double discount;
 
     /**
+     * Дата и время создания записи о товаре
+     * <p>Устанавливается на уровне БД в момент создания записи, неизменно
+     */
+    @CreatedDate
+    @Column(name = "created", updatable = false)
+    private LocalDateTime created;
+
+    /**
+     * Дата и время обновления записи о товаре
+     * <p>Устанавливается в момент обновления записи
+     */
+    @LastModifiedDate
+    @Column(name = "modified")
+    private LocalDateTime modified;
+
+    /**
      * Список заказов, в которых присутствует данный товар
      */
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -67,11 +89,11 @@ public class Goods {
         this.discount = discount;
     }
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -123,4 +145,19 @@ public class Goods {
         this.ordersWithThisGoods = ordersWithThisGoods;
     }
 
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public LocalDateTime getModified() {
+        return modified;
+    }
+
+    public void setModified(LocalDateTime modified) {
+        this.modified = modified;
+    }
 }
