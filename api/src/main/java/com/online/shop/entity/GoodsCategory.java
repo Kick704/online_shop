@@ -1,13 +1,11 @@
 package com.online.shop.entity;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
 
 /**
  * Класс-сущность категории товара интернет-магазина
@@ -15,12 +13,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "goods_categories")
-public class GoodsCategory {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
-    private UUID id;
+public class GoodsCategory extends AbstractEntity{
 
     /**
      * Наименование категории товара
@@ -29,41 +22,16 @@ public class GoodsCategory {
     private String categoryName;
 
     /**
-     * Дата и время создания записи о категории товара
-     * <p>Устанавливается на уровне БД в момент создания записи, неизменно
-     */
-    @CreatedDate
-    @Column(name = "created", updatable = false)
-    private LocalDateTime created;
-
-    /**
-     * Дата и время обновления записи о категории товара
-     * <p>Устанавливается в момент обновления записи
-     */
-    @LastModifiedDate
-    @Column(name = "modified")
-    private LocalDateTime modified;
-
-    /**
      * Список товаров данной категории
      */
-    @OneToMany(mappedBy = "goodsCategory",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "goodsCategory")
     private List<Goods> goodsInThisCategory;
 
-    public GoodsCategory() {
+    protected GoodsCategory() {
     }
 
-    public GoodsCategory(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
+    private GoodsCategory(@NotNull GoodsCategoryBuilder categoryBuilder) {
+        this.categoryName = categoryBuilder.categoryName;
     }
 
     public String getCategoryName() {
@@ -82,19 +50,40 @@ public class GoodsCategory {
         this.goodsInThisCategory = goodsInThisCategory;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GoodsCategory that = (GoodsCategory) o;
+        return Objects.equals(categoryName, that.categoryName) &&
+                Objects.equals(goodsInThisCategory, that.goodsInThisCategory);
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    @Override
+    public int hashCode() {
+        return Objects.hash(categoryName, goodsInThisCategory);
     }
 
-    public LocalDateTime getModified() {
-        return modified;
+    @Override
+    public String toString() {
+        return "GoodsCategory{" +
+                "categoryName='" + categoryName + '\'' +
+                ", goodsInThisCategory=" + goodsInThisCategory +
+                '}';
     }
 
-    public void setModified(LocalDateTime modified) {
-        this.modified = modified;
+    public static class GoodsCategoryBuilder {
+
+        //Обязательно
+        private final String categoryName;
+
+        public GoodsCategoryBuilder(String categoryName) {
+            this.categoryName = categoryName;
+        }
+
+        public GoodsCategory build() {
+            return new GoodsCategory(this);
+        }
     }
+
 }

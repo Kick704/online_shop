@@ -3,7 +3,7 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
     <changeSet id="create-table-customers" author="Kick704">
         <createTable tableName="customers" remarks="Таблица покупателей интернет-магазина">
@@ -16,9 +16,7 @@
             <column name="firstname" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="patronymic" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="patronymic" type="varchar(255)"/>
             <column name="phone_number" type="varchar(255)">
                 <constraints unique="true" nullable="false"/>
             </column>
@@ -28,7 +26,7 @@
             <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="balance" type="double" defaultValue="0">
+            <column name="balance" type="double" defaultValue="0.0">
                 <constraints nullable="false"/>
             </column>
             <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">

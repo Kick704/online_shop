@@ -1,13 +1,11 @@
 package com.online.shop.entity;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
 
 /**
  * Класс-сущность товара интернет-магазина
@@ -15,12 +13,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "goods")
-public class Goods {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
-    private UUID id;
+public class Goods extends AbstractEntity {
 
     /**
      * Наименование товара
@@ -54,47 +47,23 @@ public class Goods {
     private double discount;
 
     /**
-     * Дата и время создания записи о товаре
-     * <p>Устанавливается на уровне БД в момент создания записи, неизменно
-     */
-    @CreatedDate
-    @Column(name = "created", updatable = false)
-    private LocalDateTime created;
-
-    /**
-     * Дата и время обновления записи о товаре
-     * <p>Устанавливается в момент обновления записи
-     */
-    @LastModifiedDate
-    @Column(name = "modified")
-    private LocalDateTime modified;
-
-    /**
      * Список заказов, в которых присутствует данный товар
      */
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany
     @JoinTable(name = "order_item",
             joinColumns = @JoinColumn(name = "goods_id"),
             inverseJoinColumns = @JoinColumn(name = "order_id"))
     private List<Order> ordersWithThisGoods;
 
-    public Goods() {
+    protected Goods() {
     }
 
-    public Goods(String name, GoodsCategory goodsCategory, double price, int count, double discount) {
-        this.name = name;
-        this.goodsCategory = goodsCategory;
-        this.price = price;
-        this.count = count;
-        this.discount = discount;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
+    private Goods(@NotNull GoodsBuilder goodsBuilder) {
+        this.name = goodsBuilder.name;
+        this.goodsCategory = goodsBuilder.goodsCategory;
+        this.price = goodsBuilder.price;
+        this.count = goodsBuilder.count;
+        this.discount = goodsBuilder.discount;
     }
 
     public String getName() {
@@ -145,19 +114,61 @@ public class Goods {
         this.ordersWithThisGoods = ordersWithThisGoods;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Goods goods = (Goods) o;
+        return Double.compare(price, goods.price) == 0 && count == goods.count &&
+                Double.compare(discount, goods.discount) == 0 &&
+                Objects.equals(name, goods.name) &&
+                Objects.equals(goodsCategory, goods.goodsCategory) &&
+                Objects.equals(ordersWithThisGoods, goods.ordersWithThisGoods);
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, goodsCategory, price, count, discount, ordersWithThisGoods);
     }
 
-    public LocalDateTime getModified() {
-        return modified;
+    @Override
+    public String toString() {
+        return "Goods{" +
+                "name='" + name + '\'' +
+                ", goodsCategory=" + goodsCategory +
+                ", price=" + price +
+                ", count=" + count +
+                ", discount=" + discount +
+                ", ordersWithThisGoods=" + ordersWithThisGoods +
+                '}';
     }
 
-    public void setModified(LocalDateTime modified) {
-        this.modified = modified;
+    public static class GoodsBuilder {
+
+        //Обязательно
+        private final String name;
+        private final GoodsCategory goodsCategory;
+        private final double price;
+        private final int count;
+
+        // Опционально
+        private double discount;
+
+        public GoodsBuilder(String name, GoodsCategory goodsCategory, double price, int count) {
+            this.name = name;
+            this.goodsCategory = goodsCategory;
+            this.price = price;
+            this.count = count;
+        }
+
+        public GoodsBuilder setDiscount(double discount) {
+            this.discount = discount;
+            return this;
+        }
+
+        public Goods build() {
+            return new Goods(this);
+        }
     }
+
 }

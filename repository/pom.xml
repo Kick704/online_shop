@@ -19,12 +19,10 @@
         <dependency>
             <groupId>com.online.shop</groupId>
             <artifactId>api</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.online.shop</groupId>
             <artifactId>liquibase</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 

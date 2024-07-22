@@ -1,13 +1,11 @@
 package com.online.shop.entity;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
 
 /**
  * Класс-сущность покупателя интернет-магазина
@@ -15,12 +13,7 @@ import java.util.UUID;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "customers")
-public class Customer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
-    private UUID id;
+public class Customer extends AbstractEntity{
 
     /**
      * Фамилия покупателя
@@ -60,31 +53,16 @@ public class Customer {
 
     /**
      * Баланс покупателя
+     * <p>При создании на уровне БД устанавливается {@code 0.0}
      */
     @Column(name = "balance")
     private double balance;
 
     /**
-     * Дата и время создания записи о покупателе
-     * <p>Устанавливается на уровне БД в момент создания записи, неизменно
-     */
-    @CreatedDate
-    @Column(name = "created", updatable = false)
-    private LocalDateTime created;
-
-    /**
-     * Дата и время обновления записи о покупателе
-     * <p>Устанавливается в момент обновления записи
-     */
-    @LastModifiedDate
-    @Column(name = "modified")
-    private LocalDateTime modified;
-
-    /**
      * Статус аккаунта покупателя:
      * <p>0 - заблокирован
      * <p>1 - активен
-     * <p>При создании устанавливается 0
+     * <p>При создании на уровне БД устанавливается {@code 1}
      */
     @Column(name = "enabled")
     private boolean enabled;
@@ -92,35 +70,28 @@ public class Customer {
     /**
      * Список заказов покупателя
      */
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer")
     private List<Order> orders;
 
     /**
      * Корзина покупателя
      */
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     @JoinTable(name = "cart",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "goods_id"))
-    private List<Goods> cart;
+    private List<Goods> goodsInCart;
 
-    public Customer() {
+    protected Customer() {
     }
 
-    public Customer(String firstname, String surname, String phoneNumber, String email, String password) {
-        this.firstname = firstname;
-        this.surname = surname;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.password = password;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
+    private Customer(@NotNull CustomerBuilder customerBuilder) {
+        this.firstname = customerBuilder.firstname;
+        this.surname = customerBuilder.surname;
+        this.patronymic = customerBuilder.patronymic;
+        this.phoneNumber = customerBuilder.phoneNumber;
+        this.email = customerBuilder.email;
+        this.password = customerBuilder.password;
     }
 
     public String getFirstname() {
@@ -188,11 +159,11 @@ public class Customer {
     }
 
     public List<Goods> getCart() {
-        return cart;
+        return goodsInCart;
     }
 
-    public void setCart(List<Goods> cart) {
-        this.cart = cart;
+    public void setCart(List<Goods> goodsInCart) {
+        this.goodsInCart = goodsInCart;
     }
 
     public String getPatronymic() {
@@ -203,19 +174,68 @@ public class Customer {
         this.patronymic = patronymic;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return Double.compare(balance, customer.balance) == 0 && enabled == customer.enabled &&
+                Objects.equals(surname, customer.surname) && Objects.equals(firstname, customer.firstname) &&
+                Objects.equals(patronymic, customer.patronymic) && Objects.equals(phoneNumber, customer.phoneNumber) &&
+                Objects.equals(email, customer.email) && Objects.equals(password, customer.password) &&
+                Objects.equals(orders, customer.orders) && Objects.equals(goodsInCart, customer.goodsInCart);
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    @Override
+    public int hashCode() {
+        return Objects.hash(surname, firstname, patronymic, phoneNumber, email, password, balance, enabled, orders,
+                goodsInCart);
     }
 
-    public LocalDateTime getModified() {
-        return modified;
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "surname='" + surname + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", balance=" + balance +
+                ", enabled=" + enabled +
+                ", orders=" + orders +
+                ", goodsInCart=" + goodsInCart +
+                '}';
     }
 
-    public void setModified(LocalDateTime modified) {
-        this.modified = modified;
+    public static class CustomerBuilder{
+
+        // Обязательно
+        private final String surname;
+        private final String firstname;
+        private final String phoneNumber;
+        private final String email;
+        private final String password;
+
+        // Опционально
+        private String patronymic;
+
+        public CustomerBuilder(String surname, String firstname, String phoneNumber, String email, String password) {
+            this.surname = surname;
+            this.firstname = firstname;
+            this.phoneNumber = phoneNumber;
+            this.email = email;
+            this.password = password;
+        }
+
+        public CustomerBuilder setPatronymic(String patronymic) {
+            this.patronymic = patronymic;
+            return this;
+        }
+
+        public Customer build() {
+            return new Customer(this);
+        }
     }
+
 }

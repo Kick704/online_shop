@@ -2,13 +2,11 @@ package com.online.shop.entity;
 
 import com.online.shop.enums.OrderStatus;
 import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
 
 /**
  * Класс-сущность заказа из интернет-магазина
@@ -16,17 +14,12 @@ import java.util.UUID;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "orders")
-public class Order {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
-    private UUID id;
+public class Order extends AbstractEntity{
 
     /**
      * Покупатель
      */
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
@@ -35,22 +28,6 @@ public class Order {
      */
     @Column(name = "amount")
     private double amount;
-
-    /**
-     * Дата и время создания записи о заказе
-     * <p>Устанавливается на уровне БД в момент создания записи, неизменно
-     */
-    @CreatedDate
-    @Column(name = "created", updatable = false)
-    private LocalDateTime created;
-
-    /**
-     * Дата и время обновления записи о заказе
-     * <p>Устанавливается в момент обновления записи
-     */
-    @LastModifiedDate
-    @Column(name = "modified")
-    private LocalDateTime modified;
 
     /**
      * Адрес доставки товара, указанный покупателем
@@ -66,6 +43,7 @@ public class Order {
 
     /**
      * Статус заказа
+     * <p>При создании на уровне приложения устанавливается {@code CREATED}
      */
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -74,29 +52,21 @@ public class Order {
     /**
      * Список товаров в заказе
      */
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany
     @JoinTable(name = "order_item",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "goods_id"))
     private List<Goods> goodsInOrder;
 
-    public Order() {
+    protected Order() {
     }
 
-    public Order(Customer customer, double amount, String deliveryAddress, int receiptCode) {
-        this.customer = customer;
-        this.amount = amount;
-        this.deliveryAddress = deliveryAddress;
+    private Order(@NotNull OrderBuilder orderBuilder) {
+        this.customer = orderBuilder.customer;
+        this.amount = orderBuilder.amount;
+        this.deliveryAddress = orderBuilder.deliveryAddress;
+        this.receiptCode = orderBuilder.receiptCode;
         this.status = OrderStatus.CREATED;
-        this.receiptCode = receiptCode;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public Customer getCustomer() {
@@ -147,19 +117,54 @@ public class Order {
         this.goodsInOrder = goodsInOrder;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return Double.compare(amount, order.amount) == 0 &&
+                receiptCode == order.receiptCode &&
+                Objects.equals(customer, order.customer) &&
+                Objects.equals(deliveryAddress, order.deliveryAddress) &&
+                status == order.status &&
+                Objects.equals(goodsInOrder, order.goodsInOrder);
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
+    @Override
+    public int hashCode() {
+        return Objects.hash(customer, amount, deliveryAddress, receiptCode, status, goodsInOrder);
     }
 
-    public LocalDateTime getModified() {
-        return modified;
+    @Override
+    public String toString() {
+        return "Order{" +
+                "customer=" + customer +
+                ", amount=" + amount +
+                ", deliveryAddress='" + deliveryAddress + '\'' +
+                ", receiptCode=" + receiptCode +
+                ", status=" + status +
+                ", goodsInOrder=" + goodsInOrder +
+                '}';
     }
 
-    public void setModified(LocalDateTime modified) {
-        this.modified = modified;
+    public static class OrderBuilder{
+
+        // Обязательно
+        private final Customer customer;
+        private final double amount;
+        private final String deliveryAddress;
+        private final int receiptCode;
+
+        public OrderBuilder(Customer customer, double amount, String deliveryAddress, int receiptCode) {
+            this.customer = customer;
+            this.amount = amount;
+            this.deliveryAddress = deliveryAddress;
+            this.receiptCode = receiptCode;
+        }
+
+        public Order build() {
+            return new Order(this);
+        }
     }
+
 }
