@@ -61,12 +61,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.jetbrains</groupId>
-                <artifactId>annotations</artifactId>
-                <version>24.0.0</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
                 <groupId>com.online.shop</groupId>
                 <artifactId>api</artifactId>
                 <version>${project.parent.version}</version>
@@ -90,7 +84,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>application/src/main/java/com/online/shop/online_shop/OnlineShopApplication.java</mainClass>
+                    <mainClass>application/src/main/java/com/online/shop/online_shop/OnlineShopApplication.java
+                    </mainClass>
                 </configuration>
             </plugin>
         </plugins>

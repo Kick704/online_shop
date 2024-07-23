@@ -1,9 +1,8 @@
 package com.online.shop.entity;
 
 import com.online.shop.enums.OrderStatus;
+import com.online.shop.exception.UninitializedFieldException;
 import jakarta.persistence.*;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,9 +11,8 @@ import java.util.Objects;
  * Класс-сущность заказа из интернет-магазина
  */
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "orders")
-public class Order extends AbstractEntity{
+public class Order extends AbstractEntity {
 
     /**
      * Покупатель
@@ -58,15 +56,15 @@ public class Order extends AbstractEntity{
             inverseJoinColumns = @JoinColumn(name = "goods_id"))
     private List<Goods> goodsInOrder;
 
-    protected Order() {
+    public Order() {
     }
 
-    private Order(@NotNull OrderBuilder orderBuilder) {
-        this.customer = orderBuilder.customer;
-        this.amount = orderBuilder.amount;
-        this.deliveryAddress = orderBuilder.deliveryAddress;
-        this.receiptCode = orderBuilder.receiptCode;
-        this.status = OrderStatus.CREATED;
+    private Order(Builder builder) {
+        setCustomer(builder.customer);
+        setAmount(builder.amount);
+        setDeliveryAddress(builder.deliveryAddress);
+        setReceiptCode(builder.receiptCode);
+        status = OrderStatus.CREATED;
     }
 
     public Customer getCustomer() {
@@ -122,7 +120,8 @@ public class Order extends AbstractEntity{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return Double.compare(amount, order.amount) == 0 &&
+        return Objects.equals(getId(), order.getId()) &&
+                Double.compare(amount, order.amount) == 0 &&
                 receiptCode == order.receiptCode &&
                 Objects.equals(customer, order.customer) &&
                 Objects.equals(deliveryAddress, order.deliveryAddress) &&
@@ -132,13 +131,14 @@ public class Order extends AbstractEntity{
 
     @Override
     public int hashCode() {
-        return Objects.hash(customer, amount, deliveryAddress, receiptCode, status, goodsInOrder);
+        return Objects.hash(getId(), customer, amount, deliveryAddress, receiptCode, status, goodsInOrder);
     }
 
     @Override
     public String toString() {
         return "Order{" +
-                "customer=" + customer +
+                "id=" + getId() +
+                ", customer=" + customer +
                 ", amount=" + amount +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 ", receiptCode=" + receiptCode +
@@ -147,24 +147,45 @@ public class Order extends AbstractEntity{
                 '}';
     }
 
-    public static class OrderBuilder{
 
-        // Обязательно
-        private final Customer customer;
-        private final double amount;
-        private final String deliveryAddress;
-        private final int receiptCode;
+    public static final class Builder {
+        private Customer customer;
+        private double amount;
+        private String deliveryAddress;
+        private int receiptCode;
 
-        public OrderBuilder(Customer customer, double amount, String deliveryAddress, int receiptCode) {
-            this.customer = customer;
-            this.amount = amount;
-            this.deliveryAddress = deliveryAddress;
-            this.receiptCode = receiptCode;
+        private Builder() {
+        }
+
+        public static Builder newBuilder() {
+            return new Builder();
+        }
+
+        public Builder customer(Customer val) {
+            customer = val;
+            return this;
+        }
+
+        public Builder amount(double val) {
+            amount = val;
+            return this;
+        }
+
+        public Builder deliveryAddress(String val) {
+            deliveryAddress = val;
+            return this;
+        }
+
+        public Builder receiptCode(int val) {
+            receiptCode = val;
+            return this;
         }
 
         public Order build() {
+            if (customer == null && deliveryAddress == null) {
+                throw new UninitializedFieldException();
+            }
             return new Order(this);
         }
     }
-
 }

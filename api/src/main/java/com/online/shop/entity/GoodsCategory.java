@@ -1,8 +1,7 @@
 package com.online.shop.entity;
 
+import com.online.shop.exception.UninitializedFieldException;
 import jakarta.persistence.*;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
 import java.util.Objects;
@@ -11,9 +10,8 @@ import java.util.Objects;
  * Класс-сущность категории товара интернет-магазина
  */
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "goods_categories")
-public class GoodsCategory extends AbstractEntity{
+public class GoodsCategory extends AbstractEntity {
 
     /**
      * Наименование категории товара
@@ -27,11 +25,11 @@ public class GoodsCategory extends AbstractEntity{
     @OneToMany(mappedBy = "goodsCategory")
     private List<Goods> goodsInThisCategory;
 
-    protected GoodsCategory() {
+    public GoodsCategory() {
     }
 
-    private GoodsCategory(@NotNull GoodsCategoryBuilder categoryBuilder) {
-        this.categoryName = categoryBuilder.categoryName;
+    private GoodsCategory(Builder builder) {
+        setCategoryName(builder.categoryName);
     }
 
     public String getCategoryName() {
@@ -55,35 +53,48 @@ public class GoodsCategory extends AbstractEntity{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GoodsCategory that = (GoodsCategory) o;
-        return Objects.equals(categoryName, that.categoryName) &&
+        return Objects.equals(getId(), that.getId()) &&
+                Objects.equals(categoryName, that.categoryName) &&
                 Objects.equals(goodsInThisCategory, that.goodsInThisCategory);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(categoryName, goodsInThisCategory);
+        return Objects.hash(getId(), categoryName, goodsInThisCategory);
     }
 
     @Override
     public String toString() {
         return "GoodsCategory{" +
-                "categoryName='" + categoryName + '\'' +
+                "id=" + getId() +
+                ", categoryName='" + categoryName + '\'' +
                 ", goodsInThisCategory=" + goodsInThisCategory +
                 '}';
     }
 
-    public static class GoodsCategoryBuilder {
 
-        //Обязательно
-        private final String categoryName;
+    public static final class Builder {
+        private String categoryName;
 
-        public GoodsCategoryBuilder(String categoryName) {
-            this.categoryName = categoryName;
+        private Builder() {
+        }
+
+        public static Builder newBuilder() {
+            return new Builder();
+        }
+
+        public Builder categoryName(String val) {
+            categoryName = val;
+            return this;
         }
 
         public GoodsCategory build() {
+            if (categoryName == null) {
+                throw new UninitializedFieldException();
+            }
             return new GoodsCategory(this);
         }
     }
 
 }
+

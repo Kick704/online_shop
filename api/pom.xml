@@ -12,11 +12,4 @@
 
     <artifactId>api</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-        </dependency>
-    </dependencies>
-
 </project>

@@ -1,8 +1,7 @@
 package com.online.shop.entity;
 
+import com.online.shop.exception.UninitializedFieldException;
 import jakarta.persistence.*;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
 import java.util.Objects;
@@ -11,9 +10,8 @@ import java.util.Objects;
  * Класс-сущность покупателя интернет-магазина
  */
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "customers")
-public class Customer extends AbstractEntity{
+public class Customer extends AbstractEntity {
 
     /**
      * Фамилия покупателя
@@ -82,16 +80,16 @@ public class Customer extends AbstractEntity{
             inverseJoinColumns = @JoinColumn(name = "goods_id"))
     private List<Goods> goodsInCart;
 
-    protected Customer() {
+    public Customer() {
     }
 
-    private Customer(@NotNull CustomerBuilder customerBuilder) {
-        this.firstname = customerBuilder.firstname;
-        this.surname = customerBuilder.surname;
-        this.patronymic = customerBuilder.patronymic;
-        this.phoneNumber = customerBuilder.phoneNumber;
-        this.email = customerBuilder.email;
-        this.password = customerBuilder.password;
+    private Customer(Builder builder) {
+        setSurname(builder.surname);
+        setFirstname(builder.firstname);
+        setPatronymic(builder.patronymic);
+        setPhoneNumber(builder.phoneNumber);
+        setEmail(builder.email);
+        setPassword(builder.password);
     }
 
     public String getFirstname() {
@@ -179,7 +177,8 @@ public class Customer extends AbstractEntity{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return Double.compare(balance, customer.balance) == 0 && enabled == customer.enabled &&
+        return Objects.equals(getId(), customer.getId()) &&
+                Double.compare(balance, customer.balance) == 0 && enabled == customer.enabled &&
                 Objects.equals(surname, customer.surname) && Objects.equals(firstname, customer.firstname) &&
                 Objects.equals(patronymic, customer.patronymic) && Objects.equals(phoneNumber, customer.phoneNumber) &&
                 Objects.equals(email, customer.email) && Objects.equals(password, customer.password) &&
@@ -188,14 +187,15 @@ public class Customer extends AbstractEntity{
 
     @Override
     public int hashCode() {
-        return Objects.hash(surname, firstname, patronymic, phoneNumber, email, password, balance, enabled, orders,
-                goodsInCart);
+        return Objects.hash(getId(), surname, firstname, patronymic, phoneNumber, email, password, balance, enabled,
+                orders, goodsInCart);
     }
 
     @Override
     public String toString() {
         return "Customer{" +
-                "surname='" + surname + '\'' +
+                "id=" + getId() +
+                ", surname='" + surname + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", patronymic='" + patronymic + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
@@ -208,34 +208,57 @@ public class Customer extends AbstractEntity{
                 '}';
     }
 
-    public static class CustomerBuilder{
 
-        // Обязательно
-        private final String surname;
-        private final String firstname;
-        private final String phoneNumber;
-        private final String email;
-        private final String password;
-
-        // Опционально
+    public static final class Builder {
+        private String surname;
+        private String firstname;
         private String patronymic;
+        private String phoneNumber;
+        private String email;
+        private String password;
 
-        public CustomerBuilder(String surname, String firstname, String phoneNumber, String email, String password) {
-            this.surname = surname;
-            this.firstname = firstname;
-            this.phoneNumber = phoneNumber;
-            this.email = email;
-            this.password = password;
+        private Builder() {
         }
 
-        public CustomerBuilder setPatronymic(String patronymic) {
-            this.patronymic = patronymic;
+        public static Builder newBuilder() {
+            return new Builder();
+        }
+
+        public Builder surname(String val) {
+            surname = val;
+            return this;
+        }
+
+        public Builder firstname(String val) {
+            firstname = val;
+            return this;
+        }
+
+        public Builder patronymic(String val) {
+            patronymic = val;
+            return this;
+        }
+
+        public Builder phoneNumber(String val) {
+            phoneNumber = val;
+            return this;
+        }
+
+        public Builder email(String val) {
+            email = val;
+            return this;
+        }
+
+        public Builder password(String val) {
+            password = val;
             return this;
         }
 
         public Customer build() {
+            if (surname == null && firstname == null && phoneNumber == null && email == null && password == null) {
+                throw new UninitializedFieldException();
+            }
             return new Customer(this);
         }
     }
-
 }

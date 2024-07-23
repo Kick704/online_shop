@@ -22,7 +22,9 @@
             <column name="count" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="discount" type="double"/>
+            <column name="discount" type="double">
+                <constraints nullable="false"/>
+            </column>
             <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>

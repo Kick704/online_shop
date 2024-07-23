@@ -1,8 +1,7 @@
 package com.online.shop.entity;
 
+import com.online.shop.exception.UninitializedFieldException;
 import jakarta.persistence.*;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
 import java.util.Objects;
@@ -11,7 +10,6 @@ import java.util.Objects;
  * Класс-сущность товара интернет-магазина
  */
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "goods")
 public class Goods extends AbstractEntity {
 
@@ -55,15 +53,15 @@ public class Goods extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "order_id"))
     private List<Order> ordersWithThisGoods;
 
-    protected Goods() {
+    public Goods() {
     }
 
-    private Goods(@NotNull GoodsBuilder goodsBuilder) {
-        this.name = goodsBuilder.name;
-        this.goodsCategory = goodsBuilder.goodsCategory;
-        this.price = goodsBuilder.price;
-        this.count = goodsBuilder.count;
-        this.discount = goodsBuilder.discount;
+    private Goods(Builder builder) {
+        setName(builder.name);
+        setGoodsCategory(builder.goodsCategory);
+        setPrice(builder.price);
+        setCount(builder.count);
+        setDiscount(builder.discount);
     }
 
     public String getName() {
@@ -119,7 +117,8 @@ public class Goods extends AbstractEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Goods goods = (Goods) o;
-        return Double.compare(price, goods.price) == 0 && count == goods.count &&
+        return Objects.equals(getId(), goods.getId()) &&
+                Double.compare(price, goods.price) == 0 && count == goods.count &&
                 Double.compare(discount, goods.discount) == 0 &&
                 Objects.equals(name, goods.name) &&
                 Objects.equals(goodsCategory, goods.goodsCategory) &&
@@ -128,13 +127,14 @@ public class Goods extends AbstractEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, goodsCategory, price, count, discount, ordersWithThisGoods);
+        return Objects.hash(getId(), name, goodsCategory, price, count, discount, ordersWithThisGoods);
     }
 
     @Override
     public String toString() {
         return "Goods{" +
-                "name='" + name + '\'' +
+                "id=" + getId() +
+                ", name='" + name + '\'' +
                 ", goodsCategory=" + goodsCategory +
                 ", price=" + price +
                 ", count=" + count +
@@ -143,32 +143,51 @@ public class Goods extends AbstractEntity {
                 '}';
     }
 
-    public static class GoodsBuilder {
 
-        //Обязательно
-        private final String name;
-        private final GoodsCategory goodsCategory;
-        private final double price;
-        private final int count;
-
-        // Опционально
+    public static final class Builder {
+        private String name;
+        private GoodsCategory goodsCategory;
+        private double price;
+        private int count;
         private double discount;
 
-        public GoodsBuilder(String name, GoodsCategory goodsCategory, double price, int count) {
-            this.name = name;
-            this.goodsCategory = goodsCategory;
-            this.price = price;
-            this.count = count;
+        private Builder() {
         }
 
-        public GoodsBuilder setDiscount(double discount) {
-            this.discount = discount;
+        public static Builder newBuilder() {
+            return new Builder();
+        }
+
+        public Builder name(String val) {
+            name = val;
+            return this;
+        }
+
+        public Builder goodsCategory(GoodsCategory val) {
+            goodsCategory = val;
+            return this;
+        }
+
+        public Builder price(double val) {
+            price = val;
+            return this;
+        }
+
+        public Builder count(int val) {
+            count = val;
+            return this;
+        }
+
+        public Builder discount(double val) {
+            discount = val;
             return this;
         }
 
         public Goods build() {
+            if (name == null && goodsCategory == null) {
+                throw new UninitializedFieldException();
+            }
             return new Goods(this);
         }
     }
-
 }
