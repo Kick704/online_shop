@@ -10,5 +10,15 @@
     </parent>
 
     <artifactId>service</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.online.shop</groupId>
+            <artifactId>api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.online.shop</groupId>
+            <artifactId>repository</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

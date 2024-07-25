@@ -11,4 +11,15 @@
 
     <artifactId>facade</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.online.shop</groupId>
+            <artifactId>api</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>
