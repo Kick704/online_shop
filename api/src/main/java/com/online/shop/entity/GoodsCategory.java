@@ -1,6 +1,6 @@
 package com.online.shop.entity;
 
-import com.online.shop.exception.UninitializedFieldException;
+import com.online.shop.exception.UninitializedBuilderFieldException;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -53,22 +53,20 @@ public class GoodsCategory extends AbstractEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GoodsCategory that = (GoodsCategory) o;
-        return Objects.equals(getId(), that.getId()) &&
-                Objects.equals(categoryName, that.categoryName) &&
-                Objects.equals(goodsInThisCategory, that.goodsInThisCategory);
+        return Objects.equals(id, that.id) &&
+                Objects.equals(categoryName, that.categoryName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), categoryName, goodsInThisCategory);
+        return Objects.hash(id, categoryName);
     }
 
     @Override
     public String toString() {
         return "GoodsCategory{" +
-                "id=" + getId() +
+                "id=" + id +
                 ", categoryName='" + categoryName + '\'' +
-                ", goodsInThisCategory=" + goodsInThisCategory +
                 '}';
     }
 
@@ -90,7 +88,7 @@ public class GoodsCategory extends AbstractEntity {
 
         public GoodsCategory build() {
             if (categoryName == null) {
-                throw new UninitializedFieldException();
+                throw new UninitializedBuilderFieldException("GoodsCategory: поле categoryName ссылается на null");
             }
             return new GoodsCategory(this);
         }

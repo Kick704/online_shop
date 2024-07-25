@@ -1,6 +1,6 @@
 package com.online.shop.entity;
 
-import com.online.shop.exception.UninitializedFieldException;
+import com.online.shop.exception.UninitializedBuilderFieldException;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -117,29 +117,28 @@ public class Goods extends AbstractEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Goods goods = (Goods) o;
-        return Objects.equals(getId(), goods.getId()) &&
-                Double.compare(price, goods.price) == 0 && count == goods.count &&
+        return Objects.equals(id, goods.id) &&
+                Double.compare(price, goods.price) == 0 &&
+                count == goods.count &&
                 Double.compare(discount, goods.discount) == 0 &&
                 Objects.equals(name, goods.name) &&
-                Objects.equals(goodsCategory, goods.goodsCategory) &&
-                Objects.equals(ordersWithThisGoods, goods.ordersWithThisGoods);
+                Objects.equals(goodsCategory, goods.goodsCategory);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), name, goodsCategory, price, count, discount, ordersWithThisGoods);
+        return Objects.hash(id, name, goodsCategory, price, count, discount);
     }
 
     @Override
     public String toString() {
         return "Goods{" +
-                "id=" + getId() +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", goodsCategory=" + goodsCategory +
                 ", price=" + price +
                 ", count=" + count +
                 ", discount=" + discount +
-                ", ordersWithThisGoods=" + ordersWithThisGoods +
                 '}';
     }
 
@@ -185,7 +184,8 @@ public class Goods extends AbstractEntity {
 
         public Goods build() {
             if (name == null && goodsCategory == null) {
-                throw new UninitializedFieldException();
+                throw new UninitializedBuilderFieldException("Goods: одно или несколько полей (name, goodsCategory) " +
+                        "ссылаются на null");
             }
             return new Goods(this);
         }

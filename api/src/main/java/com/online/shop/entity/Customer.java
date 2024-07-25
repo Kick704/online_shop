@@ -1,6 +1,6 @@
 package com.online.shop.entity;
 
-import com.online.shop.exception.UninitializedFieldException;
+import com.online.shop.exception.UninitializedBuilderFieldException;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -177,24 +177,26 @@ public class Customer extends AbstractEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return Objects.equals(getId(), customer.getId()) &&
-                Double.compare(balance, customer.balance) == 0 && enabled == customer.enabled &&
-                Objects.equals(surname, customer.surname) && Objects.equals(firstname, customer.firstname) &&
-                Objects.equals(patronymic, customer.patronymic) && Objects.equals(phoneNumber, customer.phoneNumber) &&
-                Objects.equals(email, customer.email) && Objects.equals(password, customer.password) &&
-                Objects.equals(orders, customer.orders) && Objects.equals(goodsInCart, customer.goodsInCart);
+        return Objects.equals(id, customer.id) &&
+                Objects.equals(surname, customer.surname) &&
+                Objects.equals(firstname, customer.firstname) &&
+                Objects.equals(patronymic, customer.patronymic) &&
+                Objects.equals(phoneNumber, customer.phoneNumber) &&
+                Objects.equals(email, customer.email) &&
+                Objects.equals(password, customer.password) &&
+                Double.compare(balance, customer.balance) == 0 &&
+                enabled == customer.enabled;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), surname, firstname, patronymic, phoneNumber, email, password, balance, enabled,
-                orders, goodsInCart);
+        return Objects.hash(id, surname, firstname, patronymic, phoneNumber, email, password, balance, enabled);
     }
 
     @Override
     public String toString() {
         return "Customer{" +
-                "id=" + getId() +
+                "id=" + id +
                 ", surname='" + surname + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", patronymic='" + patronymic + '\'' +
@@ -203,11 +205,8 @@ public class Customer extends AbstractEntity {
                 ", password='" + password + '\'' +
                 ", balance=" + balance +
                 ", enabled=" + enabled +
-                ", orders=" + orders +
-                ", goodsInCart=" + goodsInCart +
                 '}';
     }
-
 
     public static final class Builder {
         private String surname;
@@ -256,7 +255,8 @@ public class Customer extends AbstractEntity {
 
         public Customer build() {
             if (surname == null && firstname == null && phoneNumber == null && email == null && password == null) {
-                throw new UninitializedFieldException();
+                throw new UninitializedBuilderFieldException("Customer: одно или несколько полей (surname, firstname, " +
+                        "phoneNumber, email, password) ссылаются на null");
             }
             return new Customer(this);
         }

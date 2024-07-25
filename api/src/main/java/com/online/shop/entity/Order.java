@@ -1,7 +1,7 @@
 package com.online.shop.entity;
 
 import com.online.shop.enums.OrderStatus;
-import com.online.shop.exception.UninitializedFieldException;
+import com.online.shop.exception.UninitializedBuilderFieldException;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -120,30 +120,28 @@ public class Order extends AbstractEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return Objects.equals(getId(), order.getId()) &&
+        return Objects.equals(id, order.id) &&
                 Double.compare(amount, order.amount) == 0 &&
                 receiptCode == order.receiptCode &&
                 Objects.equals(customer, order.customer) &&
                 Objects.equals(deliveryAddress, order.deliveryAddress) &&
-                status == order.status &&
-                Objects.equals(goodsInOrder, order.goodsInOrder);
+                status == order.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), customer, amount, deliveryAddress, receiptCode, status, goodsInOrder);
+        return Objects.hash(id, customer, amount, deliveryAddress, receiptCode, status);
     }
 
     @Override
     public String toString() {
         return "Order{" +
-                "id=" + getId() +
+                "id=" + id +
                 ", customer=" + customer +
                 ", amount=" + amount +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 ", receiptCode=" + receiptCode +
                 ", status=" + status +
-                ", goodsInOrder=" + goodsInOrder +
                 '}';
     }
 
@@ -183,7 +181,8 @@ public class Order extends AbstractEntity {
 
         public Order build() {
             if (customer == null && deliveryAddress == null) {
-                throw new UninitializedFieldException();
+                throw new UninitializedBuilderFieldException("Order: одно или несколько полей (customer, " +
+                        "deliveryAddress) ссылаются на null");
             }
             return new Order(this);
         }

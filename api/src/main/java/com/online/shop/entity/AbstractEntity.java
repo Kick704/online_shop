@@ -18,7 +18,7 @@ public class AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private UUID id;
+    protected UUID id;
 
     /**
      * Дата и время создания записи о товаре
@@ -26,7 +26,7 @@ public class AbstractEntity {
      */
     @CreatedDate
     @Column(name = "created", updatable = false)
-    private LocalDateTime created;
+    protected LocalDateTime created;
 
     /**
      * Дата и время обновления записи о товаре
@@ -34,7 +34,7 @@ public class AbstractEntity {
      */
     @LastModifiedDate
     @Column(name = "modified")
-    private LocalDateTime modified;
+    protected LocalDateTime modified;
 
     public UUID getId() {
         return id;
