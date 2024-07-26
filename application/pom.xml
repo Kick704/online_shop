@@ -9,6 +9,13 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>service</artifactId>
+    <artifactId>application</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.online.shop</groupId>
+            <artifactId>repository</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
