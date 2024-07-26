@@ -22,7 +22,7 @@ public class Goods extends AbstractEntity {
     /**
      * Категория товара
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private GoodsCategory goodsCategory;
 
