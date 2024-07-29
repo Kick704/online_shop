@@ -2,6 +2,7 @@ package com.online.shop.dao;
 
 import com.online.shop.entity.GoodsCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -32,18 +33,19 @@ public interface GoodsCategoryRepository extends JpaRepository<GoodsCategory, UU
     /**
      * Выборка категории товаров по названию
      *
-     * @param name наименование категории товаров {@link String}
+     * @param categoryName наименование категории товаров {@link String}
      * @return {@link GoodsCategory} - категория товаров по указанному наименованию, или {@code null},
      * если такой категории нет
      */
-    @Query(value = "SELECT gc FROM GoodsCategory gc WHERE gc.name = :name")
-    GoodsCategory findGoodsCategoryByName(@Param("name") String name);
+    @Query(value = "SELECT gc FROM GoodsCategory gc WHERE gc.categoryName = :categoryName")
+    GoodsCategory findGoodsCategoryByName(@Param("categoryName") String categoryName);
 
     /**
      * Удаление категории товара по id
      * @param id идентификатор категории товара {@link UUID}
      */
-    @Query(value = "DELETE gc FROM GoodsCategory gc WHERE gc.id = :id")
+    @Modifying
+    @Query(value = "DELETE FROM GoodsCategory gc WHERE gc.id = :id")
     void deleteGoodsCategoryById(@Param("id") UUID id);
 
 }

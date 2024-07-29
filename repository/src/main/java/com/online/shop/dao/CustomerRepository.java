@@ -2,6 +2,7 @@ package com.online.shop.dao;
 
 import com.online.shop.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -40,7 +41,8 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
      * Удаление покупателя по id
      * @param id идентификатор покупателя {@link UUID}
      */
-    @Query(value = "DELETE c FROM Customer c WHERE c.id = :id")
+    @Modifying
+    @Query(value = "DELETE FROM Customer c WHERE c.id = :id")
     void deleteCustomerById(@Param("id") UUID id);
 
 }

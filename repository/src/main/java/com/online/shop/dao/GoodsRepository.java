@@ -2,6 +2,7 @@ package com.online.shop.dao;
 
 import com.online.shop.entity.Goods;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -39,7 +40,8 @@ public interface GoodsRepository extends JpaRepository<Goods, UUID> {
      * Удаление товара по id
      * @param id идентификатор товара {@link UUID}
      */
-    @Query(value = "DELETE g FROM Goods g WHERE g.id = :id")
+    @Modifying
+    @Query(value = "DELETE FROM Goods g WHERE g.id = :id")
     void deleteGoodsById(@Param("id") UUID id);
 
 }
