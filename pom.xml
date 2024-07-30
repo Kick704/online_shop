@@ -76,6 +76,11 @@
                 <version>1.5.5.Final</version>
             </dependency>
             <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>1.5.5.Final</version>
+            </dependency>
+            <dependency>
                 <groupId>com.online.shop</groupId>
                 <artifactId>api</artifactId>
                 <version>${project.parent.version}</version>
@@ -109,8 +114,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>application/src/main/java/com/online/shop/OnlineShopApplication.java
-                    </mainClass>
+                    <mainClass>com.online.shop.OnlineShopApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
