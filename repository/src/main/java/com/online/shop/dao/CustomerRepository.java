@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -15,34 +16,39 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
 
     /**
      * Выборка покупателя по id
+     *
      * @param id идентификатор покупателя {@link UUID}
-     * @return {@link Customer} - покупатель по указанному {@code id}, или {@code null}, если такого покупателя нет
+     * @return {@link Optional} - контейнер, содержащий покупателя {@link Customer} по указанному {@code id}
      */
     @Query(value = "SELECT c FROM Customer c WHERE c.id = :id")
-    Customer findCustomerById(@Param("id") UUID id);
+    Optional<Customer> findCustomerById(@Param("id") UUID id);
 
     /**
      * Выборка всех покупателей
-     * @return {@link List} - список всех покупателей, или {@code null}, если покупателей еще нет
+     *
+     * @return {@link List} - список, содержащий список всех покупателей {@link Customer}
      */
     @Query(value = "SELECT c FROM Customer c")
     List<Customer> findAllCustomers();
 
     /**
      * Выборка покупателей по состоянию(активен или заблокирован) аккаунта
+     *
      * @param enabled состояние аккаунта {@link boolean}
-     * @return {@link List} - список всех покупателей по указанному состоянию аккаунта, или {@code null},
-     * если таких покупателей нет
+     * @return {@link List} - список, содержащий список всех покупателей {@link Customer} по указанному состоянию
+     * аккаунта {@code enabled}
      */
     @Query(value = "SELECT c FROM Customer c WHERE c.enabled = :enabled")
     List<Customer> findAllCustomersByEnabled(@Param("enabled") boolean enabled);
 
     /**
      * Удаление покупателя по id
+     *
      * @param id идентификатор покупателя {@link UUID}
+     * @return количество удалённых строк {@link int}
      */
     @Modifying
     @Query(value = "DELETE FROM Customer c WHERE c.id = :id")
-    void deleteCustomerById(@Param("id") UUID id);
+    int deleteCustomerById(@Param("id") UUID id);
 
 }

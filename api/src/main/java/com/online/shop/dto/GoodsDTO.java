@@ -1,6 +1,6 @@
 package com.online.shop.dto;
 
-public class GoodsDTO {
+public class GoodsDTO extends AbstractDTO{
 
     private String name;
     private GoodsCategoryDTO goodsCategory;
@@ -62,7 +62,8 @@ public class GoodsDTO {
     @Override
     public String toString() {
         return "GoodsDTO{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", goodsCategory=" + goodsCategory +
                 ", price=" + price +
                 ", count=" + count +

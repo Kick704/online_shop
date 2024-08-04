@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Класс-сущность покупателя интернет-магазина
@@ -90,6 +91,7 @@ public class Customer extends AbstractEntity {
         setPhoneNumber(builder.phoneNumber);
         setEmail(builder.email);
         setPassword(builder.password);
+        enabled = true;
     }
 
     public String getFirstname() {
@@ -156,11 +158,11 @@ public class Customer extends AbstractEntity {
         this.orders = orders;
     }
 
-    public List<Goods> getCart() {
+    public List<Goods> getGoodsInCart() {
         return goodsInCart;
     }
 
-    public void setCart(List<Goods> goodsInCart) {
+    public void setGoodsInCart(List<Goods> goodsInCart) {
         this.goodsInCart = goodsInCart;
     }
 
@@ -254,11 +256,14 @@ public class Customer extends AbstractEntity {
         }
 
         public Customer build() {
-            if (surname == null && firstname == null && phoneNumber == null && email == null && password == null) {
+            if (surname == null || firstname == null || phoneNumber == null || email == null || password == null) {
                 throw new UninitializedBuilderFieldException("Customer: одно или несколько полей (surname, firstname, " +
                         "phoneNumber, email, password) ссылаются на null");
             }
             return new Customer(this);
         }
     }
+
 }
+
+

@@ -183,7 +183,7 @@ public class Goods extends AbstractEntity {
         }
 
         public Goods build() {
-            if (name == null && goodsCategory == null) {
+            if (name == null || goodsCategory == null) {
                 throw new UninitializedBuilderFieldException("Goods: одно или несколько полей (name, goodsCategory) " +
                         "ссылаются на null");
             }

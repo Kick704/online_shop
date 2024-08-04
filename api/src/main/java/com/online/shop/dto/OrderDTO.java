@@ -1,6 +1,6 @@
 package com.online.shop.dto;
 
-public class OrderDTO {
+public class OrderDTO extends AbstractDTO{
 
     private CustomerDTO customer;
     private double amount;
@@ -42,7 +42,8 @@ public class OrderDTO {
     @Override
     public String toString() {
         return "OrderDTO{" +
-                "customer=" + customer +
+                "id=" + id +
+                ", customer=" + customer +
                 ", amount=" + amount +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 '}';

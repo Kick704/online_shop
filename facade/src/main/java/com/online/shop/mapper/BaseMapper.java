@@ -1,20 +1,15 @@
 package com.online.shop.mapper;
 
-import com.online.shop.dto.OrderDTO;
-import com.online.shop.entity.Order;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import com.online.shop.dto.AbstractDTO;
+import com.online.shop.entity.AbstractEntity;
 
 import java.util.List;
 
 /**
- * Маппер для {@link Order} и {@link OrderDTO}
+ * Базовый интерфейс для всех мапперов
+ * <p> mapstruct не поддерживает обобщенные интерфейсы, поэтому данный интерфейс лишь описывает правила для мапперов
  */
-@Mapper(componentModel = "spring", uses = CustomerMapper.class,
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface OrderMapper extends BaseMapper<Order, OrderDTO> {
+public interface BaseMapper<Entity extends AbstractEntity, DTO extends AbstractDTO> {
 
     /**
      * Маппинг из сущности в DTO
@@ -22,8 +17,7 @@ public interface OrderMapper extends BaseMapper<Order, OrderDTO> {
      * @param entity сущность
      * @return DTO
      */
-    @Override
-    OrderDTO toDTO(Order entity);
+    DTO toDTO(Entity entity);
 
     /**
      * Маппинг из DTO в сущность
@@ -31,26 +25,23 @@ public interface OrderMapper extends BaseMapper<Order, OrderDTO> {
      * @param dto DTO
      * @return сущность
      */
-    @Override
-    Order toEntity(OrderDTO dto);
+    Entity toEntity(DTO dto);
 
     /**
      * Маппинг из списка сущностей в список DTO
      *
-     * @param orders список сущностей
+     * @param entities список сущностей
      * @return список DTO
      */
-    @Override
-    List<OrderDTO> toDTOList(List<Order> orders);
+    List<DTO> toDTOList(List<Entity> entities);
 
     /**
      * Маппинг из списка DTO в список сущностей
      *
-     * @param orderDTOS список DTO
+     * @param dtos список DTO
      * @return список сущностей
      */
-    @Override
-    List<Order> toEntityList(List<OrderDTO> orderDTOS);
+    List<Entity> toEntityList(List<DTO> dtos);
 
     /**
      * Обновление сущности на основе DTO, игнорируя null поля и поле id
@@ -58,7 +49,6 @@ public interface OrderMapper extends BaseMapper<Order, OrderDTO> {
      * @param dto    DTO, проинициализированные поля которого, кроме id, будут обновлены в сущности
      * @param entity обновляемая сущность
      */
-    @Override
-    @Mapping(target = "id", ignore = true)
-    void updateEntityFromDto(OrderDTO dto, @MappingTarget Order entity);
+    void updateEntityFromDto(DTO dto, Entity entity);
+
 }

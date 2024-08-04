@@ -81,29 +81,34 @@
                 <version>1.5.5.Final</version>
             </dependency>
             <dependency>
-                <groupId>com.online.shop</groupId>
-                <artifactId>api</artifactId>
-                <version>${project.parent.version}</version>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>2.6.0</version>
             </dependency>
             <dependency>
                 <groupId>com.online.shop</groupId>
                 <artifactId>liquibase</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.online.shop</groupId>
                 <artifactId>repository</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.online.shop</groupId>
+                <artifactId>api</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.online.shop</groupId>
                 <artifactId>service</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.online.shop</groupId>
                 <artifactId>facade</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -111,11 +116,9 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>com.online.shop.OnlineShopApplication</mainClass>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
             </plugin>
         </plugins>
     </build>

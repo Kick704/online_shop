@@ -1,6 +1,6 @@
 package com.online.shop.dto;
 
-public class CustomerDTO {
+public class CustomerDTO extends AbstractDTO{
 
     private String surname;
     private String firstname;
@@ -8,20 +8,18 @@ public class CustomerDTO {
     private String phoneNumber;
     private String email;
     private double balance;
-    private boolean enabled;
 
     public CustomerDTO() {
     }
 
     public CustomerDTO(String surname, String firstname, String patronymic, String phoneNumber, String email,
-                       double balance, boolean enabled) {
+                       double balance) {
         this.surname = surname;
         this.firstname = firstname;
         this.patronymic = patronymic;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.balance = balance;
-        this.enabled = enabled;
     }
 
     public String getSurname() {
@@ -72,25 +70,18 @@ public class CustomerDTO {
         this.balance = balance;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     @Override
     public String toString() {
         return "CustomerDTO{" +
-                "surname='" + surname + '\'' +
+                "id=" + id +
+                ", surname='" + surname + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", patronymic='" + patronymic + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", balance=" + balance +
-                ", enabled=" + enabled +
                 '}';
     }
 
 }
+

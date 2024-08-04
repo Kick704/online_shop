@@ -9,26 +9,37 @@ public interface GoodsService {
 
     /**
      * Выборка товара по id
+     *
      * @param id идентификатор товара {@link UUID}
-     * @return {@link Goods} - товар по указанному {@code id}, или {@code null}, если такого товара нет
+     * @return {@link Goods} - товар по указанному {@code id}
      */
     Goods findGoodsById(UUID id);
 
     /**
      * Выборка всех товаров
-     * @return {@link List} - список всех товаров, или {@code null}, если товаров еще нет
+     *
+     * @return {@link List} - список всех товаров {@link Goods}
      */
     List<Goods> findAllGoods();
 
     /**
      * Выборка товаров по названию
+     *
      * @param name наименование товара {@link String}
-     * @return {@link List} - список товаров по указанному наименованию, или {@code null}, если такого товара нет
+     * @return {@link List} - список товаров по указанному наименованию {@code name}
      */
     List<Goods> findAllGoodsByName(String name);
 
     /**
+     * Добавление/обновление товара в БД
+     *
+     * @param goods сущность Товар {@link Goods}
+     */
+    void saveGoods(Goods goods);
+
+    /**
      * Удаление товара по id
+     *
      * @param id идентификатор товара {@link UUID}
      */
     void deleteGoodsById(UUID id);

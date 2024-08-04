@@ -11,14 +11,14 @@ public interface GoodsCategoryService {
      * Выборка категории товаров по id
      *
      * @param id идентификатор заказа {@link UUID}
-     * @return {@link GoodsCategory} - категория товаров по указанному {@code id}, или {@code null},
-     * если такой категории нет
+     * @return {@link GoodsCategory} - категория товаров по указанному {@code id}
      */
     GoodsCategory findGoodsCategoryById(UUID id);
 
     /**
      * Выборка всех категорий товаров
-     * @return {@link List} - список всех категорий товаров, или {@code null}, если категорий еще нет
+     *
+     * @return {@link List} - список всех категорий товаров
      */
     List<GoodsCategory> findAllGoodsCategory();
 
@@ -26,13 +26,20 @@ public interface GoodsCategoryService {
      * Выборка категории товаров по названию
      *
      * @param name наименование категории товаров {@link String}
-     * @return {@link GoodsCategory} - категория товаров по указанному наименованию, или {@code null},
-     * если такой категории нет
+     * @return {@link GoodsCategory} - категория товаров по указанному наименованию {@code name}
      */
     GoodsCategory findGoodsCategoryByName(String name);
 
     /**
+     * Добавление/обновление категории товаров в БД
+     *
+     * @param category сущность Категория товаров {@link GoodsCategory}
+     */
+    void saveGoodsCategory(GoodsCategory category);
+
+    /**
      * Удаление категории товара по id
+     *
      * @param id идентификатор категории товара {@link UUID}
      */
     void deleteGoodsCategoryById(UUID id);

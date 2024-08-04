@@ -180,7 +180,7 @@ public class Order extends AbstractEntity {
         }
 
         public Order build() {
-            if (customer == null && deliveryAddress == null) {
+            if (customer == null || deliveryAddress == null) {
                 throw new UninitializedBuilderFieldException("Order: одно или несколько полей (customer, " +
                         "deliveryAddress) ссылаются на null");
             }

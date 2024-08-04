@@ -8,15 +8,12 @@
         <groupId>com.online.shop</groupId>
         <artifactId>online_shop</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>repository</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>com.online.shop</groupId>
-            <artifactId>api</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -24,6 +21,14 @@
         <dependency>
             <groupId>com.online.shop</groupId>
             <artifactId>liquibase</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.online.shop</groupId>
+            <artifactId>api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
         </dependency>
     </dependencies>
 

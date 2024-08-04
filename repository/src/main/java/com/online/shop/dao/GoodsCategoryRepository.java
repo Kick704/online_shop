@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -17,15 +18,15 @@ public interface GoodsCategoryRepository extends JpaRepository<GoodsCategory, UU
      * Выборка категории товаров по id
      *
      * @param id идентификатор заказа {@link UUID}
-     * @return {@link GoodsCategory} - категория товаров по указанному {@code id}, или {@code null},
-     * если такой категории нет
+     * @return {@link Optional} - контейнер, содержащий категорию товаров {@link GoodsCategory} по указанному {@code id}
      */
     @Query(value = "SELECT gc FROM GoodsCategory gc WHERE gc.id = id")
-    GoodsCategory findGoodsCategoryById(@Param("id") UUID id);
+    Optional<GoodsCategory> findGoodsCategoryById(@Param("id") UUID id);
 
     /**
      * Выборка всех категорий товаров
-     * @return {@link List} - список всех категорий товаров, или {@code null}, если категорий еще нет
+     *
+     * @return {@link List} - список всех категорий товаров {@link GoodsCategory}
      */
     @Query(value = "SELECT gс FROM GoodsCategory gс")
     List<GoodsCategory> findAllGoodsCategory();
@@ -34,18 +35,20 @@ public interface GoodsCategoryRepository extends JpaRepository<GoodsCategory, UU
      * Выборка категории товаров по названию
      *
      * @param categoryName наименование категории товаров {@link String}
-     * @return {@link GoodsCategory} - категория товаров по указанному наименованию, или {@code null},
-     * если такой категории нет
+     * @return {@link Optional} - контейнер, содержащий категорию товаров {@link GoodsCategory} по указанному
+     * наименованию {@code categoryName}
      */
     @Query(value = "SELECT gc FROM GoodsCategory gc WHERE gc.categoryName = :categoryName")
-    GoodsCategory findGoodsCategoryByName(@Param("categoryName") String categoryName);
+    Optional<GoodsCategory> findGoodsCategoryByName(@Param("categoryName") String categoryName);
 
     /**
      * Удаление категории товара по id
+     *
      * @param id идентификатор категории товара {@link UUID}
+     * @return количество удалённых строк {@link int}
      */
     @Modifying
     @Query(value = "DELETE FROM GoodsCategory gc WHERE gc.id = :id")
-    void deleteGoodsCategoryById(@Param("id") UUID id);
+    int deleteGoodsCategoryById(@Param("id") UUID id);
 
 }
