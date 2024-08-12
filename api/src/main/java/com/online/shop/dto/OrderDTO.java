@@ -1,19 +1,15 @@
 package com.online.shop.dto;
 
-public class OrderDTO extends AbstractDTO{
+import com.online.shop.entity.Order;
+
+/**
+ * DTO Заказ на основе сущности {@link Order}
+ */
+public class OrderDTO extends AbstractDTO {
 
     private CustomerDTO customer;
     private double amount;
     private String deliveryAddress;
-
-    public OrderDTO() {
-    }
-
-    public OrderDTO(CustomerDTO customer, double amount, String deliveryAddress) {
-        this.customer = customer;
-        this.amount = amount;
-        this.deliveryAddress = deliveryAddress;
-    }
 
     public CustomerDTO getCustomer() {
         return customer;

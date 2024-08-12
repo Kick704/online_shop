@@ -1,8 +1,7 @@
 package com.online.shop.controller;
 
-import com.online.shop.dto.CustomerDTO;
+import com.online.shop.dto.OrderCreationDTO;
 import com.online.shop.dto.OrderDTO;
-import com.online.shop.entity.Order;
 import com.online.shop.enums.OrderStatus;
 import com.online.shop.service.OrderFacadeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/orders")
+@RequestMapping(ApiPath.API_BASE + "/order")
 @Tag(name = "Заказы", description = "Управление заказами интернет-магазина")
 public class OrderController {
 
@@ -55,12 +54,12 @@ public class OrderController {
     /**
      * Обработчик POST запроса для создания заказа
      *
-     * @param order сущность {@link Order}, содержащая информацию для создания заказа
+     * @param orderCreationDTO DTO {@link OrderCreationDTO}, содержащая информацию для создания заказа
      * @return DTO {@link OrderDTO}, содержащий информацию о заказе
      */
     @PostMapping
-    public OrderDTO addNewOrder(@RequestBody Order order) {
-        return orderFacadeService.addNewOrder(order);
+    public OrderDTO addNewOrder(@RequestBody OrderCreationDTO orderCreationDTO) {
+        return orderFacadeService.addNewOrder(orderCreationDTO);
     }
 
     /**

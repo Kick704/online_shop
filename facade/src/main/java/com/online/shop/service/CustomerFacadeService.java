@@ -1,8 +1,8 @@
 package com.online.shop.service;
 
+import com.online.shop.dto.CustomerCreationDTO;
 import com.online.shop.dto.CustomerDTO;
 import com.online.shop.dto.GoodsDTO;
-import com.online.shop.entity.Customer;
 
 import java.util.List;
 import java.util.UUID;
@@ -43,10 +43,10 @@ public interface CustomerFacadeService {
     /**
      * Добавление нового покупателя в БД
      *
-     * @param customer сущность Покупатель {@link Customer}
+     * @param customerCreationDTO DTO новый Покупатель {@link CustomerCreationDTO}
      * @return DTO Покупатель {@link CustomerDTO}
      */
-    CustomerDTO addNewCustomer(Customer customer);
+    CustomerDTO addNewCustomer(CustomerCreationDTO customerCreationDTO);
 
     /**
      * Обновление покупателя в БД

@@ -1,18 +1,13 @@
 package com.online.shop.dto;
 
-import com.online.shop.entity.Customer;
-
-/**
- * DTO Покупатель на основе сущности {@link Customer}
- */
-public class CustomerDTO extends AbstractDTO {
+public class CustomerCreationDTO {
 
     private String surname;
     private String firstname;
     private String patronymic;
     private String phoneNumber;
     private String email;
-    private double balance;
+    private String password;
 
     public String getSurname() {
         return surname;
@@ -54,26 +49,23 @@ public class CustomerDTO extends AbstractDTO {
         this.email = email;
     }
 
-    public double getBalance() {
-        return balance;
+    public String getPassword() {
+        return password;
     }
 
-    public void setBalance(double balance) {
-        this.balance = balance;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public String toString() {
-        return "CustomerDTO{" +
-                "id=" + id +
-                ", surname='" + surname + '\'' +
+        return "CustomerCreationDTO{" +
+                "surname='" + surname + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", patronymic='" + patronymic + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
-                ", balance=" + balance +
+                ", password='" + password + '\'' +
                 '}';
     }
-
 }
-

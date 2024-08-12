@@ -1,7 +1,7 @@
 package com.online.shop.service;
 
+import com.online.shop.dto.GoodsCreationDTO;
 import com.online.shop.dto.GoodsDTO;
-import com.online.shop.entity.Goods;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,10 +34,10 @@ public interface GoodsFacadeService {
     /**
      * Добавление нового товара в БД
      *
-     * @param goods сущность Товар {@link Goods}
+     * @param goodsCreationDTO DTO новый Товар {@link GoodsCreationDTO}
      * @return DTO Товар {@link GoodsDTO}
      */
-    GoodsDTO addNewGoods(Goods goods);
+    GoodsDTO addNewGoods(GoodsCreationDTO goodsCreationDTO);
 
     /**
      * Обновление товара в БД

@@ -2,8 +2,7 @@ package com.online.shop.service;
 
 import com.online.shop.dao.GoodsCategoryRepository;
 import com.online.shop.entity.GoodsCategory;
-import com.online.shop.exception.NoEntitiesFoundException;
-import com.online.shop.exception.NoSuchEntityException;
+import com.online.shop.exception.NotFoundEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,25 +20,25 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
      *
      * @param id идентификатор заказа {@link UUID}
      * @return {@link GoodsCategory} - категория товаров по указанному {@code id}, или выбрасывается исключение
-     * {@link NoSuchEntityException}, если такой категории нет
+     * {@link NotFoundEntityException}, если такой категории нет
      */
     @Override
     public GoodsCategory findGoodsCategoryById(UUID id) {
         return categoryRepository.findGoodsCategoryById(id)
-                .orElseThrow(() -> new NoSuchEntityException("Категория товаров с ID: " + id + " не найдена"));
+                .orElseThrow(() -> new NotFoundEntityException("Категория товаров с ID: " + id + " не найдена"));
     }
 
     /**
      * Выборка всех категорий товаров
      *
      * @return {@link List} - список всех категорий товаров {@link GoodsCategory}, или выбрасывается исключение
-     * {@link NoEntitiesFoundException}, если категорий ещё нет
+     * {@link NotFoundEntityException}, если категорий ещё нет
      */
     @Override
     public List<GoodsCategory> findAllGoodsCategory() {
         List<GoodsCategory> categories = categoryRepository.findAllGoodsCategory();
         if (categories.isEmpty()) {
-            throw new NoEntitiesFoundException("Ни одна категория товаров не найдена в БД");
+            throw new NotFoundEntityException("Ни одна категория товаров не найдена в БД");
         }
         return categories;
     }
@@ -49,13 +48,13 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
      *
      * @param name наименование категории товаров {@link String}
      * @return {@link GoodsCategory} - категория товаров по указанному наименованию {@code name}, или выбрасывается
-     * исключение {@link NoSuchEntityException}, если такой категории нет
+     * исключение {@link NotFoundEntityException}, если такой категории нет
      */
     @Override
     public GoodsCategory findGoodsCategoryByName(String name) {
         return categoryRepository.findGoodsCategoryByName(name)
                 .orElseThrow(() ->
-                        new NoSuchEntityException("Категория товаров с наименованием: " + name + " не найдена"));
+                        new NotFoundEntityException("Категория товаров с наименованием: " + name + " не найдена"));
     }
 
     /**
@@ -70,7 +69,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
 
     /**
      * Удаление категории товара по id
-     * <p> Может выбросить исключение {@link NoSuchEntityException}, если категория товаров {@link GoodsCategory}
+     * <p> Может выбросить исключение {@link NotFoundEntityException}, если категория товаров {@link GoodsCategory}
      * не была удалёна
      *
      * @param id идентификатор категории товара {@link UUID}
@@ -78,7 +77,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     @Override
     public void deleteGoodsCategoryById(UUID id) {
         if (categoryRepository.deleteGoodsCategoryById(id) == 0) {
-            throw new NoSuchEntityException("Категория товаров с ID: " + id + " не найдена и/или не может быть удалена");
+            throw new NotFoundEntityException("Категория товаров с ID: " + id + " не найдена и/или не может быть удалена");
         }
     }
 }

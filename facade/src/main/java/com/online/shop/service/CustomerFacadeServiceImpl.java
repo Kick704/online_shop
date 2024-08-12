@@ -1,5 +1,6 @@
 package com.online.shop.service;
 
+import com.online.shop.dto.CustomerCreationDTO;
 import com.online.shop.dto.CustomerDTO;
 import com.online.shop.dto.GoodsDTO;
 import com.online.shop.entity.Customer;
@@ -53,6 +54,7 @@ public class CustomerFacadeServiceImpl implements CustomerFacadeService {
      * @return {@link List} - список всех товаров {@link GoodsDTO} в корзине покупателя
      */
     @Override
+    @Transactional(readOnly = true)
     public List<GoodsDTO> findAllGoodsInCustomerCart(UUID id) {
         return goodsMapper.toDTOList(customerService.findAllGoodsInCustomerCart(id));
     }
@@ -73,20 +75,13 @@ public class CustomerFacadeServiceImpl implements CustomerFacadeService {
     /**
      * Добавление нового покупателя в БД
      *
-     * @param customer сущность Покупатель {@link CustomerDTO}
+     * @param customerCreationDTO DTO новый Покупатель {@link CustomerCreationDTO}
+     * @return DTO Покупатель {@link CustomerDTO}
      */
     @Override
     @Transactional
-    public CustomerDTO addNewCustomer(Customer customer) {
-        Customer newCustomer = Customer.Builder.
-                newBuilder().
-                surname(customer.getSurname()).
-                firstname(customer.getFirstname()).
-                patronymic(customer.getPatronymic()).
-                phoneNumber(customer.getPhoneNumber()).
-                email(customer.getEmail()).
-                password(customer.getPassword()).
-                build();
+    public CustomerDTO addNewCustomer(CustomerCreationDTO customerCreationDTO) {
+        Customer newCustomer =  customerMapper.toEntity(customerCreationDTO);
         customerService.saveCustomer(newCustomer);
         return customerMapper.toDTO(newCustomer);
     }

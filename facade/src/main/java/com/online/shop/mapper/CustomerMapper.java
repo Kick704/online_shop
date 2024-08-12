@@ -1,5 +1,6 @@
 package com.online.shop.mapper;
 
+import com.online.shop.dto.CustomerCreationDTO;
 import com.online.shop.dto.CustomerDTO;
 import com.online.shop.entity.Customer;
 import org.mapstruct.Mapper;
@@ -32,6 +33,13 @@ public interface CustomerMapper extends BaseMapper<Customer, CustomerDTO> {
      */
     @Override
     Customer toEntity(CustomerDTO dto);
+
+    /**
+     * Маппинг из DTO в сущность при регистрации покупателя
+     * @param dto DTO с информацией о покупателе для регистрации
+     * @return сущность
+     */
+    Customer toEntity(CustomerCreationDTO dto);
 
     /**
      * Маппинг из списка сущностей в список DTO

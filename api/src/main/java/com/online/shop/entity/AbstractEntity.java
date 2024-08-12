@@ -5,7 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 /**
@@ -13,7 +13,7 @@ import java.util.UUID;
  */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class AbstractEntity {
+public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,7 +26,7 @@ public class AbstractEntity {
      */
     @CreatedDate
     @Column(name = "created", updatable = false)
-    protected LocalDateTime created;
+    protected ZonedDateTime created;
 
     /**
      * Дата и время обновления записи о товаре
@@ -34,7 +34,7 @@ public class AbstractEntity {
      */
     @LastModifiedDate
     @Column(name = "modified")
-    protected LocalDateTime modified;
+    protected ZonedDateTime modified;
 
     public UUID getId() {
         return id;
@@ -44,19 +44,19 @@ public class AbstractEntity {
         this.id = id;
     }
 
-    public LocalDateTime getCreated() {
+    public ZonedDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDateTime created) {
+    public void setCreated(ZonedDateTime created) {
         this.created = created;
     }
 
-    public LocalDateTime getModified() {
+    public ZonedDateTime getModified() {
         return modified;
     }
 
-    public void setModified(LocalDateTime modified) {
+    public void setModified(ZonedDateTime modified) {
         this.modified = modified;
     }
 }

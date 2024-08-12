@@ -20,7 +20,7 @@ public interface GoodsCategoryRepository extends JpaRepository<GoodsCategory, UU
      * @param id идентификатор заказа {@link UUID}
      * @return {@link Optional} - контейнер, содержащий категорию товаров {@link GoodsCategory} по указанному {@code id}
      */
-    @Query(value = "SELECT gc FROM GoodsCategory gc WHERE gc.id = id")
+    @Query(value = "SELECT gc FROM GoodsCategory gc WHERE gc.id = :id")
     Optional<GoodsCategory> findGoodsCategoryById(@Param("id") UUID id);
 
     /**

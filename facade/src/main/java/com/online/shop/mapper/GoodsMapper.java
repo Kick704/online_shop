@@ -1,5 +1,6 @@
 package com.online.shop.mapper;
 
+import com.online.shop.dto.GoodsCreationDTO;
 import com.online.shop.dto.GoodsDTO;
 import com.online.shop.entity.Goods;
 import org.mapstruct.Mapper;
@@ -33,6 +34,13 @@ public interface GoodsMapper extends BaseMapper<Goods, GoodsDTO> {
      */
     @Override
     Goods toEntity(GoodsDTO dto);
+
+    /**
+     * Маппинг из DTO в сущность при добавлении нового товара
+     * @param dto DTO с информацией о новом товре
+     * @return сущность
+     */
+    Goods toEntity(GoodsCreationDTO dto);
 
     /**
      * Маппинг из списка сущностей в список DTO

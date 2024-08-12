@@ -1,15 +1,13 @@
 package com.online.shop.dto;
 
-public class GoodsCategoryDTO extends AbstractDTO{
+import com.online.shop.entity.GoodsCategory;
+
+/**
+ * DTO Категория товаров на основе сущности {@link GoodsCategory}
+ */
+public class GoodsCategoryDTO extends AbstractDTO {
 
     private String categoryName;
-
-    public GoodsCategoryDTO() {
-    }
-
-    public GoodsCategoryDTO(String categoryName) {
-        this.categoryName = categoryName;
-    }
 
     public String getCategoryName() {
         return categoryName;

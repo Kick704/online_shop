@@ -1,8 +1,8 @@
 package com.online.shop.controller;
 
+import com.online.shop.dto.CustomerCreationDTO;
 import com.online.shop.dto.CustomerDTO;
 import com.online.shop.dto.GoodsDTO;
-import com.online.shop.entity.Customer;
 import com.online.shop.service.CustomerFacadeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/customers")
+@RequestMapping(ApiPath.API_BASE + "/customer")
 @Tag(name = "Покупатели", description = "Взаимодействие с пользователями интернет-магазина")
 public class CustomerController {
 
@@ -51,7 +51,7 @@ public class CustomerController {
      */
     @GetMapping(value = "/cart", params = "id")
     @Operation(summary = "Получить корзину покупателя",
-            description = "Позволяет получить список товаров покупателя по ID")
+            description = "Позволяет получить список товаров покупателя по ID покупателя")
     public List<GoodsDTO> getCustomerCart(@RequestParam UUID id) {
         return customerFacadeService.findAllGoodsInCustomerCart(id);
     }
@@ -72,14 +72,14 @@ public class CustomerController {
     /**
      * Обработчик POST запроса для регистрации покупателя
      *
-     * @param customer сущность {@link Customer}, содержащая информацию для регистрации покупателя
-     * @return DTO {@link CustomerDTO}, содержащий информацию о покупателе
+     * @param customerCreationDTO DTO {@link CustomerCreationDTO}, содержащая информацию для регистрации покупателя
+     * @return DTO {@link CustomerDTO}, содержащий информацию о зарегистрированном покупателе
      */
     @PostMapping
     @Operation(summary = "Регистрация покупателя",
             description = "Позволяет пользователю зарегистрироваться в качестве покупателя")
-    public CustomerDTO addNewCustomer(@RequestBody Customer customer) {
-        return customerFacadeService.addNewCustomer(customer);
+    public CustomerDTO addNewCustomer(@RequestBody CustomerCreationDTO customerCreationDTO) {
+        return customerFacadeService.addNewCustomer(customerCreationDTO);
     }
 
     /**

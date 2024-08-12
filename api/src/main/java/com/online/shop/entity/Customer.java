@@ -91,7 +91,7 @@ public class Customer extends AbstractEntity {
         setPhoneNumber(builder.phoneNumber);
         setEmail(builder.email);
         setPassword(builder.password);
-        enabled = true;
+        setEnabled(builder.enabled);
     }
 
     public String getFirstname() {
@@ -217,6 +217,7 @@ public class Customer extends AbstractEntity {
         private String phoneNumber;
         private String email;
         private String password;
+        private final boolean enabled = true;
 
         private Builder() {
         }

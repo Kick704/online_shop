@@ -1,8 +1,8 @@
 package com.online.shop.controller;
 
 import com.online.shop.dto.CustomerDTO;
+import com.online.shop.dto.GoodsCreationDTO;
 import com.online.shop.dto.GoodsDTO;
-import com.online.shop.entity.Goods;
 import com.online.shop.service.GoodsFacadeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/goods")
+@RequestMapping(ApiPath.API_BASE + "/goods")
 @Tag(name = "Товары", description = "Управление товарами интернет-магазина")
 public class GoodsController {
 
@@ -52,14 +52,14 @@ public class GoodsController {
     }
 
     /**
-     * Обработчик POST запроса для создания товара
+     * Обработчик POST запроса для добавления нового товара
      *
-     * @param goods сущность {@link Goods}, содержащая информацию для создания товара
-     * @return DTO {@link GoodsDTO}, содержащий информацию о товаре
+     * @param goodsCreationDTO DTO {@link GoodsCreationDTO}, содержащая информацию для добавления нового товара
+     * @return DTO {@link GoodsDTO}, содержащий информацию о новом товаре
      */
     @PostMapping
-    public GoodsDTO addNewGoods(@RequestBody Goods goods) {
-        return goodsFacadeService.addNewGoods(goods);
+    public GoodsDTO addNewGoods(@RequestBody GoodsCreationDTO goodsCreationDTO) {
+        return goodsFacadeService.addNewGoods(goodsCreationDTO);
     }
 
     /**

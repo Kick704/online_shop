@@ -1,5 +1,6 @@
 package com.online.shop.service;
 
+import com.online.shop.dto.OrderCreationDTO;
 import com.online.shop.dto.OrderDTO;
 import com.online.shop.entity.Order;
 import com.online.shop.enums.OrderStatus;
@@ -33,12 +34,12 @@ public interface OrderFacadeService {
     List<OrderDTO> findAllOrdersByStatus(OrderStatus status);
 
     /**
-     * Добавление заказа товара в БД
+     * Создание заказа в БД
      *
-     * @param order сущность Заказ {@link Order}
+     * @param orderCreationDTO DTO новый Заказ {@link OrderCreationDTO}
      * @return DTO Заказ {@link OrderDTO}
      */
-    OrderDTO addNewOrder(Order order);
+    OrderDTO addNewOrder(OrderCreationDTO orderCreationDTO);
 
     /**
      * Обновление заказа в БД

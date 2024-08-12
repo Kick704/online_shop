@@ -142,7 +142,6 @@ public class Goods extends AbstractEntity {
                 '}';
     }
 
-
     public static final class Builder {
         private String name;
         private GoodsCategory goodsCategory;

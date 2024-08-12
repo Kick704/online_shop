@@ -1,7 +1,7 @@
 package com.online.shop.service;
 
+import com.online.shop.dto.GoodsCategoryCreationDTO;
 import com.online.shop.dto.GoodsCategoryDTO;
-import com.online.shop.entity.GoodsCategory;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,10 +34,10 @@ public interface GoodsCategoryFacadeService {
     /**
      * Добавление новой категории товаров в БД
      *
-     * @param category сущность Категория товаров {@link GoodsCategory}
+     * @param categoryCreationDTO DTO новая Категория товаров {@link GoodsCategoryCreationDTO}
      * @return DTO Категория товаров {@link GoodsCategoryDTO}
      */
-    GoodsCategoryDTO addNewGoodsCategory(GoodsCategory category);
+    GoodsCategoryDTO addNewGoodsCategory(GoodsCategoryCreationDTO categoryCreationDTO);
 
     /**
      * Обновление категории товаров в БД

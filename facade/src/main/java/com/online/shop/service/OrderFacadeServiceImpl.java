@@ -1,5 +1,6 @@
 package com.online.shop.service;
 
+import com.online.shop.dto.OrderCreationDTO;
 import com.online.shop.dto.OrderDTO;
 import com.online.shop.entity.Customer;
 import com.online.shop.entity.Order;
@@ -60,25 +61,18 @@ public class OrderFacadeServiceImpl implements OrderFacadeService {
     }
 
     /**
-     * Создание заказа в БД с удалением товаров из корзины покупателя
+     * Создание заказа в БД
      *
-     * @param order сущность Заказ {@link Order}
+     * @param orderCreationDTO DTO новый Заказ {@link OrderCreationDTO}
      * @return DTO Заказ {@link OrderDTO}
      */
     @Override
-    public OrderDTO addNewOrder(Order order) {
-        Customer customer = customerService.findCustomerById(order.getCustomer().getId());
-        Order newOrder = Order.Builder
-                .newBuilder()
-                .customer(order.getCustomer())
-                .amount(order.getAmount())
-                .deliveryAddress(order.getDeliveryAddress())
-                .receiptCode(order.getReceiptCode())
-                .build();
-        newOrder.setGoodsInOrder(customer.getGoodsInCart());
-        orderService.saveOrder(newOrder);
-        customer.getGoodsInCart().clear();
-        customerService.saveCustomer(customer);
+    @Transactional
+    public OrderDTO addNewOrder(OrderCreationDTO orderCreationDTO) {
+        Order newOrder = orderMapper.toEntity(orderCreationDTO);
+        Customer customer = customerService.findCustomerById(orderCreationDTO.getCustomerId());
+        newOrder.setCustomer(customer);
+        orderService.createOrder(newOrder);
         return orderMapper.toDTO(newOrder);
     }
 
@@ -90,10 +84,11 @@ public class OrderFacadeServiceImpl implements OrderFacadeService {
      * @return обновлённый DTO Заказ {@link OrderDTO}
      */
     @Override
+    @Transactional
     public OrderDTO updateOrder(UUID id, OrderDTO orderDTO) {
         Order order = orderService.findOrderById(id);
         orderMapper.updateEntityFromDto(orderDTO, order);
-        orderService.saveOrder(order);
+        orderService.updateOrder(order);
         return orderMapper.toDTO(order);
     }
 

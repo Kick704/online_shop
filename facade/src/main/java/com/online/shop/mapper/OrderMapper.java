@@ -1,5 +1,6 @@
 package com.online.shop.mapper;
 
+import com.online.shop.dto.OrderCreationDTO;
 import com.online.shop.dto.OrderDTO;
 import com.online.shop.entity.Order;
 import org.mapstruct.Mapper;
@@ -33,6 +34,13 @@ public interface OrderMapper extends BaseMapper<Order, OrderDTO> {
      */
     @Override
     Order toEntity(OrderDTO dto);
+
+    /**
+     * Маппинг из DTO в сущность при создании заказа
+     * @param dto DTO с информацией о создаваемом заказе
+     * @return сущность
+     */
+    Order toEntity(OrderCreationDTO dto);
 
     /**
      * Маппинг из списка сущностей в список DTO

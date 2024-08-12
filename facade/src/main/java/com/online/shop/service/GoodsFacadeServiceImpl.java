@@ -1,8 +1,10 @@
 package com.online.shop.service;
 
+import com.online.shop.dto.GoodsCreationDTO;
 import com.online.shop.dto.GoodsDTO;
 import com.online.shop.entity.Customer;
 import com.online.shop.entity.Goods;
+import com.online.shop.entity.GoodsCategory;
 import com.online.shop.mapper.GoodsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,9 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private GoodsCategoryService categoryService;
 
     @Autowired
     private GoodsMapper goodsMapper;
@@ -61,20 +66,16 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
     /**
      * Добавление нового товара в БД
      *
-     * @param goods сущность Товар {@link Goods}
+     * @param goodsCreationDTO DTO новый Товар {@link GoodsCreationDTO}
      * @return DTO Товар {@link GoodsDTO}
      */
     @Override
     @Transactional
-    public GoodsDTO addNewGoods(Goods goods) {
-        Goods newGoods = Goods.Builder
-                .newBuilder()
-                .name(goods.getName())
-                .goodsCategory(goods.getGoodsCategory())
-                .price(goods.getPrice())
-                .count(goods.getCount())
-                .discount(goods.getDiscount())
-                .build();
+    public GoodsDTO addNewGoods(GoodsCreationDTO goodsCreationDTO) {
+        GoodsCategory category = categoryService.findGoodsCategoryById(goodsCreationDTO.getGoodsCategoryId());
+        Goods newGoods = goodsMapper.toEntity(goodsCreationDTO);
+        System.out.println(newGoods);
+        newGoods.setGoodsCategory(category);
         goodsService.saveGoods(newGoods);
         return goodsMapper.toDTO(newGoods);
     }

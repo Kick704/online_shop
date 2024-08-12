@@ -64,7 +64,7 @@ public class Order extends AbstractEntity {
         setAmount(builder.amount);
         setDeliveryAddress(builder.deliveryAddress);
         setReceiptCode(builder.receiptCode);
-        status = OrderStatus.CREATED;
+        setStatus(builder.status);
     }
 
     public Customer getCustomer() {
@@ -145,12 +145,12 @@ public class Order extends AbstractEntity {
                 '}';
     }
 
-
     public static final class Builder {
         private Customer customer;
         private double amount;
         private String deliveryAddress;
         private int receiptCode;
+        private final OrderStatus status = OrderStatus.CREATED;
 
         private Builder() {
         }

@@ -1,5 +1,6 @@
 package com.online.shop.service;
 
+import com.online.shop.dto.GoodsCategoryCreationDTO;
 import com.online.shop.dto.GoodsCategoryDTO;
 import com.online.shop.entity.GoodsCategory;
 import com.online.shop.mapper.GoodsCategoryMapper;
@@ -57,16 +58,13 @@ public class GoodsCategoryFacadeServiceImpl implements GoodsCategoryFacadeServic
     /**
      * Добавление новой категории товаров в БД
      *
-     * @param category сущность Категория товаров {@link GoodsCategory}
+     * @param categoryCreationDTO DTO новая Категория товаров {@link GoodsCategoryCreationDTO}
      * @return DTO Категория товаров {@link GoodsCategoryDTO}
      */
     @Override
     @Transactional
-    public GoodsCategoryDTO addNewGoodsCategory(GoodsCategory category) {
-        GoodsCategory newCategory = GoodsCategory.Builder
-                .newBuilder()
-                .categoryName(category.getCategoryName())
-                .build();
+    public GoodsCategoryDTO addNewGoodsCategory(GoodsCategoryCreationDTO categoryCreationDTO) {
+        GoodsCategory newCategory = categoryMapper.toEntity(categoryCreationDTO);
         categoryService.saveGoodsCategory(newCategory);
         return categoryMapper.toDTO(newCategory);
     }

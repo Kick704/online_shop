@@ -32,11 +32,17 @@ public interface OrderService {
     List<Order> findAllOrdersByStatus(OrderStatus status);
 
     /**
-     * Добавление/обновление заказа в БД
+     * Создание заказа в БД
+     * @param order сущность Заказ {@link Order}
+     */
+    void createOrder(Order order);
+
+    /**
+     * Обновление заказа в БД
      *
      * @param order сущность Заказ {@link Order}
      */
-    void saveOrder(Order order);
+    void updateOrder(Order order);
 
     /**
      * Удаление заказа по id

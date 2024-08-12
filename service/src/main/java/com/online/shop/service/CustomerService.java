@@ -26,9 +26,17 @@ public interface CustomerService {
     /**
      * Выборка всех товаров в корзине покупателя
      *
+     * @param id идентификатор покупателя {@link UUID}
      * @return {@link List} - список всех товаров {@link Goods} в корзине покупателя
      */
     List<Goods> findAllGoodsInCustomerCart(UUID id);
+
+    /**
+     * Получение общей стоимости товаров в корзине покупателя
+     * @param id идентификатор покупателя {@link UUID}
+     * @return Общая стоимость товаров в корзине покупателя
+     */
+    double getAmountOfGoodsInCustomerCart(UUID id);
 
     /**
      * Выборка покупателей по состоянию(активен или заблокирован) аккаунта
