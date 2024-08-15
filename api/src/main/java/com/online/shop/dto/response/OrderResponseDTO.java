@@ -1,22 +1,33 @@
-package com.online.shop.dto;
+package com.online.shop.dto.response;
 
 import com.online.shop.entity.Order;
+
+import java.util.List;
 
 /**
  * DTO Заказ на основе сущности {@link Order}
  */
-public class OrderDTO extends AbstractDTO {
+public class OrderResponseDTO extends AbstractResponseDTO {
 
-    private CustomerDTO customer;
+    private CustomerResponseDTO customer;
+    private List<GoodsResponseDTO> goodsInOrder;
     private double amount;
     private String deliveryAddress;
 
-    public CustomerDTO getCustomer() {
+    public CustomerResponseDTO getCustomer() {
         return customer;
     }
 
-    public void setCustomer(CustomerDTO customer) {
+    public void setCustomer(CustomerResponseDTO customer) {
         this.customer = customer;
+    }
+
+    public List<GoodsResponseDTO> getGoodsInOrder() {
+        return goodsInOrder;
+    }
+
+    public void setGoodsInOrder(List<GoodsResponseDTO> goodsInOrder) {
+        this.goodsInOrder = goodsInOrder;
     }
 
     public double getAmount() {
@@ -37,9 +48,10 @@ public class OrderDTO extends AbstractDTO {
 
     @Override
     public String toString() {
-        return "OrderDTO{" +
+        return "OrderResponseDTO{" +
                 "id=" + id +
                 ", customer=" + customer +
+                ", goodsInOrder=" + goodsInOrder +
                 ", amount=" + amount +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 '}';

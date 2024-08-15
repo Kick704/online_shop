@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Реализация интерфейса для управления сущностью {@link Order} на сервисном слое
+ */
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -32,9 +34,12 @@ public class OrderServiceImpl implements OrderService {
      * {@link NotFoundEntityException}, если такого заказа нет
      */
     @Override
-    public Order findOrderById(UUID id) {
+    public Order findById(UUID id) {
         return orderRepository.findOrderById(id)
-                .orElseThrow(() -> new NotFoundEntityException("Заказ с ID: " + id + " не найден"));
+                .orElseThrow(() -> new NotFoundEntityException(
+                        new StringBuilder("Заказ с ID: ")
+                                .append(id)
+                                .append(" не найден")));
     }
 
     /**
@@ -44,10 +49,11 @@ public class OrderServiceImpl implements OrderService {
      * {@link NotFoundEntityException}, если заказов ещё нет
      */
     @Override
-    public List<Order> findAllOrders() {
+    public List<Order> findAll() {
         List<Order> orders = orderRepository.findAllOrders();
         if (orders.isEmpty()) {
-            throw new NotFoundEntityException("Ни один заказ не найден в БД");
+            throw new NotFoundEntityException(
+                    new StringBuilder("Ни один заказ не найден в БД"));
         }
         return orders;
     }
@@ -63,7 +69,9 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> findAllOrdersByStatus(OrderStatus status) {
         List<Order> orders = orderRepository.findAllOrdersByStatus(status);
         if (orders.isEmpty()) {
-            throw new NotFoundEntityException("Ни один заказ не найден по статусу " + status);
+            throw new NotFoundEntityException(
+                    new StringBuilder("Ни один заказ не найден по статусу ")
+                            .append(status));
         }
         return orders;
     }
@@ -81,10 +89,9 @@ public class OrderServiceImpl implements OrderService {
         Customer customer = order.getCustomer();
         List<Goods> goodsInCart = new ArrayList<>(customer.getGoodsInCart());
         order.setGoodsInOrder(goodsInCart);
-        order.setAmount(customerService.getAmountOfGoodsInCustomerCart(customer.getId()));
         orderRepository.save(order);
         customer.getGoodsInCart().clear();
-        customerService.saveCustomer(customer);
+        customerService.save(customer);
     }
 
     /**
@@ -104,9 +111,12 @@ public class OrderServiceImpl implements OrderService {
      * @param id идентификатор заказа {@link UUID}
      */
     @Override
-    public void deleteOrderById(UUID id) {
+    public void deleteById(UUID id) {
         if (orderRepository.deleteOrderById(id) == 0) {
-            throw new NotFoundEntityException("Заказ с ID: " + id + " не найден и/или не может быть удалён");
+            throw new NotFoundEntityException(
+                    new StringBuilder("Заказ с ID: ")
+                            .append(id)
+                            .append(" не найден или не может быть удалён"));
         }
     }
 }

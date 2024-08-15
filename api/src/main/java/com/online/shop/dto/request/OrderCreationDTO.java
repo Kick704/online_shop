@@ -1,8 +1,13 @@
-package com.online.shop.dto;
+package com.online.shop.dto.request;
+
+import com.online.shop.entity.Order;
 
 import java.util.UUID;
 
-public class OrderCreationDTO {
+/**
+ * DTO для создания сущности Заказ {@link Order}
+ */
+public class OrderCreationDTO extends AbstractRequestDTO implements CreationDTO {
 
     private UUID customerId;
     private String deliveryAddress;

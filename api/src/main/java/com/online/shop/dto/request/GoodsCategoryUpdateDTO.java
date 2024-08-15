@@ -1,6 +1,11 @@
-package com.online.shop.dto;
+package com.online.shop.dto.request;
 
-public class GoodsCategoryCreationDTO {
+import com.online.shop.entity.GoodsCategory;
+
+/**
+ * DTO для изменения сущности Категория товаров {@link GoodsCategory}
+ */
+public class GoodsCategoryUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
 
     private String categoryName;
 
@@ -14,7 +19,7 @@ public class GoodsCategoryCreationDTO {
 
     @Override
     public String toString() {
-        return "GoodsCategoryCreationDTO{" +
+        return "GoodsCategoryUpdateDTO{" +
                 "categoryName='" + categoryName + '\'' +
                 '}';
     }

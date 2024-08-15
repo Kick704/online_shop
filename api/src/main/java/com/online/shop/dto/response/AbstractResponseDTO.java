@@ -1,11 +1,11 @@
-package com.online.shop.dto;
+package com.online.shop.dto.response;
 
 import java.util.UUID;
 
 /**
  * Абстрактный класс с общими полями и методами для всех DTO, предоставляющих информацию о сущностях
  */
-public abstract class AbstractDTO {
+public abstract class AbstractResponseDTO {
 
     protected UUID id;
 

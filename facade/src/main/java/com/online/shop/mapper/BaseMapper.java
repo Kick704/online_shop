@@ -1,6 +1,7 @@
 package com.online.shop.mapper;
 
-import com.online.shop.dto.AbstractDTO;
+import com.online.shop.dto.request.AbstractRequestDTO;
+import com.online.shop.dto.response.AbstractResponseDTO;
 import com.online.shop.entity.AbstractEntity;
 
 import java.util.List;
@@ -8,47 +9,50 @@ import java.util.List;
 /**
  * Базовый интерфейс для всех мапперов
  * <p> mapstruct не поддерживает обобщенные интерфейсы, поэтому данный интерфейс лишь описывает правила для мапперов
+ *
+ * @param <Entity> сущность
+ * @param <ResponseDTO> DTO, предоставляющий информацию о сущности
  */
-public interface BaseMapper<Entity extends AbstractEntity, DTO extends AbstractDTO> {
+public interface BaseMapper<Entity extends AbstractEntity, ResponseDTO extends AbstractResponseDTO> {
 
     /**
      * Маппинг из сущности в DTO
      *
      * @param entity сущность
-     * @return DTO
+     * @return ResponseDTO
      */
-    DTO toDTO(Entity entity);
+    ResponseDTO toDTO(Entity entity);
 
     /**
      * Маппинг из DTO в сущность
      *
-     * @param dto DTO
+     * @param dto RequestDTO
      * @return сущность
      */
-    Entity toEntity(DTO dto);
+    Entity toEntity(AbstractRequestDTO dto);
 
     /**
      * Маппинг из списка сущностей в список DTO
      *
      * @param entities список сущностей
-     * @return список DTO
+     * @return список ResponseDTO
      */
-    List<DTO> toDTOList(List<Entity> entities);
+    List<ResponseDTO> toDTOList(List<Entity> entities);
 
     /**
      * Маппинг из списка DTO в список сущностей
      *
-     * @param dtos список DTO
+     * @param dtos список RequestDTO
      * @return список сущностей
      */
-    List<Entity> toEntityList(List<DTO> dtos);
+    List<Entity> toEntityList(List<AbstractRequestDTO> dtos);
 
     /**
      * Обновление сущности на основе DTO, игнорируя null поля и поле id
      *
-     * @param dto    DTO, проинициализированные поля которого, кроме id, будут обновлены в сущности
+     * @param dto    RequestDTO, проинициализированные поля которого будут обновлены в сущности
      * @param entity обновляемая сущность
      */
-    void updateEntityFromDto(DTO dto, Entity entity);
+    void updateEntityFromDto(AbstractRequestDTO dto, Entity entity);
 
 }

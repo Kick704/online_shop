@@ -2,25 +2,17 @@ package com.online.shop.service;
 
 import com.online.shop.entity.GoodsCategory;
 
-import java.util.List;
-import java.util.UUID;
-
-public interface GoodsCategoryService {
-
-    /**
-     * Выборка категории товаров по id
-     *
-     * @param id идентификатор заказа {@link UUID}
-     * @return {@link GoodsCategory} - категория товаров по указанному {@code id}
-     */
-    GoodsCategory findGoodsCategoryById(UUID id);
+/**
+ * Интерфейс для управления сущностью {@link GoodsCategory} на сервисном слое
+ */
+public interface GoodsCategoryService extends BaseService<GoodsCategory> {
 
     /**
-     * Выборка всех категорий товаров
+     * Добавление/обновление категории товаров в БД
      *
-     * @return {@link List} - список всех категорий товаров
+     * @param category сущность Категория товаров {@link GoodsCategory}
      */
-    List<GoodsCategory> findAllGoodsCategory();
+    void save(GoodsCategory category);
 
     /**
      * Выборка категории товаров по названию
@@ -29,19 +21,5 @@ public interface GoodsCategoryService {
      * @return {@link GoodsCategory} - категория товаров по указанному наименованию {@code name}
      */
     GoodsCategory findGoodsCategoryByName(String name);
-
-    /**
-     * Добавление/обновление категории товаров в БД
-     *
-     * @param category сущность Категория товаров {@link GoodsCategory}
-     */
-    void saveGoodsCategory(GoodsCategory category);
-
-    /**
-     * Удаление категории товара по id
-     *
-     * @param id идентификатор категории товара {@link UUID}
-     */
-    void deleteGoodsCategoryById(UUID id);
 
 }

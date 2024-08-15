@@ -6,22 +6,17 @@ import com.online.shop.entity.Goods;
 import java.util.List;
 import java.util.UUID;
 
-public interface CustomerService {
+/**
+ * Интерфейс для управления сущностью {@link Customer} на сервисном слое
+ */
+public interface CustomerService extends BaseService<Customer> {
 
     /**
-     * Выборка покупателя по id
+     * Добавление/обновление покупателя в БД
      *
-     * @param id идентификатор покупателя {@link UUID}
-     * @return {@link Customer}, покупатель по указанному {@code id}
+     * @param customer сущность Покупатель {@link Customer}
      */
-    Customer findCustomerById(UUID id);
-
-    /**
-     * Выборка всех покупателей
-     *
-     * @return {@link List} - список всех покупателей {@link Customer}
-     */
-    List<Customer> findAllCustomers();
+    void save(Customer customer);
 
     /**
      * Выборка всех товаров в корзине покупателя
@@ -45,19 +40,5 @@ public interface CustomerService {
      * @return {@link List} - список всех покупателей по указанному состоянию аккаунта {@code enabled}
      */
     List<Customer> findAllCustomersByEnabled(boolean enabled);
-
-    /**
-     * Добавление/обновление покупателя в БД
-     *
-     * @param customer сущность Покупатель {@link Customer}
-     */
-    void saveCustomer(Customer customer);
-
-    /**
-     * Удаление покупателя по id
-     *
-     * @param id идентификатор покупателя {@link UUID}
-     */
-    void deleteCustomerById(UUID id);
 
 }

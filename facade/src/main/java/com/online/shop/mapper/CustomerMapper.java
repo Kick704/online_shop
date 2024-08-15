@@ -1,72 +1,63 @@
 package com.online.shop.mapper;
 
-import com.online.shop.dto.CustomerCreationDTO;
-import com.online.shop.dto.CustomerDTO;
+import com.online.shop.dto.request.AbstractRequestDTO;
+import com.online.shop.dto.response.CustomerResponseDTO;
 import com.online.shop.entity.Customer;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
 /**
- * Маппер для {@link Customer} и {@link CustomerDTO}
+ * Маппер для сущности {@link Customer} в DTO и обратно
  */
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface CustomerMapper extends BaseMapper<Customer, CustomerDTO> {
+public interface CustomerMapper extends BaseMapper<Customer, CustomerResponseDTO> {
 
     /**
      * Маппинг из сущности в DTO
      *
      * @param entity сущность
-     * @return DTO
+     * @return ResponseDTO
      */
     @Override
-    CustomerDTO toDTO(Customer entity);
+    CustomerResponseDTO toDTO(Customer entity);
 
     /**
      * Маппинг из DTO в сущность
      *
-     * @param dto DTO
+     * @param dto RequestDTO
      * @return сущность
      */
     @Override
-    Customer toEntity(CustomerDTO dto);
-
-    /**
-     * Маппинг из DTO в сущность при регистрации покупателя
-     * @param dto DTO с информацией о покупателе для регистрации
-     * @return сущность
-     */
-    Customer toEntity(CustomerCreationDTO dto);
+    Customer toEntity(AbstractRequestDTO dto);
 
     /**
      * Маппинг из списка сущностей в список DTO
      *
      * @param customers список сущностей
-     * @return список DTO
+     * @return список ResponseDTO
      */
     @Override
-    List<CustomerDTO> toDTOList(List<Customer> customers);
+    List<CustomerResponseDTO> toDTOList(List<Customer> customers);
 
     /**
      * Маппинг из списка DTO в список сущностей
      *
-     * @param customerDTOS список DTO
+     * @param dtos список RequestDTO
      * @return список сущностей
      */
     @Override
-    List<Customer> toEntityList(List<CustomerDTO> customerDTOS);
+    List<Customer> toEntityList(List<AbstractRequestDTO> dtos);
 
     /**
      * Обновление сущности на основе DTO, игнорируя null поля и поле id
      *
-     * @param dto    DTO, проинициализированные поля которого, кроме id, будут обновлены в сущности
+     * @param dto    RequestDTO, проинициализированные поля которого будут обновлены в сущности
      * @param entity обновляемая сущность
      */
     @Override
-    @Mapping(target = "id", ignore = true)
-    void updateEntityFromDto(CustomerDTO dto, @MappingTarget Customer entity);
+    void updateEntityFromDto(AbstractRequestDTO dto, @MappingTarget Customer entity);
 
 }

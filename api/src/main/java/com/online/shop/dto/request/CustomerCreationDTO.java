@@ -1,6 +1,11 @@
-package com.online.shop.dto;
+package com.online.shop.dto.request;
 
-public class CustomerCreationDTO {
+import com.online.shop.entity.Customer;
+
+/**
+ * DTO для создания сущности Покупатель {@link Customer}
+ */
+public class CustomerCreationDTO extends AbstractRequestDTO implements CreationDTO {
 
     private String surname;
     private String firstname;

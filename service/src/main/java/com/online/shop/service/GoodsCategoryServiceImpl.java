@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Реализация интерфейса для управления сущностью {@link GoodsCategory} на сервисном слое
+ */
 @Service
 public class GoodsCategoryServiceImpl implements GoodsCategoryService {
 
@@ -23,9 +26,12 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
      * {@link NotFoundEntityException}, если такой категории нет
      */
     @Override
-    public GoodsCategory findGoodsCategoryById(UUID id) {
+    public GoodsCategory findById(UUID id) {
         return categoryRepository.findGoodsCategoryById(id)
-                .orElseThrow(() -> new NotFoundEntityException("Категория товаров с ID: " + id + " не найдена"));
+                .orElseThrow(() -> new NotFoundEntityException(
+                        new StringBuilder("Категория товаров с ID: ")
+                                .append(id)
+                                .append(" не найдена")));
     }
 
     /**
@@ -35,10 +41,11 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
      * {@link NotFoundEntityException}, если категорий ещё нет
      */
     @Override
-    public List<GoodsCategory> findAllGoodsCategory() {
+    public List<GoodsCategory> findAll() {
         List<GoodsCategory> categories = categoryRepository.findAllGoodsCategory();
         if (categories.isEmpty()) {
-            throw new NotFoundEntityException("Ни одна категория товаров не найдена в БД");
+            throw new NotFoundEntityException(
+                    new StringBuilder("Ни одна категория товаров не найдена в БД"));
         }
         return categories;
     }
@@ -54,7 +61,10 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     public GoodsCategory findGoodsCategoryByName(String name) {
         return categoryRepository.findGoodsCategoryByName(name)
                 .orElseThrow(() ->
-                        new NotFoundEntityException("Категория товаров с наименованием: " + name + " не найдена"));
+                        new NotFoundEntityException(
+                                new StringBuilder("Категория товаров с наименованием: ")
+                                        .append(name)
+                                        .append(" не найдена")));
     }
 
     /**
@@ -63,7 +73,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
      * @param category сущность Категория товаров {@link GoodsCategory}
      */
     @Override
-    public void saveGoodsCategory(GoodsCategory category) {
+    public void save(GoodsCategory category) {
         categoryRepository.save(category);
     }
 
@@ -75,9 +85,12 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
      * @param id идентификатор категории товара {@link UUID}
      */
     @Override
-    public void deleteGoodsCategoryById(UUID id) {
+    public void deleteById(UUID id) {
         if (categoryRepository.deleteGoodsCategoryById(id) == 0) {
-            throw new NotFoundEntityException("Категория товаров с ID: " + id + " не найдена и/или не может быть удалена");
+            throw new NotFoundEntityException(
+                    new StringBuilder("Категория товаров с ID: ")
+                            .append(id)
+                            .append(" не найдена или не может быть удалена"));
         }
     }
 }

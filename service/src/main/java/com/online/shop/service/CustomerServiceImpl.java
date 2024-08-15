@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Реализация интерфейса для управления сущностью {@link Customer} на сервисном слое
+ */
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -24,9 +27,10 @@ public class CustomerServiceImpl implements CustomerService {
      * {@link NotFoundEntityException}, если такого покупателя нет
      */
     @Override
-    public Customer findCustomerById(UUID id) {
+    public Customer findById(UUID id) {
         return customerRepository.findCustomerById(id)
-                .orElseThrow(() -> new NotFoundEntityException("Покупатель с ID: " + id + " не найден"));
+                .orElseThrow(() -> new NotFoundEntityException(
+                        new StringBuilder("Покупатель с ID: " + id + " не найден")));
     }
 
     /**
@@ -36,10 +40,11 @@ public class CustomerServiceImpl implements CustomerService {
      * {@link NotFoundEntityException}, если покупателей ещё нет
      */
     @Override
-    public List<Customer> findAllCustomers() {
+    public List<Customer> findAll() {
         List<Customer> customers = customerRepository.findAllCustomers();
         if (customers.isEmpty()) {
-            throw new NotFoundEntityException("Ни один покупатель не найден в БД");
+            throw new NotFoundEntityException(
+                    new StringBuilder("Ни один покупатель не найден в БД"));
         }
         return customers;
     }
@@ -52,7 +57,7 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public List<Goods> findAllGoodsInCustomerCart(UUID id) {
-        Customer customer = findCustomerById(id);
+        Customer customer = findById(id);
         List<Goods> goodsInCart = customer.getGoodsInCart();
         if (goodsInCart.isEmpty()) {
             throw new IllegalStateException("Корзина покупателя пуста");
@@ -86,8 +91,9 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> findAllCustomersByEnabled(boolean enabled) {
         List<Customer> customers = customerRepository.findAllCustomersByEnabled(enabled);
         if (customers.isEmpty()) {
-            throw new NotFoundEntityException("Ни один покупатель не найден по указанному состоянию аккаунта: "
-                    + enabled);
+            throw new NotFoundEntityException(
+                    new StringBuilder("Ни один покупатель не найден по указанному состоянию аккаунта: ")
+                            .append(enabled));
         }
         return customers;
     }
@@ -98,7 +104,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @param customer сущность Покупатель {@link Customer}
      */
     @Override
-    public void saveCustomer(Customer customer) {
+    public void save(Customer customer) {
         customerRepository.save(customer);
     }
 
@@ -109,9 +115,12 @@ public class CustomerServiceImpl implements CustomerService {
      * @param id идентификатор покупателя {@link UUID}
      */
     @Override
-    public void deleteCustomerById(UUID id) {
+    public void deleteById(UUID id) {
         if (customerRepository.deleteCustomerById(id) == 0) {
-            throw new NotFoundEntityException("Покупатель с ID: " + id + " не найден и/или не может быть удалён");
+            throw new NotFoundEntityException(
+                    new StringBuilder("Покупатель с ID: ")
+                            .append(id)
+                            .append(" не найден или не может быть удалён"));
         }
     }
 }

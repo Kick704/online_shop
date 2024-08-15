@@ -1,11 +1,11 @@
-package com.online.shop.dto;
+package com.online.shop.dto.response;
 
 import com.online.shop.entity.Customer;
 
 /**
  * DTO Покупатель на основе сущности {@link Customer}
  */
-public class CustomerDTO extends AbstractDTO {
+public class CustomerResponseDTO extends AbstractResponseDTO {
 
     private String surname;
     private String firstname;
@@ -64,7 +64,7 @@ public class CustomerDTO extends AbstractDTO {
 
     @Override
     public String toString() {
-        return "CustomerDTO{" +
+        return "CustomerResponseDTO{" +
                 "id=" + id +
                 ", surname='" + surname + '\'' +
                 ", firstname='" + firstname + '\'' +

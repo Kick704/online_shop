@@ -1,57 +1,22 @@
 package com.online.shop.service;
 
-import com.online.shop.dto.GoodsCategoryCreationDTO;
-import com.online.shop.dto.GoodsCategoryDTO;
+import com.online.shop.dto.request.GoodsCategoryCreationDTO;
+import com.online.shop.dto.request.GoodsCategoryUpdateDTO;
+import com.online.shop.dto.response.GoodsCategoryResponseDTO;
+import com.online.shop.entity.GoodsCategory;
 
-import java.util.List;
-import java.util.UUID;
-
-public interface GoodsCategoryFacadeService {
-
-    /**
-     * Выборка категории товаров по id
-     *
-     * @param id идентификатор категории товара {@link UUID}
-     * @return {@link GoodsCategoryDTO} - категория товаров по указанному {@code id}
-     */
-    GoodsCategoryDTO findGoodsCategoryById(UUID id);
-
-    /**
-     * Выборка всех категорий товаров
-     *
-     * @return {@link List} - список всех категорий товаров {@link GoodsCategoryDTO}
-     */
-    List<GoodsCategoryDTO> findAllGoodsCategory();
+/**
+ * Фасад-сервис слоя представления для управления DTO на основе сущности {@link GoodsCategory}
+ */
+public interface GoodsCategoryFacadeService
+        extends BaseFacadeService<GoodsCategoryCreationDTO, GoodsCategoryUpdateDTO, GoodsCategoryResponseDTO> {
 
     /**
      * Выборка категории товаров по названию
      *
      * @param name наименование категории товаров {@link String}
-     * @return {@link GoodsCategoryDTO} - категория товаров по указанному наименованию {@code name}
+     * @return {@link GoodsCategoryResponseDTO} - категория товаров по указанному наименованию {@code name}
      */
-    GoodsCategoryDTO findGoodsCategoryByName(String name);
-
-    /**
-     * Добавление новой категории товаров в БД
-     *
-     * @param categoryCreationDTO DTO новая Категория товаров {@link GoodsCategoryCreationDTO}
-     * @return DTO Категория товаров {@link GoodsCategoryDTO}
-     */
-    GoodsCategoryDTO addNewGoodsCategory(GoodsCategoryCreationDTO categoryCreationDTO);
-
-    /**
-     * Обновление категории товаров в БД
-     *
-     * @param id          идентификатор категории товаров {@link UUID}
-     * @param categoryDTO DTO Категория товаров {@link GoodsCategoryDTO} с изменёнными полями
-     * @return обновлённый DTO Категория товаров {@link GoodsCategoryDTO}
-     */
-    GoodsCategoryDTO updateGoodsCategory(UUID id, GoodsCategoryDTO categoryDTO);
-
-    /**
-     * Удаление категории товара по id
-     * @param id идентификатор категории товара {@link UUID}
-     */
-    void deleteGoodsCategoryById(UUID id);
+    GoodsCategoryResponseDTO findGoodsCategoryByName(String name);
 
 }

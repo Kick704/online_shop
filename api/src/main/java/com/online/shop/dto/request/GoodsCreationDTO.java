@@ -1,14 +1,16 @@
-package com.online.shop.dto;
+package com.online.shop.dto.request;
 
 import com.online.shop.entity.Goods;
 
+import java.util.UUID;
+
 /**
- * DTO Товары на основе сущности {@link Goods}
+ * DTO для создания сущности Товар {@link Goods}
  */
-public class GoodsDTO extends AbstractDTO {
+public class GoodsCreationDTO extends AbstractRequestDTO implements CreationDTO {
 
     private String name;
-    private GoodsCategoryDTO goodsCategory;
+    private UUID goodsCategoryId;
     private double price;
     private int count;
     private double discount;
@@ -21,12 +23,12 @@ public class GoodsDTO extends AbstractDTO {
         this.name = name;
     }
 
-    public GoodsCategoryDTO getGoodsCategory() {
-        return goodsCategory;
+    public UUID getGoodsCategoryId() {
+        return goodsCategoryId;
     }
 
-    public void setGoodsCategory(GoodsCategoryDTO goodsCategory) {
-        this.goodsCategory = goodsCategory;
+    public void setGoodsCategoryId(UUID goodsCategoryId) {
+        this.goodsCategoryId = goodsCategoryId;
     }
 
     public double getPrice() {
@@ -55,10 +57,9 @@ public class GoodsDTO extends AbstractDTO {
 
     @Override
     public String toString() {
-        return "GoodsDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", goodsCategory=" + goodsCategory +
+        return "GoodsCreationDTO{" +
+                "name='" + name + '\'' +
+                ", goodsCategoryId=" + goodsCategoryId +
                 ", price=" + price +
                 ", count=" + count +
                 ", discount=" + discount +

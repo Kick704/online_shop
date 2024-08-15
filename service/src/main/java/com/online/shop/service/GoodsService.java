@@ -3,24 +3,18 @@ package com.online.shop.service;
 import com.online.shop.entity.Goods;
 
 import java.util.List;
-import java.util.UUID;
 
-public interface GoodsService {
-
-    /**
-     * Выборка товара по id
-     *
-     * @param id идентификатор товара {@link UUID}
-     * @return {@link Goods} - товар по указанному {@code id}
-     */
-    Goods findGoodsById(UUID id);
+/**
+ * Интерфейс для управления сущностью {@link Goods} на сервисном слое
+ */
+public interface GoodsService extends BaseService<Goods> {
 
     /**
-     * Выборка всех товаров
+     * Добавление/обновление товара в БД
      *
-     * @return {@link List} - список всех товаров {@link Goods}
+     * @param goods сущность Товар {@link Goods}
      */
-    List<Goods> findAllGoods();
+    void save(Goods goods);
 
     /**
      * Выборка товаров по названию
@@ -29,19 +23,5 @@ public interface GoodsService {
      * @return {@link List} - список товаров по указанному наименованию {@code name}
      */
     List<Goods> findAllGoodsByName(String name);
-
-    /**
-     * Добавление/обновление товара в БД
-     *
-     * @param goods сущность Товар {@link Goods}
-     */
-    void saveGoods(Goods goods);
-
-    /**
-     * Удаление товара по id
-     *
-     * @param id идентификатор товара {@link UUID}
-     */
-    void deleteGoodsById(UUID id);
 
 }

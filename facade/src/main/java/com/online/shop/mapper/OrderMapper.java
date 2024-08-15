@@ -1,72 +1,64 @@
 package com.online.shop.mapper;
 
-import com.online.shop.dto.OrderCreationDTO;
-import com.online.shop.dto.OrderDTO;
+import com.online.shop.dto.request.AbstractRequestDTO;
+import com.online.shop.dto.response.OrderResponseDTO;
 import com.online.shop.entity.Order;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
 /**
- * Маппер для {@link Order} и {@link OrderDTO}
+ * Маппер для сущности {@link Order} и обратно
  */
-@Mapper(componentModel = "spring", uses = CustomerMapper.class,
+@Mapper(componentModel = "spring", uses = {CustomerMapper.class, GoodsMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface OrderMapper extends BaseMapper<Order, OrderDTO> {
+public interface OrderMapper extends BaseMapper<Order, OrderResponseDTO> {
 
     /**
      * Маппинг из сущности в DTO
      *
      * @param entity сущность
-     * @return DTO
+     * @return ResponseDTO
      */
     @Override
-    OrderDTO toDTO(Order entity);
+    OrderResponseDTO toDTO(Order entity);
 
     /**
      * Маппинг из DTO в сущность
      *
-     * @param dto DTO
+     * @param dto RequestDTO
      * @return сущность
      */
     @Override
-    Order toEntity(OrderDTO dto);
-
-    /**
-     * Маппинг из DTO в сущность при создании заказа
-     * @param dto DTO с информацией о создаваемом заказе
-     * @return сущность
-     */
-    Order toEntity(OrderCreationDTO dto);
+    Order toEntity(AbstractRequestDTO dto);
 
     /**
      * Маппинг из списка сущностей в список DTO
      *
      * @param orders список сущностей
-     * @return список DTO
+     * @return список ResponseDTO
      */
     @Override
-    List<OrderDTO> toDTOList(List<Order> orders);
+    List<OrderResponseDTO> toDTOList(List<Order> orders);
 
     /**
      * Маппинг из списка DTO в список сущностей
      *
-     * @param orderDTOS список DTO
+     * @param dtos список RequestDTO
      * @return список сущностей
      */
     @Override
-    List<Order> toEntityList(List<OrderDTO> orderDTOS);
+    List<Order> toEntityList(List<AbstractRequestDTO> dtos);
 
     /**
      * Обновление сущности на основе DTO, игнорируя null поля и поле id
      *
-     * @param dto    DTO, проинициализированные поля которого, кроме id, будут обновлены в сущности
+     * @param dto    RequestDTO, проинициализированные поля которого будут обновлены в сущности
      * @param entity обновляемая сущность
      */
     @Override
-    @Mapping(target = "id", ignore = true)
-    void updateEntityFromDto(OrderDTO dto, @MappingTarget Order entity);
+    void updateEntityFromDto(AbstractRequestDTO dto, @MappingTarget Order entity);
+
 }

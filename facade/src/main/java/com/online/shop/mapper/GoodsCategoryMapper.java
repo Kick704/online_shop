@@ -1,72 +1,63 @@
 package com.online.shop.mapper;
 
-import com.online.shop.dto.GoodsCategoryCreationDTO;
-import com.online.shop.dto.GoodsCategoryDTO;
+import com.online.shop.dto.request.AbstractRequestDTO;
+import com.online.shop.dto.response.GoodsCategoryResponseDTO;
 import com.online.shop.entity.GoodsCategory;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
 /**
- * Маппер для {@link GoodsCategory} и {@link GoodsCategoryDTO}
+ * Маппер для сущности {@link GoodsCategory} и обратно
  */
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface GoodsCategoryMapper extends BaseMapper<GoodsCategory, GoodsCategoryDTO> {
+public interface GoodsCategoryMapper extends BaseMapper<GoodsCategory, GoodsCategoryResponseDTO> {
 
     /**
      * Маппинг из сущности в DTO
      *
      * @param entity сущность
-     * @return DTO
+     * @return ResponseDTO
      */
     @Override
-    GoodsCategoryDTO toDTO(GoodsCategory entity);
+    GoodsCategoryResponseDTO toDTO(GoodsCategory entity);
 
     /**
      * Маппинг из DTO в сущность
      *
-     * @param dto DTO
+     * @param dto RequestDTO
      * @return сущность
      */
     @Override
-    GoodsCategory toEntity(GoodsCategoryDTO dto);
-
-    /**
-     * Маппинг из DTO в сущность при добавлении новой категории товаров
-     * @param dto DTO с информацией о новой категории товаров
-     * @return сущность
-     */
-    GoodsCategory toEntity(GoodsCategoryCreationDTO dto);
+    GoodsCategory toEntity(AbstractRequestDTO dto);
 
     /**
      * Маппинг из списка сущностей в список DTO
      *
      * @param goodsCategories список сущностей
-     * @return список DTO
+     * @return список ResponseDTO
      */
     @Override
-    List<GoodsCategoryDTO> toDTOList(List<GoodsCategory> goodsCategories);
+    List<GoodsCategoryResponseDTO> toDTOList(List<GoodsCategory> goodsCategories);
 
     /**
      * Маппинг из списка DTO в список сущностей
      *
-     * @param goodsCategoryDTOS список DTO
+     * @param dtos список RequestDTO
      * @return список сущностей
      */
     @Override
-    List<GoodsCategory> toEntityList(List<GoodsCategoryDTO> goodsCategoryDTOS);
+    List<GoodsCategory> toEntityList(List<AbstractRequestDTO> dtos);
 
     /**
      * Обновление сущности на основе DTO, игнорируя null поля и поле id
      *
-     * @param dto    DTO, проинициализированные поля которого, кроме id, будут обновлены в сущности
+     * @param dto    RequestDTO, проинициализированные поля которого будут обновлены в сущности
      * @param entity обновляемая сущность
      */
     @Override
-    @Mapping(target = "id", ignore = true)
-    void updateEntityFromDto(GoodsCategoryDTO dto, @MappingTarget GoodsCategory entity);
+    void updateEntityFromDto(AbstractRequestDTO dto, @MappingTarget GoodsCategory entity);
 
 }

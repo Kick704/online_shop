@@ -1,11 +1,11 @@
-package com.online.shop.dto;
+package com.online.shop.dto.request;
 
 import com.online.shop.entity.GoodsCategory;
 
 /**
- * DTO Категория товаров на основе сущности {@link GoodsCategory}
+ * DTO для создания сущности Категория товаров {@link GoodsCategory}
  */
-public class GoodsCategoryDTO extends AbstractDTO {
+public class GoodsCategoryCreationDTO extends AbstractRequestDTO implements CreationDTO {
 
     private String categoryName;
 
@@ -19,9 +19,8 @@ public class GoodsCategoryDTO extends AbstractDTO {
 
     @Override
     public String toString() {
-        return "GoodsCategoryDTO{" +
-                "id=" + id +
-                ", categoryName='" + categoryName + '\'' +
+        return "GoodsCategoryCreationDTO{" +
+                "categoryName='" + categoryName + '\'' +
                 '}';
     }
 

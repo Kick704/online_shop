@@ -1,11 +1,13 @@
-package com.online.shop.dto;
+package com.online.shop.dto.request;
 
-import java.util.UUID;
+import com.online.shop.entity.Goods;
 
-public class GoodsCreationDTO {
+/**
+ * DTO для изменения сущности Товар {@link Goods}
+ */
+public class GoodsUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
 
     private String name;
-    private UUID goodsCategoryId;
     private double price;
     private int count;
     private double discount;
@@ -16,14 +18,6 @@ public class GoodsCreationDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public UUID getGoodsCategoryId() {
-        return goodsCategoryId;
-    }
-
-    public void setGoodsCategoryId(UUID goodsCategoryId) {
-        this.goodsCategoryId = goodsCategoryId;
     }
 
     public double getPrice() {
@@ -52,9 +46,8 @@ public class GoodsCreationDTO {
 
     @Override
     public String toString() {
-        return "GoodsCreationDTO{" +
+        return "GoodsUpdateDTO{" +
                 "name='" + name + '\'' +
-                ", goodsCategoryId=" + goodsCategoryId +
                 ", price=" + price +
                 ", count=" + count +
                 ", discount=" + discount +

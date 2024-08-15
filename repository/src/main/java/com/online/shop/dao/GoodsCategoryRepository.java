@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Репозиторий для управления сущностями {@link GoodsCategory} между приложением и БД
+ */
 @Repository
 public interface GoodsCategoryRepository extends JpaRepository<GoodsCategory, UUID> {
 

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Реализация интерфейса для управления сущностью {@link Goods} на сервисном слое
+ */
 @Service
 public class GoodsServiceImpl implements GoodsService {
 
@@ -23,9 +26,12 @@ public class GoodsServiceImpl implements GoodsService {
      * {@link NotFoundEntityException}, если такого товара нет
      */
     @Override
-    public Goods findGoodsById(UUID id) {
+    public Goods findById(UUID id) {
         return goodsRepository.findGoodsById(id)
-                .orElseThrow(() -> new NotFoundEntityException("Товар с ID: " + id + " не найден"));
+                .orElseThrow(() -> new NotFoundEntityException(
+                        new StringBuilder("Товар с ID: ")
+                                .append(id)
+                                .append(" не найден")));
     }
 
     /**
@@ -35,10 +41,11 @@ public class GoodsServiceImpl implements GoodsService {
      * {@link NotFoundEntityException}, если товаров ещё нет
      */
     @Override
-    public List<Goods> findAllGoods() {
+    public List<Goods> findAll() {
         List<Goods> goods = goodsRepository.findAllGoods();
         if (goods.isEmpty()) {
-            throw new NotFoundEntityException("Ни один товар не найден в БД");
+            throw new NotFoundEntityException(
+                    new StringBuilder("Ни один товар не найден в БД"));
         }
         return goods;
     }
@@ -54,7 +61,8 @@ public class GoodsServiceImpl implements GoodsService {
     public List<Goods> findAllGoodsByName(String name) {
         List<Goods> goods = goodsRepository.findAllGoodsByName(name);
         if (goods.isEmpty()) {
-            throw new NotFoundEntityException("Ни один товар не найден по наименованию " + name);
+            throw new NotFoundEntityException(new StringBuilder("Ни один товар не найден по наименованию ")
+                    .append(name));
         }
         return goods;
     }
@@ -65,7 +73,7 @@ public class GoodsServiceImpl implements GoodsService {
      * @param goods сущность Товар {@link Goods}
      */
     @Override
-    public void saveGoods(Goods goods) {
+    public void save(Goods goods) {
         goodsRepository.save(goods);
     }
 
@@ -76,9 +84,12 @@ public class GoodsServiceImpl implements GoodsService {
      * @param id идентификатор товара {@link UUID}
      */
     @Override
-    public void deleteGoodsById(UUID id) {
+    public void deleteById(UUID id) {
         if (goodsRepository.deleteGoodsById(id) == 0) {
-            throw new NotFoundEntityException("Товар с ID: " + id + " не найден и/или не может быть удалён");
+            throw new NotFoundEntityException(
+                    new StringBuilder("Товар с ID: ")
+                            .append(id)
+                            .append(" не найден или не может быть удалён"));
         }
     }
 }

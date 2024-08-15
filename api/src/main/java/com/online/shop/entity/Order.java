@@ -22,7 +22,7 @@ public class Order extends AbstractEntity {
     private Customer customer;
 
     /**
-     * Полная стоимость заказа
+     * Итоговая стоимость заказа
      */
     @Column(name = "amount")
     private double amount;
@@ -56,12 +56,23 @@ public class Order extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "goods_id"))
     private List<Goods> goodsInOrder;
 
+    /**
+     * Расчёт итоговой стоимости заказа при создании и обновлении заказа
+     */
+    @PrePersist
+    @PreUpdate
+    public void computeAmount() {
+        amount = goodsInOrder
+                .stream()
+                .mapToDouble(Goods::getPrice)
+                .sum();
+    }
+
     public Order() {
     }
 
     private Order(Builder builder) {
         setCustomer(builder.customer);
-        setAmount(builder.amount);
         setDeliveryAddress(builder.deliveryAddress);
         setReceiptCode(builder.receiptCode);
         setStatus(builder.status);
@@ -147,7 +158,6 @@ public class Order extends AbstractEntity {
 
     public static final class Builder {
         private Customer customer;
-        private double amount;
         private String deliveryAddress;
         private int receiptCode;
         private final OrderStatus status = OrderStatus.CREATED;
@@ -161,11 +171,6 @@ public class Order extends AbstractEntity {
 
         public Builder customer(Customer val) {
             customer = val;
-            return this;
-        }
-
-        public Builder amount(double val) {
-            amount = val;
             return this;
         }
 

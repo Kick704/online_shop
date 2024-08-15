@@ -4,24 +4,11 @@ import com.online.shop.entity.Order;
 import com.online.shop.enums.OrderStatus;
 
 import java.util.List;
-import java.util.UUID;
 
-public interface OrderService {
-
-    /**
-     * Выборка заказа по id
-     *
-     * @param id идентификатор заказа {@link UUID}
-     * @return {@link Order} - заказ по указанному {@code id}
-     */
-    Order findOrderById(UUID id);
-
-    /**
-     * Выборка всех заказов
-     *
-     * @return {@link List} - список всех заказов {@link Order}
-     */
-    List<Order> findAllOrders();
+/**
+ * Интерфейс для управления сущностью {@link Order} на сервисном слое
+ */
+public interface OrderService extends BaseService<Order> {
 
     /**
      * Выборка заказов по статусу
@@ -43,12 +30,5 @@ public interface OrderService {
      * @param order сущность Заказ {@link Order}
      */
     void updateOrder(Order order);
-
-    /**
-     * Удаление заказа по id
-     *
-     * @param id идентификатор заказа {@link UUID}
-     */
-    void deleteOrderById(UUID id);
 
 }

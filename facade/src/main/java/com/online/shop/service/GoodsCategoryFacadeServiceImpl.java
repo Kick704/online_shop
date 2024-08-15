@@ -1,7 +1,9 @@
 package com.online.shop.service;
 
-import com.online.shop.dto.GoodsCategoryCreationDTO;
-import com.online.shop.dto.GoodsCategoryDTO;
+import com.online.shop.dto.request.GoodsCategoryCreationDTO;
+import com.online.shop.dto.request.GoodsCategoryUpdateDTO;
+import com.online.shop.dto.response.GoodsCategoryResponseDTO;
+import com.online.shop.dto.response.InformationDTO;
 import com.online.shop.entity.GoodsCategory;
 import com.online.shop.mapper.GoodsCategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Фасад-сервис слоя представления для управления DTO на основе сущности {@link GoodsCategory}
+ */
 @Service
 public class GoodsCategoryFacadeServiceImpl implements GoodsCategoryFacadeService {
 
@@ -24,34 +29,34 @@ public class GoodsCategoryFacadeServiceImpl implements GoodsCategoryFacadeServic
      * Выборка категории товаров по id
      *
      * @param id идентификатор заказа {@link UUID}
-     * @return {@link GoodsCategoryDTO} - категория товаров по указанному {@code id}
+     * @return {@link GoodsCategoryResponseDTO} - категория товаров по указанному {@code id}
      */
     @Override
     @Transactional(readOnly = true)
-    public GoodsCategoryDTO findGoodsCategoryById(UUID id) {
-        return categoryMapper.toDTO(categoryService.findGoodsCategoryById(id));
+    public GoodsCategoryResponseDTO findById(UUID id) {
+        return categoryMapper.toDTO(categoryService.findById(id));
     }
 
     /**
      * Выборка всех категорий товаров
      *
-     * @return {@link List} - список всех категорий товаров {@link GoodsCategoryDTO}
+     * @return {@link List} - список всех категорий товаров {@link GoodsCategoryResponseDTO}
      */
     @Override
     @Transactional(readOnly = true)
-    public List<GoodsCategoryDTO> findAllGoodsCategory() {
-        return categoryMapper.toDTOList(categoryService.findAllGoodsCategory());
+    public List<GoodsCategoryResponseDTO> findAll() {
+        return categoryMapper.toDTOList(categoryService.findAll());
     }
 
     /**
      * Выборка категории товаров по названию
      *
      * @param name наименование категории товаров {@link String}
-     * @return {@link GoodsCategoryDTO} - категория товаров по указанному наименованию {@code name}
+     * @return {@link GoodsCategoryResponseDTO} - категория товаров по указанному наименованию {@code name}
      */
     @Override
     @Transactional(readOnly = true)
-    public GoodsCategoryDTO findGoodsCategoryByName(String name) {
+    public GoodsCategoryResponseDTO findGoodsCategoryByName(String name) {
         return categoryMapper.toDTO(categoryService.findGoodsCategoryByName(name));
     }
 
@@ -59,13 +64,13 @@ public class GoodsCategoryFacadeServiceImpl implements GoodsCategoryFacadeServic
      * Добавление новой категории товаров в БД
      *
      * @param categoryCreationDTO DTO новая Категория товаров {@link GoodsCategoryCreationDTO}
-     * @return DTO Категория товаров {@link GoodsCategoryDTO}
+     * @return DTO Категория товаров {@link GoodsCategoryResponseDTO}
      */
     @Override
     @Transactional
-    public GoodsCategoryDTO addNewGoodsCategory(GoodsCategoryCreationDTO categoryCreationDTO) {
+    public GoodsCategoryResponseDTO addNew(GoodsCategoryCreationDTO categoryCreationDTO) {
         GoodsCategory newCategory = categoryMapper.toEntity(categoryCreationDTO);
-        categoryService.saveGoodsCategory(newCategory);
+        categoryService.save(newCategory);
         return categoryMapper.toDTO(newCategory);
     }
 
@@ -73,15 +78,15 @@ public class GoodsCategoryFacadeServiceImpl implements GoodsCategoryFacadeServic
      * Обновление категории товаров в БД
      *
      * @param id          идентификатор категории товаров {@link UUID}
-     * @param categoryDTO DTO Категория товаров {@link GoodsCategoryDTO} с изменёнными полями
-     * @return обновлённый DTO Категория товаров {@link GoodsCategoryDTO}
+     * @param categoryUpdateDTO DTO Категория товаров {@link GoodsCategoryUpdateDTO} с изменёнными полями
+     * @return обновлённый DTO Категория товаров {@link GoodsCategoryResponseDTO}
      */
     @Override
     @Transactional
-    public GoodsCategoryDTO updateGoodsCategory(UUID id, GoodsCategoryDTO categoryDTO) {
-        GoodsCategory category = categoryService.findGoodsCategoryById(id);
-        categoryMapper.updateEntityFromDto(categoryDTO, category);
-        categoryService.saveGoodsCategory(category);
+    public GoodsCategoryResponseDTO update(UUID id, GoodsCategoryUpdateDTO categoryUpdateDTO) {
+        GoodsCategory category = categoryService.findById(id);
+        categoryMapper.updateEntityFromDto(categoryUpdateDTO, category);
+        categoryService.save(category);
         return categoryMapper.toDTO(category);
     }
 
@@ -89,11 +94,16 @@ public class GoodsCategoryFacadeServiceImpl implements GoodsCategoryFacadeServic
      * Удаление категории товара по id
      *
      * @param id идентификатор категории товара {@link UUID}
+     * @return {@link InformationDTO} с сообщением о результате
      */
     @Override
     @Transactional
-    public void deleteGoodsCategoryById(UUID id) {
-        categoryService.deleteGoodsCategoryById(id);
+    public InformationDTO deleteById(UUID id) {
+        categoryService.deleteById(id);
+        return new InformationDTO(
+                new StringBuilder("Категория товаров с ID: ")
+                .append(id)
+                .append(" удалена"));
     }
 
 }
