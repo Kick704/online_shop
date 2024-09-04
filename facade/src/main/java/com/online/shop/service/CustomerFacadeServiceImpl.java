@@ -86,7 +86,7 @@ public class CustomerFacadeServiceImpl implements CustomerFacadeService {
     @Override
     @Transactional
     public CustomerResponseDTO addNew(CustomerCreationDTO customerCreationDTO) {
-        Customer newCustomer =  customerMapper.toEntity(customerCreationDTO);
+        Customer newCustomer = customerMapper.toEntity(customerCreationDTO);
         customerService.save(newCustomer);
         return customerMapper.toDTO(newCustomer);
     }
@@ -94,7 +94,7 @@ public class CustomerFacadeServiceImpl implements CustomerFacadeService {
     /**
      * Обновление покупателя в БД
      *
-     * @param id идентификатор покупателя {@link UUID}
+     * @param id                идентификатор покупателя {@link UUID}
      * @param customerUpdateDTO DTO Покупатель {@link CustomerUpdateDTO} с изменёнными полями
      * @return обновлённый DTO Покупатель {@link CustomerResponseDTO}
      */
@@ -117,10 +117,7 @@ public class CustomerFacadeServiceImpl implements CustomerFacadeService {
     @Transactional
     public InformationDTO deleteById(UUID id) {
         customerService.deleteById(id);
-        return new InformationDTO(
-                new StringBuilder("Покупатель с ID: ")
-                .append(id)
-                .append(" удалён"));
+        return new InformationDTO(String.format("Покупатель с ID: %s удалён", id));
     }
 
 }

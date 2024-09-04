@@ -1,17 +1,22 @@
 package com.online.shop.dto.response;
 
 import com.online.shop.entity.Order;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
 /**
  * DTO Заказ на основе сущности {@link Order}
  */
+@Schema(description = "DTO Заказ")
 public class OrderResponseDTO extends AbstractResponseDTO {
 
     private CustomerResponseDTO customer;
+    @Schema(description = "Список товаров в заказе")
     private List<GoodsResponseDTO> goodsInOrder;
+    @Schema(description = "Итоговая стоимость")
     private double amount;
+    @Schema(description = "Адрес доставки")
     private String deliveryAddress;
 
     public CustomerResponseDTO getCustomer() {

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -36,10 +37,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order findById(UUID id) {
         return orderRepository.findOrderById(id)
-                .orElseThrow(() -> new NotFoundEntityException(
-                        new StringBuilder("Заказ с ID: ")
-                                .append(id)
-                                .append(" не найден")));
+                .orElseThrow(() -> new NotFoundEntityException(String.format("Заказ с ID: %s не найден", id)));
     }
 
     /**
@@ -52,8 +50,7 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> findAll() {
         List<Order> orders = orderRepository.findAllOrders();
         if (orders.isEmpty()) {
-            throw new NotFoundEntityException(
-                    new StringBuilder("Ни один заказ не найден в БД"));
+            throw new NotFoundEntityException("Ни один заказ не найден в БД");
         }
         return orders;
     }
@@ -69,9 +66,7 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> findAllOrdersByStatus(OrderStatus status) {
         List<Order> orders = orderRepository.findAllOrdersByStatus(status);
         if (orders.isEmpty()) {
-            throw new NotFoundEntityException(
-                    new StringBuilder("Ни один заказ не найден по статусу ")
-                            .append(status));
+            throw new NotFoundEntityException(String.format("Ни один заказ не найден по статусу %s", status));
         }
         return orders;
     }
@@ -96,11 +91,13 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Обновление заказа в БД
+     * <p> Может выбросить исключение {@link NullPointerException}, если сущность ссылается на null
      *
      * @param order сущность Заказ {@link Order}
      */
     @Override
     public void updateOrder(Order order) {
+        Objects.requireNonNull(order, "Сущность Order не проинициализирована перед сохранением");
         orderRepository.save(order);
     }
 
@@ -113,10 +110,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteById(UUID id) {
         if (orderRepository.deleteOrderById(id) == 0) {
-            throw new NotFoundEntityException(
-                    new StringBuilder("Заказ с ID: ")
-                            .append(id)
-                            .append(" не найден или не может быть удалён"));
+            throw new NotFoundEntityException(String.format("Заказ с ID: %s не найден или не может быть удалён", id));
         }
     }
 }

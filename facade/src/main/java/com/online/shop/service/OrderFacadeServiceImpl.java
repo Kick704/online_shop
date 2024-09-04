@@ -87,7 +87,7 @@ public class OrderFacadeServiceImpl implements OrderFacadeService {
     /**
      * Обновление заказа в БД
      *
-     * @param id       идентификатор заказа {@link UUID}
+     * @param id             идентификатор заказа {@link UUID}
      * @param orderUpdateDTO DTO Заказ {@link OrderUpdateDTO} с изменёнными полями
      * @return обновлённый DTO Заказ {@link OrderResponseDTO}
      */
@@ -110,10 +110,7 @@ public class OrderFacadeServiceImpl implements OrderFacadeService {
     @Transactional
     public InformationDTO deleteById(UUID id) {
         orderService.deleteById(id);
-        return new InformationDTO(
-                new StringBuilder("Заказ с ID: ")
-                        .append(id)
-                        .append(" удалён"));
+        return new InformationDTO(String.format("Заказ с ID: %s удалён", id));
     }
 
 }

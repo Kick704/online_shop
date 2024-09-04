@@ -1,18 +1,27 @@
 package com.online.shop.dto.request;
 
 import com.online.shop.entity.Customer;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * DTO для изменения сущности Покупатель {@link Customer}
  */
+@Schema(description = "DTO для обновления покупателя")
 public class CustomerUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
 
+    @Schema(description = "Фамилия")
     private String surname;
+    @Schema(description = "Имя")
     private String firstname;
+    @Schema(description = "Отчество")
     private String patronymic;
+    @Schema(description = "Номер телефона")
     private String phoneNumber;
+    @Schema(description = "E-mail")
     private String email;
+    @Schema(description = "Пароль")
     private String password;
+    @Schema(description = "Статус аккаунта")
     private boolean enabled;
 
     public String getSurname() {

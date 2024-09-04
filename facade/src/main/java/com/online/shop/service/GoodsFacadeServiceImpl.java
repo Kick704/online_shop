@@ -126,10 +126,7 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
     @Transactional
     public InformationDTO deleteById(UUID id) {
         goodsService.deleteById(id);
-        return new InformationDTO(
-                new StringBuilder("Товар с ID: ")
-                .append(id)
-                .append(" удалён"));
+        return new InformationDTO(String.format("Товар с ID: %s удалён", id));
     }
 
 //    /**
@@ -151,7 +148,7 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
 //        }
 //        if (!customer.getGoodsInCart().remove(goods)) {
 //            throw new IllegalStateException("Не удалось удалить товар с ID: " + goodsId +
-//                    " из корзины покупателя с ID: ");
+//                    " из корзины покупателя с ID: " + customerId);
 //        }
 //        customerService.save(customer);
 //        return new InformationDTO("Товар с ID: " + goodsId + " удалён из корзины покупателя с ID: " + customerId);

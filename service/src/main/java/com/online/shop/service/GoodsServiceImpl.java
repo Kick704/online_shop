@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -28,10 +29,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public Goods findById(UUID id) {
         return goodsRepository.findGoodsById(id)
-                .orElseThrow(() -> new NotFoundEntityException(
-                        new StringBuilder("Товар с ID: ")
-                                .append(id)
-                                .append(" не найден")));
+                .orElseThrow(() -> new NotFoundEntityException(String.format("Товар с ID: %s не найден", id)));
     }
 
     /**
@@ -44,8 +42,7 @@ public class GoodsServiceImpl implements GoodsService {
     public List<Goods> findAll() {
         List<Goods> goods = goodsRepository.findAllGoods();
         if (goods.isEmpty()) {
-            throw new NotFoundEntityException(
-                    new StringBuilder("Ни один товар не найден в БД"));
+            throw new NotFoundEntityException("Ни один товар не найден в БД");
         }
         return goods;
     }
@@ -61,19 +58,20 @@ public class GoodsServiceImpl implements GoodsService {
     public List<Goods> findAllGoodsByName(String name) {
         List<Goods> goods = goodsRepository.findAllGoodsByName(name);
         if (goods.isEmpty()) {
-            throw new NotFoundEntityException(new StringBuilder("Ни один товар не найден по наименованию ")
-                    .append(name));
+            throw new NotFoundEntityException(String.format("Ни один товар не найден по наименованию %s", name));
         }
         return goods;
     }
 
     /**
      * Добавление/обновление товара в БД
+     * <p> Может выбросить исключение {@link NullPointerException}, если сущность ссылается на null
      *
      * @param goods сущность Товар {@link Goods}
      */
     @Override
     public void save(Goods goods) {
+        Objects.requireNonNull(goods, "Сущность Goods не проинициализирована перед сохранением");
         goodsRepository.save(goods);
     }
 
@@ -86,10 +84,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void deleteById(UUID id) {
         if (goodsRepository.deleteGoodsById(id) == 0) {
-            throw new NotFoundEntityException(
-                    new StringBuilder("Товар с ID: ")
-                            .append(id)
-                            .append(" не найден или не может быть удалён"));
+            throw new NotFoundEntityException(String.format("Товар с ID: %s не найден или не может быть удалён", id));
         }
     }
 }

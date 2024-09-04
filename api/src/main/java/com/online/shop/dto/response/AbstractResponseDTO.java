@@ -1,5 +1,7 @@
 package com.online.shop.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.UUID;
 
 /**
@@ -7,6 +9,7 @@ import java.util.UUID;
  */
 public abstract class AbstractResponseDTO {
 
+    @Schema(description = "ID")
     protected UUID id;
 
     public UUID getId() {

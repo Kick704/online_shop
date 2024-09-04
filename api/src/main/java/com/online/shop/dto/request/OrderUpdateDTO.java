@@ -2,14 +2,19 @@ package com.online.shop.dto.request;
 
 import com.online.shop.entity.Order;
 import com.online.shop.enums.OrderStatus;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * DTO для изменения сущности Заказ {@link Order}
  */
+@Schema(description = "DTO для обновления заказа")
 public class OrderUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
 
+    @Schema(description = "Адрес доставки")
     private String deliveryAddress;
+    @Schema(description = "Код для получения заказа")
     private int receiptCode;
+    @Schema(description = "Статус заказа")
     private OrderStatus status;
 
     public String getDeliveryAddress() {

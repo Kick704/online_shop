@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -28,10 +29,8 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     @Override
     public GoodsCategory findById(UUID id) {
         return categoryRepository.findGoodsCategoryById(id)
-                .orElseThrow(() -> new NotFoundEntityException(
-                        new StringBuilder("Категория товаров с ID: ")
-                                .append(id)
-                                .append(" не найдена")));
+                .orElseThrow(() ->
+                        new NotFoundEntityException(String.format("Категория товаров с ID: %s не найдена", id)));
     }
 
     /**
@@ -44,8 +43,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     public List<GoodsCategory> findAll() {
         List<GoodsCategory> categories = categoryRepository.findAllGoodsCategory();
         if (categories.isEmpty()) {
-            throw new NotFoundEntityException(
-                    new StringBuilder("Ни одна категория товаров не найдена в БД"));
+            throw new NotFoundEntityException("Ни одна категория товаров не найдена в БД");
         }
         return categories;
     }
@@ -62,18 +60,18 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
         return categoryRepository.findGoodsCategoryByName(name)
                 .orElseThrow(() ->
                         new NotFoundEntityException(
-                                new StringBuilder("Категория товаров с наименованием: ")
-                                        .append(name)
-                                        .append(" не найдена")));
+                                String.format("Категория товаров с наименованием: %s не найдена", name)));
     }
 
     /**
      * Добавление/обновление категории товаров в БД
+     * <p> Может выбросить исключение {@link NullPointerException}, если сущность ссылается на null
      *
      * @param category сущность Категория товаров {@link GoodsCategory}
      */
     @Override
     public void save(GoodsCategory category) {
+        Objects.requireNonNull(category, "Сущность GoodsCategory не проинициализирована перед сохранением");
         categoryRepository.save(category);
     }
 
@@ -88,9 +86,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     public void deleteById(UUID id) {
         if (categoryRepository.deleteGoodsCategoryById(id) == 0) {
             throw new NotFoundEntityException(
-                    new StringBuilder("Категория товаров с ID: ")
-                            .append(id)
-                            .append(" не найдена или не может быть удалена"));
+                    String.format("Категория товаров с ID: %s не найдена или не может быть удалена", id));
         }
     }
 }

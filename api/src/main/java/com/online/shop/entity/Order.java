@@ -34,7 +34,7 @@ public class Order extends AbstractEntity {
     private String deliveryAddress;
 
     /**
-     * Код получения заказа
+     * Код для получения заказа
      */
     @Column(name = "receipt_code")
     private int receiptCode;

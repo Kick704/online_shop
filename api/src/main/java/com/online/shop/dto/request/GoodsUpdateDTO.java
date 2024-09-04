@@ -1,15 +1,21 @@
 package com.online.shop.dto.request;
 
 import com.online.shop.entity.Goods;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * DTO для изменения сущности Товар {@link Goods}
  */
+@Schema(description = "DTO для обновления товара")
 public class GoodsUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
 
+    @Schema(description = "Название")
     private String name;
+    @Schema(description = "Стоимость")
     private double price;
+    @Schema(description = "Количество на складе")
     private int count;
+    @Schema(description = "Скидка")
     private double discount;
 
     public String getName() {

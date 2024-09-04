@@ -1,17 +1,25 @@
 package com.online.shop.dto.response;
 
 import com.online.shop.entity.Customer;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * DTO Покупатель на основе сущности {@link Customer}
  */
+@Schema(description = "DTO Покупатель")
 public class CustomerResponseDTO extends AbstractResponseDTO {
 
+    @Schema(description = "Фамилия")
     private String surname;
+    @Schema(description = "Имя")
     private String firstname;
+    @Schema(description = "Отчество")
     private String patronymic;
+    @Schema(description = "Номер телефона")
     private String phoneNumber;
+    @Schema(description = "E-mail")
     private String email;
+    @Schema(description = "Баланс")
     private double balance;
 
     public String getSurname() {

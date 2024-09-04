@@ -100,10 +100,7 @@ public class GoodsCategoryFacadeServiceImpl implements GoodsCategoryFacadeServic
     @Transactional
     public InformationDTO deleteById(UUID id) {
         categoryService.deleteById(id);
-        return new InformationDTO(
-                new StringBuilder("Категория товаров с ID: ")
-                .append(id)
-                .append(" удалена"));
+        return new InformationDTO(String.format("Категория товаров с ID: %s удалена", id));
     }
 
 }

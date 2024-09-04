@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -29,8 +30,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer findById(UUID id) {
         return customerRepository.findCustomerById(id)
-                .orElseThrow(() -> new NotFoundEntityException(
-                        new StringBuilder("Покупатель с ID: " + id + " не найден")));
+                .orElseThrow(() ->
+                        new NotFoundEntityException(String.format("Покупатель с ID: %s не найден", id)));
     }
 
     /**
@@ -43,8 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> findAll() {
         List<Customer> customers = customerRepository.findAllCustomers();
         if (customers.isEmpty()) {
-            throw new NotFoundEntityException(
-                    new StringBuilder("Ни один покупатель не найден в БД"));
+            throw new NotFoundEntityException("Ни один покупатель не найден в БД");
         }
         return customers;
     }
@@ -92,19 +92,20 @@ public class CustomerServiceImpl implements CustomerService {
         List<Customer> customers = customerRepository.findAllCustomersByEnabled(enabled);
         if (customers.isEmpty()) {
             throw new NotFoundEntityException(
-                    new StringBuilder("Ни один покупатель не найден по указанному состоянию аккаунта: ")
-                            .append(enabled));
+                    String.format("Ни один покупатель не найден по указанному состоянию аккаунта: %s", enabled));
         }
         return customers;
     }
 
     /**
      * Добавление/обновление покупателя в БД
+     * <p> Может выбросить исключение {@link NullPointerException}, если сущность ссылается на null
      *
      * @param customer сущность Покупатель {@link Customer}
      */
     @Override
     public void save(Customer customer) {
+        Objects.requireNonNull(customer, "Сущность Customer не проинициализирована перед сохранением");
         customerRepository.save(customer);
     }
 
@@ -118,9 +119,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void deleteById(UUID id) {
         if (customerRepository.deleteCustomerById(id) == 0) {
             throw new NotFoundEntityException(
-                    new StringBuilder("Покупатель с ID: ")
-                            .append(id)
-                            .append(" не найден или не может быть удалён"));
+                    String.format("Покупатель с ID: %s не найден или не может быть удалён", id));
         }
     }
 }

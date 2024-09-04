@@ -1,18 +1,25 @@
 package com.online.shop.dto.request;
 
 import com.online.shop.entity.Goods;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.UUID;
 
 /**
  * DTO для создания сущности Товар {@link Goods}
  */
+@Schema(description = "DTO для добавления товара")
 public class GoodsCreationDTO extends AbstractRequestDTO implements CreationDTO {
 
+    @Schema(description = "Название")
     private String name;
+    @Schema(description = "ID категории товаров")
     private UUID goodsCategoryId;
+    @Schema(description = "Стоимость")
     private double price;
+    @Schema(description = "Количество на складе")
     private int count;
+    @Schema(description = "Скидка")
     private double discount;
 
     public String getName() {
