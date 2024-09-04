@@ -1,6 +1,7 @@
 package com.online.shop.mapper;
 
-import com.online.shop.dto.request.AbstractRequestDTO;
+import com.online.shop.dto.request.GoodsCreationDTO;
+import com.online.shop.dto.request.GoodsUpdateDTO;
 import com.online.shop.dto.response.GoodsResponseDTO;
 import com.online.shop.entity.Goods;
 import org.mapstruct.Mapper;
@@ -14,7 +15,10 @@ import java.util.List;
  */
 @Mapper(componentModel = "spring", uses = GoodsCategoryMapper.class,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface GoodsMapper extends BaseMapper<Goods, GoodsResponseDTO> {
+public interface GoodsMapper extends BaseMapper<Goods,
+        GoodsCreationDTO,
+        GoodsUpdateDTO,
+        GoodsResponseDTO> {
 
     /**
      * Маппинг из сущности в DTO
@@ -26,13 +30,13 @@ public interface GoodsMapper extends BaseMapper<Goods, GoodsResponseDTO> {
     GoodsResponseDTO toDTO(Goods entity);
 
     /**
-     * Маппинг из DTO в сущность
+     * Маппинг из DTO в сущность для его создания
      *
      * @param dto RequestDTO
      * @return сущность
      */
     @Override
-    Goods toEntity(AbstractRequestDTO dto);
+    Goods toEntity(GoodsCreationDTO dto);
 
     /**
      * Маппинг из списка сущностей в список DTO
@@ -44,21 +48,12 @@ public interface GoodsMapper extends BaseMapper<Goods, GoodsResponseDTO> {
     List<GoodsResponseDTO> toDTOList(List<Goods> goods);
 
     /**
-     * Маппинг из списка DTO в список сущностей
-     *
-     * @param dtos список RequestDTO
-     * @return список сущностей
-     */
-    @Override
-    List<Goods> toEntityList(List<AbstractRequestDTO> dtos);
-
-    /**
      * Обновление сущности на основе DTO, игнорируя null поля и поле id
      *
      * @param dto    RequestDTO, проинициализированные поля которого будут обновлены в сущности
      * @param entity обновляемая сущность
      */
     @Override
-    void updateEntityFromDto(AbstractRequestDTO dto, @MappingTarget Goods entity);
+    void updateEntityFromDto(GoodsUpdateDTO dto, @MappingTarget Goods entity);
 
 }

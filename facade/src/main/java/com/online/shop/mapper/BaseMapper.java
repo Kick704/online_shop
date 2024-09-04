@@ -1,6 +1,7 @@
 package com.online.shop.mapper;
 
-import com.online.shop.dto.request.AbstractRequestDTO;
+import com.online.shop.dto.request.CreationDTO;
+import com.online.shop.dto.request.UpdateDTO;
 import com.online.shop.dto.response.AbstractResponseDTO;
 import com.online.shop.entity.AbstractEntity;
 
@@ -13,7 +14,10 @@ import java.util.List;
  * @param <Entity> сущность
  * @param <ResponseDTO> DTO, предоставляющий информацию о сущности
  */
-public interface BaseMapper<Entity extends AbstractEntity, ResponseDTO extends AbstractResponseDTO> {
+public interface BaseMapper<Entity extends AbstractEntity,
+        CreationRequestDTO extends CreationDTO,
+        UpdateRequestDTO extends UpdateDTO,
+        ResponseDTO extends AbstractResponseDTO> {
 
     /**
      * Маппинг из сущности в DTO
@@ -24,12 +28,12 @@ public interface BaseMapper<Entity extends AbstractEntity, ResponseDTO extends A
     ResponseDTO toDTO(Entity entity);
 
     /**
-     * Маппинг из DTO в сущность
+     * Маппинг из DTO в сущность для его создания
      *
      * @param dto RequestDTO
      * @return сущность
      */
-    Entity toEntity(AbstractRequestDTO dto);
+    Entity toEntity(CreationRequestDTO dto);
 
     /**
      * Маппинг из списка сущностей в список DTO
@@ -40,19 +44,11 @@ public interface BaseMapper<Entity extends AbstractEntity, ResponseDTO extends A
     List<ResponseDTO> toDTOList(List<Entity> entities);
 
     /**
-     * Маппинг из списка DTO в список сущностей
-     *
-     * @param dtos список RequestDTO
-     * @return список сущностей
-     */
-    List<Entity> toEntityList(List<AbstractRequestDTO> dtos);
-
-    /**
      * Обновление сущности на основе DTO, игнорируя null поля и поле id
      *
      * @param dto    RequestDTO, проинициализированные поля которого будут обновлены в сущности
      * @param entity обновляемая сущность
      */
-    void updateEntityFromDto(AbstractRequestDTO dto, Entity entity);
+    void updateEntityFromDto(UpdateRequestDTO dto, Entity entity);
 
 }
