@@ -4,6 +4,7 @@ package com.online.shop.enums;
  * Всевозможные статусы заказа
  */
 public enum OrderStatus {
+
     CREATED("Создан"),
     COLLECTING("Собирается"),
     COMING("В пути"),
@@ -19,4 +20,5 @@ public enum OrderStatus {
     public String getValue() {
         return value;
     }
+
 }

@@ -1,7 +1,12 @@
-package com.online.shop.dto.request;
+package com.online.shop.dto.request.creation;
 
+import com.online.shop.dto.request.AbstractRequestDTO;
 import com.online.shop.entity.Goods;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
@@ -11,14 +16,25 @@ import java.util.UUID;
 @Schema(description = "DTO для добавления товара")
 public class GoodsCreationDTO extends AbstractRequestDTO implements CreationDTO {
 
+    @NotBlank(message = "Не введено название товара")
     @Schema(description = "Название")
     private String name;
+
+    @NotNull(message = "Не введён ID категории товаров")
     @Schema(description = "ID категории товаров")
     private UUID goodsCategoryId;
+
+    @NotNull(message = "Не введена стоимость товара")
+    @DecimalMin(value = "1.0", message = "Некорректная стоимость товара")
     @Schema(description = "Стоимость")
     private double price;
+
+    @NotNull(message = "Не введено количество товаров на складе")
+    @Min(value = 1, message = "На складе должен быть минимум 1 товар")
     @Schema(description = "Количество на складе")
     private int count;
+
+    @DecimalMin(value = "0.0", message = "Некорректная скидка на товар")
     @Schema(description = "Скидка")
     private double discount;
 

@@ -1,6 +1,7 @@
 package com.online.shop.entity;
 
-import com.online.shop.exception.UninitializedBuilderFieldException;
+import com.online.shop.exception_handling.CommonRuntimeException;
+import com.online.shop.exception_handling.ErrorCode;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -183,8 +184,10 @@ public class Goods extends AbstractEntity {
 
         public Goods build() {
             if (name == null || goodsCategory == null) {
-                throw new UninitializedBuilderFieldException("Goods: одно или несколько полей (name, goodsCategory) " +
-                        "ссылаются на null");
+                throw new CommonRuntimeException(
+                        ErrorCode.UNINITIALIZED_BUILDER_FIELD,
+                        "Goods: одно или несколько полей (name, goodsCategory) ссылаются на null"
+                );
             }
             return new Goods(this);
         }

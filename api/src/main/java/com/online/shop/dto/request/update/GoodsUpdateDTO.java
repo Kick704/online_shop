@@ -1,7 +1,10 @@
-package com.online.shop.dto.request;
+package com.online.shop.dto.request.update;
 
+import com.online.shop.dto.request.AbstractRequestDTO;
 import com.online.shop.entity.Goods;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
 
 /**
  * DTO для изменения сущности Товар {@link Goods}
@@ -11,10 +14,16 @@ public class GoodsUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
 
     @Schema(description = "Название")
     private String name;
+
+    @DecimalMin(value = "1.0", message = "Некорректная стоимость товара")
     @Schema(description = "Стоимость")
     private double price;
+
+    @Min(value = 1, message = "На складе должен быть минимум 1 товар")
     @Schema(description = "Количество на складе")
     private int count;
+
+    @DecimalMin(value = "0.0", message = "Некорректная скидка на товар")
     @Schema(description = "Скидка")
     private double discount;
 

@@ -1,7 +1,7 @@
 package com.online.shop.service;
 
-import com.online.shop.dto.request.GoodsCreationDTO;
-import com.online.shop.dto.request.GoodsUpdateDTO;
+import com.online.shop.dto.request.creation.GoodsCreationDTO;
+import com.online.shop.dto.request.update.GoodsUpdateDTO;
 import com.online.shop.dto.response.GoodsResponseDTO;
 import com.online.shop.entity.Goods;
 

@@ -1,13 +1,14 @@
 package com.online.shop.controller;
 
-import com.online.shop.dto.request.GoodsUpdateDTO;
+import com.online.shop.dto.request.update.GoodsUpdateDTO;
 import com.online.shop.dto.response.CustomerResponseDTO;
-import com.online.shop.dto.request.GoodsCreationDTO;
+import com.online.shop.dto.request.creation.GoodsCreationDTO;
 import com.online.shop.dto.response.GoodsResponseDTO;
 import com.online.shop.dto.response.InformationDTO;
 import com.online.shop.service.GoodsFacadeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,7 +72,7 @@ public class GoodsController {
     @PostMapping
     @Operation(summary = "Добавление нового товара в интернет-магазин",
             description = "Позволяет добавить новый товар в интернет-магазин")
-    public GoodsResponseDTO addNewGoods(@RequestBody GoodsCreationDTO goodsCreationDTO) {
+    public GoodsResponseDTO addNewGoods(@Valid @RequestBody GoodsCreationDTO goodsCreationDTO) {
         return goodsFacadeService.addNew(goodsCreationDTO);
     }
 
@@ -99,7 +100,7 @@ public class GoodsController {
     @PutMapping("/{id}")
     @Operation(summary = "Изменение информации о товаре",
             description = "Позволяет изменить информацию о товаре")
-    public GoodsResponseDTO updateGoods(@PathVariable UUID id, @RequestBody GoodsUpdateDTO goodsUpdateDTO) {
+    public GoodsResponseDTO updateGoods(@PathVariable UUID id, @Valid @RequestBody GoodsUpdateDTO goodsUpdateDTO) {
         return goodsFacadeService.update(id, goodsUpdateDTO);
     }
 

@@ -1,7 +1,13 @@
-package com.online.shop.dto.request;
+package com.online.shop.dto.request.update;
 
+import com.online.shop.dto.request.AbstractRequestDTO;
 import com.online.shop.entity.Customer;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import static com.online.shop.dto.request.ValidationConstants.MIN_CUSTOMER_PASSWORD_LENGTH;
+import static com.online.shop.dto.request.ValidationConstants.PHONE_NUMBER_REGEXP;
 
 /**
  * DTO для изменения сущности Покупатель {@link Customer}
@@ -11,18 +17,25 @@ public class CustomerUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
 
     @Schema(description = "Фамилия")
     private String surname;
+
     @Schema(description = "Имя")
     private String firstname;
+
     @Schema(description = "Отчество")
     private String patronymic;
+
+    @Pattern(regexp = PHONE_NUMBER_REGEXP, message = "Некорректный номер телефона")
     @Schema(description = "Номер телефона")
     private String phoneNumber;
+
+    @Email(message = "Некорректный e-mail")
     @Schema(description = "E-mail")
     private String email;
+
+    @Size(min = MIN_CUSTOMER_PASSWORD_LENGTH,
+            message = "Длина пароля должна составлять минимум " + MIN_CUSTOMER_PASSWORD_LENGTH + " символов")
     @Schema(description = "Пароль")
     private String password;
-    @Schema(description = "Статус аккаунта")
-    private boolean enabled;
 
     public String getSurname() {
         return surname;
@@ -72,14 +85,6 @@ public class CustomerUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
         this.password = password;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     @Override
     public String toString() {
         return "CustomerUpdateDTO{" +
@@ -89,7 +94,6 @@ public class CustomerUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", enabled=" + enabled +
                 '}';
     }
 

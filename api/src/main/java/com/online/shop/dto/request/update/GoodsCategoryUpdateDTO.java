@@ -1,5 +1,6 @@
-package com.online.shop.dto.request;
+package com.online.shop.dto.request.update;
 
+import com.online.shop.dto.request.AbstractRequestDTO;
 import com.online.shop.entity.GoodsCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 

@@ -1,7 +1,7 @@
 package com.online.shop.service;
 
-import com.online.shop.dto.request.OrderCreationDTO;
-import com.online.shop.dto.request.OrderUpdateDTO;
+import com.online.shop.dto.request.creation.OrderCreationDTO;
+import com.online.shop.dto.request.update.OrderUpdateDTO;
 import com.online.shop.dto.response.OrderResponseDTO;
 import com.online.shop.entity.Order;
 import com.online.shop.enums.OrderStatus;

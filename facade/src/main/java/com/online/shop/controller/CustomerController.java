@@ -1,13 +1,14 @@
 package com.online.shop.controller;
 
-import com.online.shop.dto.request.CustomerCreationDTO;
-import com.online.shop.dto.request.CustomerUpdateDTO;
+import com.online.shop.dto.request.creation.CustomerCreationDTO;
+import com.online.shop.dto.request.update.CustomerUpdateDTO;
 import com.online.shop.dto.response.CustomerResponseDTO;
 import com.online.shop.dto.response.GoodsResponseDTO;
 import com.online.shop.dto.response.InformationDTO;
 import com.online.shop.service.CustomerFacadeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,7 +85,7 @@ public class CustomerController {
     @PostMapping
     @Operation(summary = "Регистрация покупателя",
             description = "Позволяет зарегистрировать нового покупателя")
-    public CustomerResponseDTO addNewCustomer(@RequestBody CustomerCreationDTO customerCreationDTO) {
+    public CustomerResponseDTO addNewCustomer(@Valid @RequestBody CustomerCreationDTO customerCreationDTO) {
         return customerFacadeService.addNew(customerCreationDTO);
     }
 
@@ -97,7 +98,8 @@ public class CustomerController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Изменение информации о покупателе", description = "Позволяет изменить данные покупателя")
-    public CustomerResponseDTO updateCustomer(@PathVariable UUID id, @RequestBody CustomerUpdateDTO customerUpdateDTO) {
+    public CustomerResponseDTO updateCustomer(@PathVariable UUID id,
+                                              @Valid @RequestBody CustomerUpdateDTO customerUpdateDTO) {
         return customerFacadeService.update(id, customerUpdateDTO);
     }
 

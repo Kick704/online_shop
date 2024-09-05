@@ -1,6 +1,7 @@
 package com.online.shop.entity;
 
-import com.online.shop.exception.UninitializedBuilderFieldException;
+import com.online.shop.exception_handling.CommonRuntimeException;
+import com.online.shop.exception_handling.ErrorCode;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -80,6 +81,14 @@ public class Customer extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "goods_id"))
     private List<Goods> goodsInCart;
 
+    /**
+     * Установка статуса активности аккаунта покупателя при его регистрации
+     */
+    @PrePersist
+    public void registrateCustomer() {
+        enabled = true;
+    }
+
     public Customer() {
     }
 
@@ -90,7 +99,6 @@ public class Customer extends AbstractEntity {
         setPhoneNumber(builder.phoneNumber);
         setEmail(builder.email);
         setPassword(builder.password);
-        setEnabled(builder.enabled);
     }
 
     public String getFirstname() {
@@ -216,7 +224,6 @@ public class Customer extends AbstractEntity {
         private String phoneNumber;
         private String email;
         private String password;
-        private boolean enabled = true;
 
         private Builder() {
         }
@@ -255,15 +262,13 @@ public class Customer extends AbstractEntity {
             return this;
         }
 
-        public Builder enabled(boolean val) {
-            enabled = val;
-            return this;
-        }
-
         public Customer build() {
             if (surname == null || firstname == null || phoneNumber == null || email == null || password == null) {
-                throw new UninitializedBuilderFieldException("Customer: одно или несколько полей (surname, firstname, " +
-                        "phoneNumber, email, password) ссылаются на null");
+                throw new CommonRuntimeException(
+                        ErrorCode.UNINITIALIZED_BUILDER_FIELD,
+                        "Customer: одно или несколько полей (surname, firstname, phoneNumber, email, password) " +
+                                "ссылаются на null"
+                );
             }
             return new Customer(this);
         }
