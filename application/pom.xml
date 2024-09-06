@@ -16,6 +16,10 @@
             <groupId>com.online.shop</groupId>
             <artifactId>repository</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.online.shop</groupId>
+            <artifactId>facade</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

@@ -8,7 +8,7 @@
     <changeSet id="create-table-cart" author="Kick704">
         <createTable tableName="cart"
                      remarks="Дополнительная таблица для организации связи между покупателями и товарами - корзина">
-            <column name="id" type="UUID">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="customer_id" type="UUID">

@@ -22,7 +22,7 @@ public class Order extends AbstractEntity {
     private Customer customer;
 
     /**
-     * Полная стоимость заказа
+     * Итоговая стоимость заказа
      */
     @Column(name = "amount")
     private double amount;
@@ -34,7 +34,7 @@ public class Order extends AbstractEntity {
     private String deliveryAddress;
 
     /**
-     * Код получения заказа
+     * Код для получения заказа
      */
     @Column(name = "receipt_code")
     private int receiptCode;
@@ -56,15 +56,26 @@ public class Order extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "goods_id"))
     private List<Goods> goodsInOrder;
 
+    /**
+     * Расчёт итоговой стоимости заказа при создании и обновлении заказа
+     */
+    @PrePersist
+    @PreUpdate
+    public void computeAmount() {
+        amount = goodsInOrder
+                .stream()
+                .mapToDouble(Goods::getPrice)
+                .sum();
+    }
+
     public Order() {
     }
 
     private Order(Builder builder) {
         setCustomer(builder.customer);
-        setAmount(builder.amount);
         setDeliveryAddress(builder.deliveryAddress);
         setReceiptCode(builder.receiptCode);
-        status = OrderStatus.CREATED;
+        setStatus(builder.status);
     }
 
     public Customer getCustomer() {
@@ -145,12 +156,11 @@ public class Order extends AbstractEntity {
                 '}';
     }
 
-
     public static final class Builder {
         private Customer customer;
-        private double amount;
         private String deliveryAddress;
         private int receiptCode;
+        private final OrderStatus status = OrderStatus.CREATED;
 
         private Builder() {
         }
@@ -161,11 +171,6 @@ public class Order extends AbstractEntity {
 
         public Builder customer(Customer val) {
             customer = val;
-            return this;
-        }
-
-        public Builder amount(double val) {
-            amount = val;
             return this;
         }
 
@@ -180,7 +185,7 @@ public class Order extends AbstractEntity {
         }
 
         public Order build() {
-            if (customer == null && deliveryAddress == null) {
+            if (customer == null || deliveryAddress == null) {
                 throw new UninitializedBuilderFieldException("Order: одно или несколько полей (customer, " +
                         "deliveryAddress) ссылаются на null");
             }

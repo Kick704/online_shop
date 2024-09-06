@@ -90,6 +90,7 @@ public class Customer extends AbstractEntity {
         setPhoneNumber(builder.phoneNumber);
         setEmail(builder.email);
         setPassword(builder.password);
+        setEnabled(builder.enabled);
     }
 
     public String getFirstname() {
@@ -156,11 +157,11 @@ public class Customer extends AbstractEntity {
         this.orders = orders;
     }
 
-    public List<Goods> getCart() {
+    public List<Goods> getGoodsInCart() {
         return goodsInCart;
     }
 
-    public void setCart(List<Goods> goodsInCart) {
+    public void setGoodsInCart(List<Goods> goodsInCart) {
         this.goodsInCart = goodsInCart;
     }
 
@@ -215,6 +216,7 @@ public class Customer extends AbstractEntity {
         private String phoneNumber;
         private String email;
         private String password;
+        private boolean enabled = true;
 
         private Builder() {
         }
@@ -253,12 +255,20 @@ public class Customer extends AbstractEntity {
             return this;
         }
 
+        public Builder enabled(boolean val) {
+            enabled = val;
+            return this;
+        }
+
         public Customer build() {
-            if (surname == null && firstname == null && phoneNumber == null && email == null && password == null) {
+            if (surname == null || firstname == null || phoneNumber == null || email == null || password == null) {
                 throw new UninitializedBuilderFieldException("Customer: одно или несколько полей (surname, firstname, " +
                         "phoneNumber, email, password) ссылаются на null");
             }
             return new Customer(this);
         }
     }
+
 }
+
+
