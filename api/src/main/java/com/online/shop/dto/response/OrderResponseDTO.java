@@ -12,10 +12,13 @@ import java.util.List;
 public class OrderResponseDTO extends AbstractResponseDTO {
 
     private CustomerResponseDTO customer;
+
     @Schema(description = "Список товаров в заказе")
     private List<GoodsResponseDTO> goodsInOrder;
+
     @Schema(description = "Итоговая стоимость")
     private double amount;
+
     @Schema(description = "Адрес доставки")
     private String deliveryAddress;
 

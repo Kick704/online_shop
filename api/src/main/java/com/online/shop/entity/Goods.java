@@ -1,7 +1,7 @@
 package com.online.shop.entity;
 
 import com.online.shop.exception_handling.CommonRuntimeException;
-import com.online.shop.exception_handling.ErrorCode;
+import com.online.shop.enums.ErrorCode;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -40,10 +40,10 @@ public class Goods extends AbstractEntity {
     private int count;
 
     /**
-     * Установленная скидка на товар от 0 до 1 с двумя знаками после точки
+     * Установленная скидка на товар от 0 до 100
      */
     @Column(name = "discount")
-    private double discount;
+    private int discount;
 
     /**
      * Список заказов, в которых присутствует данный товар
@@ -97,11 +97,11 @@ public class Goods extends AbstractEntity {
         this.count = count;
     }
 
-    public double getDiscount() {
+    public int getDiscount() {
         return discount;
     }
 
-    public void setDiscount(double discount) {
+    public void setDiscount(int discount) {
         this.discount = discount;
     }
 
@@ -148,7 +148,7 @@ public class Goods extends AbstractEntity {
         private GoodsCategory goodsCategory;
         private double price;
         private int count;
-        private double discount;
+        private int discount;
 
         private Builder() {
         }
@@ -177,7 +177,7 @@ public class Goods extends AbstractEntity {
             return this;
         }
 
-        public Builder discount(double val) {
+        public Builder discount(int val) {
             discount = val;
             return this;
         }

@@ -16,6 +16,6 @@ public final class ValidationConstants {
     /**
      * Шаблон номера телефона
      */
-    public static final String PHONE_NUMBER_REGEXP = "^7\\d{10}$";
+    public static final String PHONE_NUMBER_REGEXP = "^8\\d{10}$";
 
 }

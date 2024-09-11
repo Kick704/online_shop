@@ -4,7 +4,7 @@ import com.online.shop.dao.CustomerRepository;
 import com.online.shop.entity.Customer;
 import com.online.shop.entity.Goods;
 import com.online.shop.exception_handling.CommonRuntimeException;
-import com.online.shop.exception_handling.ErrorCode;
+import com.online.shop.enums.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -106,19 +106,37 @@ public class CustomerServiceImpl implements CustomerService {
 
     /**
      * Добавление/обновление покупателя в БД
-     * <p> Может выбросить исключение {@link CommonRuntimeException}, если сущность ссылается на null
+     * <p> Может выбросить исключение {@link CommonRuntimeException},
+     * если сущность ссылается на null или не проходит проверку уникальности
      *
      * @param customer сущность Покупатель {@link Customer}
      */
     @Override
     public void save(Customer customer) {
+
         if (customer == null) {
             throw new CommonRuntimeException(
                     ErrorCode.OBJECT_REFERENCE_IS_NULL,
-                    "Сущность Customer не проинициализирована перед сохранением"
+                    "Customer: предан пустой объект для сохранения"
             );
         }
+
+        if (customerRepository.existsByPhoneNumber(customer.getPhoneNumber())) {
+            throw new CommonRuntimeException(
+                    ErrorCode.UNIQUE_CONSTRAINT_VIOLATION,
+                    "Покупатель с таким номером телефона уже зарегистрирован"
+            );
+        }
+
+        if (customerRepository.existsByEmail(customer.getEmail())) {
+            throw new CommonRuntimeException(
+                    ErrorCode.UNIQUE_CONSTRAINT_VIOLATION,
+                    "Покупатель с таким email уже зарегистрирован"
+            );
+        }
+
         customerRepository.save(customer);
+
     }
 
     /**

@@ -2,7 +2,7 @@ package com.online.shop.entity;
 
 import com.online.shop.enums.OrderStatus;
 import com.online.shop.exception_handling.CommonRuntimeException;
-import com.online.shop.exception_handling.ErrorCode;
+import com.online.shop.enums.ErrorCode;
 import jakarta.persistence.*;
 
 import java.util.List;

@@ -11,13 +11,17 @@ public class GoodsResponseDTO extends AbstractResponseDTO {
 
     @Schema(description = "Название")
     private String name;
+
     private GoodsCategoryResponseDTO goodsCategory;
-    @Schema(description = "Стоимость")
+
+    @Schema(description = "Стоимость товара")
     private double price;
+
     @Schema(description = "Количество на складе")
     private int count;
-    @Schema(description = "Скидка")
-    private double discount;
+
+    @Schema(description = "Скидка на товар")
+    private int discount;
 
     public String getName() {
         return name;
@@ -51,11 +55,11 @@ public class GoodsResponseDTO extends AbstractResponseDTO {
         this.count = count;
     }
 
-    public double getDiscount() {
+    public int getDiscount() {
         return discount;
     }
 
-    public void setDiscount(double discount) {
+    public void setDiscount(int discount) {
         this.discount = discount;
     }
 

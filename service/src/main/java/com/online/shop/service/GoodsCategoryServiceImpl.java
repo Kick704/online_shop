@@ -3,7 +3,7 @@ package com.online.shop.service;
 import com.online.shop.dao.GoodsCategoryRepository;
 import com.online.shop.entity.GoodsCategory;
 import com.online.shop.exception_handling.CommonRuntimeException;
-import com.online.shop.exception_handling.ErrorCode;
+import com.online.shop.enums.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,18 +68,28 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
 
     /**
      * Добавление/обновление категории товаров в БД
-     * <p> Может выбросить исключение {@link CommonRuntimeException}, если сущность ссылается на null
-     *
+     * <p> Может выбросить исключение {@link CommonRuntimeException},
+     * если сущность ссылается на null или не проходит проверку уникальности
      * @param category сущность Категория товаров {@link GoodsCategory}
      */
     @Override
     public void save(GoodsCategory category) {
+
         if (category == null) {
             throw new CommonRuntimeException(
                     ErrorCode.OBJECT_REFERENCE_IS_NULL,
-                    "Сущность GoodsCategory не проинициализирована перед сохранением"
+                    "GoodsCategory: предан пустой объект для сохранения"
             );
         }
+
+        String categoryName = category.getCategoryName();
+        if (categoryRepository.existsByCategoryName(categoryName)) {
+            throw new CommonRuntimeException(
+                    ErrorCode.UNIQUE_CONSTRAINT_VIOLATION,
+                    String.format("Категория товаров с наименованием: %s уже существует", categoryName)
+            );
+        }
+
         categoryRepository.save(category);
     }
 

@@ -3,7 +3,7 @@ package com.online.shop.service;
 import com.online.shop.dao.GoodsRepository;
 import com.online.shop.entity.Goods;
 import com.online.shop.exception_handling.CommonRuntimeException;
-import com.online.shop.exception_handling.ErrorCode;
+import com.online.shop.enums.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,8 +71,8 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * Добавление/обновление товара в БД
-     * <p> Может выбросить исключение {@link CommonRuntimeException}, если сущность ссылается на null
-     *
+     * <p> Может выбросить исключение {@link CommonRuntimeException},
+     * если сущность ссылается на null или не проходит проверку уникальности
      * @param goods сущность Товар {@link Goods}
      */
     @Override
@@ -80,7 +80,7 @@ public class GoodsServiceImpl implements GoodsService {
         if (goods == null) {
             throw new CommonRuntimeException(
                     ErrorCode.OBJECT_REFERENCE_IS_NULL,
-                    "Сущность Goods не проинициализирована перед сохранением"
+                    "Goods: предан пустой объект для сохранения"
             );
         }
         goodsRepository.save(goods);

@@ -1,7 +1,6 @@
 package com.online.shop.exception_handling;
 
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
+import com.online.shop.enums.ErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -25,46 +24,28 @@ public class ExceptionTranslator {
      */
     @ExceptionHandler
     public ResponseEntity<Map<String, Object>> handleCommonRuntimeException(CommonRuntimeException ex) {
-        return new ResponseEntity<>(ErrorResponse(ex.getErrorCode(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+        ErrorCode errorCode = ex.getErrorCode();
+        String message = ex.getMessage();
+        return new ResponseEntity<>(
+                ErrorResponse(errorCode, message),
+                errorCode.getStatus()
+        );
     }
 
     /**
-     * Обработчик ошибок валидаций
+     * Обработчик ошибок валидаций при создании и изменении сущностей
      * @param ex обрабатываемое исключение {@link MethodArgumentNotValidException}
      * @return информация об ошибке
      */
     @ExceptionHandler
     public ResponseEntity<Map<String, Object>> handleValidationException(MethodArgumentNotValidException ex) {
         ErrorCode errorCode = ErrorCode.INVALID_INPUT_DATA;
-
         FieldError fieldError = ex.getBindingResult().getFieldError();
         String message = (fieldError != null) ? fieldError.getDefaultMessage() : errorCode.getDescription();
-
-        return new ResponseEntity<>(ErrorResponse(errorCode, message), HttpStatus.BAD_REQUEST);
-    }
-
-    /**
-     * Обработчик нарушений целостности данных
-     * @param ex обрабатываемое исключение {@link DataIntegrityViolationException}
-     * @return информация об ошибке
-     */
-    @ExceptionHandler
-    public ResponseEntity<Map<String, Object>> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        ErrorCode errorCode = ErrorCode.DATA_INTEGRITY_VIOLATION;
-        String message = errorCode.getDescription();
-
-        Throwable rootCause = ex.getRootCause();
-        if (rootCause != null) {
-            if (rootCause.getMessage().contains("customers_phone_number_key")) {
-                message = "Пользователь с таким номером телефона уже зарегистрирован";
-            } else if (rootCause.getMessage().contains("customers_email_key")) {
-                message = "Пользователь с таким e-mail уже зарегистрирован";
-            } else if (rootCause.getMessage().contains("goods_categories_category_name_key")) {
-                message = "Такая категория товаров уже существует";
-            }
-        }
-
-        return new ResponseEntity<>(ErrorResponse(errorCode, message), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(
+                ErrorResponse(errorCode, message),
+                errorCode.getStatus()
+        );
     }
 
     /**
@@ -75,7 +56,11 @@ public class ExceptionTranslator {
     @ExceptionHandler
     public ResponseEntity<Map<String, Object>> handleOtherException(Exception ex) {
         ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
-        return new ResponseEntity<>(ErrorResponse(errorCode, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        String message = ex.getMessage();
+        return new ResponseEntity<>(
+                ErrorResponse(errorCode, message),
+                errorCode.getStatus()
+        );
     }
 
     /**
@@ -86,7 +71,7 @@ public class ExceptionTranslator {
      */
     private static Map<String, Object> ErrorResponse(ErrorCode errorCode, String message) {
         Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("errorCode", errorCode.name());
+        errorResponse.put("errorCode", String.format("%d: %s", errorCode.getCode(), errorCode.name()));
         errorResponse.put("message", message);
         errorResponse.put("timestamp", ZonedDateTime.now());
         return errorResponse;

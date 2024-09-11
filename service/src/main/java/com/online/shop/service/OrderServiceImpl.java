@@ -6,7 +6,7 @@ import com.online.shop.entity.Goods;
 import com.online.shop.entity.Order;
 import com.online.shop.enums.OrderStatus;
 import com.online.shop.exception_handling.CommonRuntimeException;
-import com.online.shop.exception_handling.ErrorCode;
+import com.online.shop.enums.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,8 +96,8 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Обновление заказа в БД
-     * <p> Может выбросить исключение {@link CommonRuntimeException}, если сущность ссылается на null
-     *
+     * <p> Может выбросить исключение {@link CommonRuntimeException},
+     * если сущность ссылается на null или не проходит проверку уникальности
      * @param order сущность Заказ {@link Order}
      */
     @Override
@@ -105,7 +105,7 @@ public class OrderServiceImpl implements OrderService {
         if (order == null) {
             throw new CommonRuntimeException(
                     ErrorCode.OBJECT_REFERENCE_IS_NULL,
-                    "Сущность Order не проинициализирована перед сохранением"
+                    "Order: предан пустой объект для сохранения"
             );
         }
         orderRepository.save(order);

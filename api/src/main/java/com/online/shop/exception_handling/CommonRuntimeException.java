@@ -1,5 +1,7 @@
 package com.online.shop.exception_handling;
 
+import com.online.shop.enums.ErrorCode;
+
 /**
  * Общее исключение для основных ошибок
  */

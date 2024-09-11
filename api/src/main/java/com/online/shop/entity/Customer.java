@@ -1,7 +1,7 @@
 package com.online.shop.entity;
 
 import com.online.shop.exception_handling.CommonRuntimeException;
-import com.online.shop.exception_handling.ErrorCode;
+import com.online.shop.enums.ErrorCode;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public class Customer extends AbstractEntity {
     private String phoneNumber;
 
     /**
-     * Email покупателя
+     * E-mail покупателя
      */
     @Column(name = "email")
     private String email;

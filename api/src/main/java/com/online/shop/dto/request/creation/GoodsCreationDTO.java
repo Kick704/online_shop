@@ -3,10 +3,7 @@ package com.online.shop.dto.request.creation;
 import com.online.shop.dto.request.AbstractRequestDTO;
 import com.online.shop.entity.Goods;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.util.UUID;
 
@@ -17,7 +14,7 @@ import java.util.UUID;
 public class GoodsCreationDTO extends AbstractRequestDTO implements CreationDTO {
 
     @NotBlank(message = "Не введено название товара")
-    @Schema(description = "Название")
+    @Schema(description = "Название товара")
     private String name;
 
     @NotNull(message = "Не введён ID категории товаров")
@@ -26,7 +23,7 @@ public class GoodsCreationDTO extends AbstractRequestDTO implements CreationDTO 
 
     @NotNull(message = "Не введена стоимость товара")
     @DecimalMin(value = "1.0", message = "Некорректная стоимость товара")
-    @Schema(description = "Стоимость")
+    @Schema(description = "Стоимость товара")
     private double price;
 
     @NotNull(message = "Не введено количество товаров на складе")
@@ -34,9 +31,10 @@ public class GoodsCreationDTO extends AbstractRequestDTO implements CreationDTO 
     @Schema(description = "Количество на складе")
     private int count;
 
-    @DecimalMin(value = "0.0", message = "Некорректная скидка на товар")
-    @Schema(description = "Скидка")
-    private double discount;
+    @Min(value = 0, message = "Cкидка на товар не может быть меньше 0")
+    @Max(value = 100, message = "Cкидка на товар не может быть больше 100")
+    @Schema(description = "Скидка на товар")
+    private int discount;
 
     public String getName() {
         return name;
@@ -70,11 +68,11 @@ public class GoodsCreationDTO extends AbstractRequestDTO implements CreationDTO 
         this.count = count;
     }
 
-    public double getDiscount() {
+    public int getDiscount() {
         return discount;
     }
 
-    public void setDiscount(double discount) {
+    public void setDiscount(int discount) {
         this.discount = discount;
     }
 
