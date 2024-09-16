@@ -2,7 +2,7 @@ package com.online.shop.entity;
 
 import com.online.shop.enums.OrderStatus;
 import com.online.shop.exception_handling.CommonRuntimeException;
-import com.online.shop.enums.ErrorCode;
+import com.online.shop.exception_handling.ErrorCode;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -62,10 +62,7 @@ public class Order extends AbstractEntity {
      */
     @PrePersist
     public void createOrder() {
-        amount = goodsInOrder
-                .stream()
-                .mapToDouble(Goods::getPrice)
-                .sum();
+        amount = goodsInOrder.stream().mapToDouble(Goods::getPrice).sum();
         status = OrderStatus.CREATED;
     }
 

@@ -1,6 +1,6 @@
 package com.online.shop.dto.response;
 
-import com.online.shop.enums.ErrorCode;
+import com.online.shop.exception_handling.ErrorCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.ZonedDateTime;

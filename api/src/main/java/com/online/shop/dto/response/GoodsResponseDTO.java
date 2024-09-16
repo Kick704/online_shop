@@ -14,13 +14,13 @@ public class GoodsResponseDTO extends AbstractResponseDTO {
 
     private GoodsCategoryResponseDTO goodsCategory;
 
-    @Schema(description = "Стоимость товара")
+    @Schema(description = "Стоимость товара в рублях")
     private double price;
 
     @Schema(description = "Количество на складе")
     private int count;
 
-    @Schema(description = "Скидка на товар")
+    @Schema(description = "Скидка на товар в процентах")
     private int discount;
 
     public String getName() {

@@ -16,7 +16,7 @@ public class OrderResponseDTO extends AbstractResponseDTO {
     @Schema(description = "Список товаров в заказе")
     private List<GoodsResponseDTO> goodsInOrder;
 
-    @Schema(description = "Итоговая стоимость")
+    @Schema(description = "Итоговая стоимость в рублях")
     private double amount;
 
     @Schema(description = "Адрес доставки")

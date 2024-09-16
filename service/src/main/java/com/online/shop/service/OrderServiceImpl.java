@@ -6,7 +6,7 @@ import com.online.shop.entity.Goods;
 import com.online.shop.entity.Order;
 import com.online.shop.enums.OrderStatus;
 import com.online.shop.exception_handling.CommonRuntimeException;
-import com.online.shop.enums.ErrorCode;
+import com.online.shop.exception_handling.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

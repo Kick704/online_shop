@@ -1,4 +1,4 @@
-package com.online.shop.enums;
+package com.online.shop.exception_handling;
 
 import org.springframework.http.HttpStatus;
 

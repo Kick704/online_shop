@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "DTO Результат выполнения операции")
 public class InformationDTO {
 
-    @Schema(description = "Результат")
+    @Schema(description = "Результат выполнения операции")
     private String message;
 
     public InformationDTO() {

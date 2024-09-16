@@ -1,7 +1,6 @@
 package com.online.shop.exception_handling;
 
 import com.online.shop.dto.response.ErrorResponseDTO;
-import com.online.shop.enums.ErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
