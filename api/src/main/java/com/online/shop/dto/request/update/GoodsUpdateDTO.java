@@ -4,6 +4,7 @@ import com.online.shop.dto.request.AbstractRequestDTO;
 import com.online.shop.entity.Goods;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
@@ -16,18 +17,19 @@ public class GoodsUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
     @Schema(description = "Название товара")
     private String name;
 
-    @DecimalMin(value = "1.0", message = "Некорректная стоимость товара")
-    @Schema(description = "Стоимость товара")
-    private double price;
+    @DecimalMin(value = "0.01", message = "Некорректная стоимость товара (минимум 0.01 руб.)")
+    @Digits(integer = 15, fraction = 2, message = "Некорректная стоимость товара (до двух цифр в дробной части)")
+    @Schema(description = "Стоимость товара в рублях")
+    private Double price;
 
-    @Min(value = 1, message = "На складе должен быть минимум 1 товар")
+    @Min(value = 0, message = "Некорректное значение числа товаров на складе")
     @Schema(description = "Количество на складе")
-    private int count;
+    private Integer count;
 
-    @Min(value = 0, message = "Cкидка на товар не может быть меньше 0")
-    @Max(value = 100, message = "Cкидка на товар не может быть больше 100")
-    @Schema(description = "Скидка на товар")
-    private int discount;
+    @Min(value = 0, message = "Cкидка на товар не может быть меньше 0%")
+    @Max(value = 100, message = "Cкидка на товар не может быть больше 100%")
+    @Schema(description = "Скидка на товар в процентах")
+    private Integer discount;
 
     public String getName() {
         return name;
@@ -37,27 +39,27 @@ public class GoodsUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
         this.name = name;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public int getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 
-    public int getDiscount() {
+    public Integer getDiscount() {
         return discount;
     }
 
-    public void setDiscount(int discount) {
+    public void setDiscount(Integer discount) {
         this.discount = discount;
     }
 

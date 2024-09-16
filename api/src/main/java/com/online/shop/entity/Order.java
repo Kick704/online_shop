@@ -74,10 +74,7 @@ public class Order extends AbstractEntity {
      */
     @PreUpdate
     public void updateOrder() {
-        amount = goodsInOrder
-                .stream()
-                .mapToDouble(Goods::getPrice)
-                .sum();
+        amount = goodsInOrder.stream().mapToDouble(Goods::getPrice).sum();
     }
 
     public Order() {
@@ -197,7 +194,7 @@ public class Order extends AbstractEntity {
         public Order build() {
             if (customer == null || deliveryAddress == null) {
                 throw new CommonRuntimeException(
-                        ErrorCode.UNINITIALIZED_BUILDER_FIELD,
+                        ErrorCode.INTERNAL_SERVER_ERROR,
                         "Order: одно или несколько полей (customer, deliveryAddress) ссылаются на null"
                 );
             }

@@ -28,7 +28,7 @@ public class Goods extends AbstractEntity {
     private GoodsCategory goodsCategory;
 
     /**
-     * Стоимость товара
+     * Стоимость товара в рублях
      */
     @Column(name = "price")
     private double price;
@@ -40,7 +40,7 @@ public class Goods extends AbstractEntity {
     private int count;
 
     /**
-     * Установленная скидка на товар от 0 до 100
+     * Установленная скидка на товар в процентах от 0% до 100%
      */
     @Column(name = "discount")
     private int discount;
@@ -185,7 +185,7 @@ public class Goods extends AbstractEntity {
         public Goods build() {
             if (name == null || goodsCategory == null) {
                 throw new CommonRuntimeException(
-                        ErrorCode.UNINITIALIZED_BUILDER_FIELD,
+                        ErrorCode.INTERNAL_SERVER_ERROR,
                         "Goods: одно или несколько полей (name, goodsCategory) ссылаются на null"
                 );
             }

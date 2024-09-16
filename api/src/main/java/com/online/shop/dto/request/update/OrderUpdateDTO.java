@@ -15,7 +15,7 @@ public class OrderUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
     private String deliveryAddress;
 
     @Schema(description = "Код для получения заказа")
-    private int receiptCode;
+    private Integer receiptCode;
 
     @Schema(description = "Статус заказа")
     private OrderStatus status;
@@ -28,11 +28,11 @@ public class OrderUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
         this.deliveryAddress = deliveryAddress;
     }
 
-    public int getReceiptCode() {
+    public Integer getReceiptCode() {
         return receiptCode;
     }
 
-    public void setReceiptCode(int receiptCode) {
+    public void setReceiptCode(Integer receiptCode) {
         this.receiptCode = receiptCode;
     }
 

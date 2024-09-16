@@ -90,7 +90,7 @@ public class GoodsCategory extends AbstractEntity {
         public GoodsCategory build() {
             if (categoryName == null) {
                 throw new CommonRuntimeException(
-                        ErrorCode.UNINITIALIZED_BUILDER_FIELD,
+                        ErrorCode.INTERNAL_SERVER_ERROR,
                         "GoodsCategory: поле categoryName ссылается на null"
                 );
             }

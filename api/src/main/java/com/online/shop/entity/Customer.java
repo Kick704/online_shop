@@ -265,7 +265,7 @@ public class Customer extends AbstractEntity {
         public Customer build() {
             if (surname == null || firstname == null || phoneNumber == null || email == null || password == null) {
                 throw new CommonRuntimeException(
-                        ErrorCode.UNINITIALIZED_BUILDER_FIELD,
+                        ErrorCode.INTERNAL_SERVER_ERROR,
                         "Customer: одно или несколько полей (surname, firstname, phoneNumber, email, password) " +
                                 "ссылаются на null"
                 );

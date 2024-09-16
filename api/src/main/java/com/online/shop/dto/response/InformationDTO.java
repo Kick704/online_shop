@@ -3,9 +3,9 @@ package com.online.shop.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
- * Результат выполнения операции
+ * Информационный DTO с результатом выполнения операции
  */
-@Schema(description = "Информационный DTO")
+@Schema(description = "DTO Результат выполнения операции")
 public class InformationDTO {
 
     @Schema(description = "Результат")

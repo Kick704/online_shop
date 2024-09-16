@@ -4,7 +4,7 @@ import com.online.shop.entity.Goods;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
- * DTO Товары на основе сущности {@link Goods}
+ * DTO Товар на основе сущности {@link Goods}
  */
 @Schema(description = "DTO Товар")
 public class GoodsResponseDTO extends AbstractResponseDTO {

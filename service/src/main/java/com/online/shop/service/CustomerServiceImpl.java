@@ -79,10 +79,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public double getAmountOfGoodsInCustomerCart(UUID id) {
         List<Goods> goodsInCart = findAllGoodsInCustomerCart(id);
-        return goodsInCart
-                .stream()
-                .mapToDouble(Goods::getPrice)
-                .sum();
+        return goodsInCart.stream().mapToDouble(Goods::getPrice).sum();
     }
 
     /**
