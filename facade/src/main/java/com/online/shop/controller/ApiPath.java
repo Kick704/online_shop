@@ -3,7 +3,10 @@ package com.online.shop.controller;
 /**
  * Класс для вынесения пути к API в константу
  */
-public class ApiPath {
+public final class ApiPath {
+
+    private ApiPath() {
+    }
 
     public static final String API_BASE = "api";
 

@@ -1,4 +1,4 @@
-package com.online.shop.dto.request;
+package com.online.shop.dto.request.update;
 
 /**
  * Общий интерфейс для DTO, участвующих в изменении сущностей

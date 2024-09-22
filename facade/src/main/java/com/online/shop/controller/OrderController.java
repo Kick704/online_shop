@@ -1,13 +1,14 @@
 package com.online.shop.controller;
 
-import com.online.shop.dto.request.OrderCreationDTO;
-import com.online.shop.dto.request.OrderUpdateDTO;
+import com.online.shop.dto.request.creation.OrderCreationDTO;
+import com.online.shop.dto.request.update.OrderUpdateDTO;
 import com.online.shop.dto.response.InformationDTO;
 import com.online.shop.dto.response.OrderResponseDTO;
 import com.online.shop.enums.OrderStatus;
 import com.online.shop.service.OrderFacadeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -70,7 +71,7 @@ public class OrderController {
     @PostMapping
     @Operation(summary = "Создание заказа",
             description = "Позволяет создать заказ на основе корзины покупателя")
-    public OrderResponseDTO addNewOrder(@RequestBody OrderCreationDTO orderCreationDTO) {
+    public OrderResponseDTO addNewOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
         return orderFacadeService.addNew(orderCreationDTO);
     }
 
@@ -84,7 +85,7 @@ public class OrderController {
     @PutMapping("/{id}")
     @Operation(summary = "Изменение заказа",
             description = "Позволяет изменить данные заказа")
-    public OrderResponseDTO updateOrder(@PathVariable UUID id, @RequestBody OrderUpdateDTO orderUpdateDTO) {
+    public OrderResponseDTO updateOrder(@PathVariable UUID id, @Valid @RequestBody OrderUpdateDTO orderUpdateDTO) {
         return orderFacadeService.update(id, orderUpdateDTO);
     }
 

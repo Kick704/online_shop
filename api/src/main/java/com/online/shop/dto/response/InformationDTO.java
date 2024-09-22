@@ -3,12 +3,12 @@ package com.online.shop.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
- * Информационный DTO для предоставления информации об успешном выполнении операции
+ * Информационный DTO с результатом выполнения операции
  */
-@Schema(description = "Информационный DTO")
+@Schema(description = "DTO Результат выполнения операции")
 public class InformationDTO {
 
-    @Schema(description = "Сообщение")
+    @Schema(description = "Результат выполнения операции")
     private String message;
 
     public InformationDTO() {

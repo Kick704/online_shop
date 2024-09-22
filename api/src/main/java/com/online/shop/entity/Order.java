@@ -1,7 +1,8 @@
 package com.online.shop.entity;
 
 import com.online.shop.enums.OrderStatus;
-import com.online.shop.exception.UninitializedBuilderFieldException;
+import com.online.shop.exception_handling.CommonRuntimeException;
+import com.online.shop.exception_handling.ErrorCode;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -57,15 +58,20 @@ public class Order extends AbstractEntity {
     private List<Goods> goodsInOrder;
 
     /**
-     * Расчёт итоговой стоимости заказа при создании и обновлении заказа
+     * Расчёт итоговой стоимости заказа и установка статуса при создании заказа
      */
     @PrePersist
+    public void createOrder() {
+        amount = goodsInOrder.stream().mapToDouble(Goods::getPrice).sum();
+        status = OrderStatus.CREATED;
+    }
+
+    /**
+     * Расчёт итоговой стоимости заказа при обновлении заказа
+     */
     @PreUpdate
-    public void computeAmount() {
-        amount = goodsInOrder
-                .stream()
-                .mapToDouble(Goods::getPrice)
-                .sum();
+    public void updateOrder() {
+        amount = goodsInOrder.stream().mapToDouble(Goods::getPrice).sum();
     }
 
     public Order() {
@@ -75,7 +81,6 @@ public class Order extends AbstractEntity {
         setCustomer(builder.customer);
         setDeliveryAddress(builder.deliveryAddress);
         setReceiptCode(builder.receiptCode);
-        setStatus(builder.status);
     }
 
     public Customer getCustomer() {
@@ -160,7 +165,6 @@ public class Order extends AbstractEntity {
         private Customer customer;
         private String deliveryAddress;
         private int receiptCode;
-        private final OrderStatus status = OrderStatus.CREATED;
 
         private Builder() {
         }
@@ -186,8 +190,10 @@ public class Order extends AbstractEntity {
 
         public Order build() {
             if (customer == null || deliveryAddress == null) {
-                throw new UninitializedBuilderFieldException("Order: одно или несколько полей (customer, " +
-                        "deliveryAddress) ссылаются на null");
+                throw new CommonRuntimeException(
+                        ErrorCode.INTERNAL_SERVER_ERROR,
+                        "Order: одно или несколько полей (customer, deliveryAddress) ссылаются на null"
+                );
             }
             return new Order(this);
         }

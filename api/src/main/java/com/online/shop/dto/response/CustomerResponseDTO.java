@@ -11,14 +11,19 @@ public class CustomerResponseDTO extends AbstractResponseDTO {
 
     @Schema(description = "Фамилия")
     private String surname;
+
     @Schema(description = "Имя")
     private String firstname;
+
     @Schema(description = "Отчество")
     private String patronymic;
+
     @Schema(description = "Номер телефона")
     private String phoneNumber;
+
     @Schema(description = "E-mail")
     private String email;
+
     @Schema(description = "Баланс")
     private double balance;
 

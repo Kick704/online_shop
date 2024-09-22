@@ -54,4 +54,11 @@ public interface GoodsCategoryRepository extends JpaRepository<GoodsCategory, UU
     @Query(value = "DELETE FROM GoodsCategory gc WHERE gc.id = :id")
     int deleteGoodsCategoryById(@Param("id") UUID id);
 
+    /**
+     * Проверка существования категории товаров в БД с указанным наименованием
+     * @param categoryName наименование категории товаров
+     * @return результат проверки
+     */
+    boolean existsByCategoryName(String categoryName);
+
 }

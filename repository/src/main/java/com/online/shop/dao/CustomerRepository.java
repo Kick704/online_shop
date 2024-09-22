@@ -54,4 +54,18 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
     @Query(value = "DELETE FROM Customer c WHERE c.id = :id")
     int deleteCustomerById(@Param("id") UUID id);
 
+    /**
+     * Проверка существования покупателя в БД с указанным номером телефона
+     * @param phoneNumber номер телефона покупателя
+     * @return результат проверки
+     */
+    boolean existsByPhoneNumber(String phoneNumber);
+
+    /**
+     * Проверка существования покупателя в БД с указанным e-mail
+     * @param email e-mail покупателя
+     * @return результат проверки
+     */
+    boolean existsByEmail(String email);
+
 }

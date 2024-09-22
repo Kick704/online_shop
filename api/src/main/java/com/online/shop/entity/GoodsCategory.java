@@ -1,6 +1,7 @@
 package com.online.shop.entity;
 
-import com.online.shop.exception.UninitializedBuilderFieldException;
+import com.online.shop.exception_handling.CommonRuntimeException;
+import com.online.shop.exception_handling.ErrorCode;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -88,7 +89,10 @@ public class GoodsCategory extends AbstractEntity {
 
         public GoodsCategory build() {
             if (categoryName == null) {
-                throw new UninitializedBuilderFieldException("GoodsCategory: поле categoryName ссылается на null");
+                throw new CommonRuntimeException(
+                        ErrorCode.INTERNAL_SERVER_ERROR,
+                        "GoodsCategory: поле categoryName ссылается на null"
+                );
             }
             return new GoodsCategory(this);
         }

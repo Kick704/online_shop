@@ -4,20 +4,24 @@ import com.online.shop.entity.Goods;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
- * DTO Товары на основе сущности {@link Goods}
+ * DTO Товар на основе сущности {@link Goods}
  */
 @Schema(description = "DTO Товар")
 public class GoodsResponseDTO extends AbstractResponseDTO {
 
     @Schema(description = "Название")
     private String name;
+
     private GoodsCategoryResponseDTO goodsCategory;
-    @Schema(description = "Стоимость")
+
+    @Schema(description = "Стоимость товара в рублях")
     private double price;
+
     @Schema(description = "Количество на складе")
     private int count;
-    @Schema(description = "Скидка")
-    private double discount;
+
+    @Schema(description = "Скидка на товар в процентах")
+    private int discount;
 
     public String getName() {
         return name;
@@ -51,11 +55,11 @@ public class GoodsResponseDTO extends AbstractResponseDTO {
         this.count = count;
     }
 
-    public double getDiscount() {
+    public int getDiscount() {
         return discount;
     }
 
-    public void setDiscount(double discount) {
+    public void setDiscount(int discount) {
         this.discount = discount;
     }
 
