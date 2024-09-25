@@ -9,10 +9,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+
+import static com.online.shop.entity.CustomerRole.ADMIN;
 
 /**
  * REST-контроллер для управления с категориями товаров интернет-магазина
@@ -70,6 +73,7 @@ public class GoodsCategoryController {
      * категории товаров
      * @return DTO {@link GoodsCategoryResponseDTO}, содержащий информацию о категории товаров
      */
+    @Secured(ADMIN)
     @PostMapping
     @Operation(summary = "Добавление категории товаров", description = "Позволяет добавить новую категорию товаров")
     public GoodsCategoryResponseDTO addNewGoodsCategory(@Valid @RequestBody GoodsCategoryCreationDTO categoryCreationDTO) {
@@ -83,6 +87,7 @@ public class GoodsCategoryController {
      * @param categoryUpdateDTO DTO {@link GoodsCategoryUpdateDTO}, содержащий новую информацию о категории товаров
      * @return DTO {@link GoodsCategoryResponseDTO} с обновленной информацией о категории товаров
      */
+    @Secured(ADMIN)
     @PutMapping("/{id}")
     @Operation(summary = "Изменение информации о категории товаров",
             description = "Позволяет изменить информацию о категории товаров")
@@ -97,6 +102,7 @@ public class GoodsCategoryController {
      * @param id идентификатор категории товаров {@link UUID}
      * @return {@link InformationDTO} с сообщением о результате
      */
+    @Secured(ADMIN)
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление категории товаров", description = "Позволяет удалить категорию товаров по его ID")
     public InformationDTO deleteGoodsCategory(@PathVariable UUID id) {

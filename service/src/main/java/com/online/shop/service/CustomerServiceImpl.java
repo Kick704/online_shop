@@ -6,6 +6,10 @@ import com.online.shop.entity.Goods;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +19,7 @@ import java.util.UUID;
  * Реализация интерфейса для управления сущностью {@link Customer} на сервисном слое
  */
 @Service
-public class CustomerServiceImpl implements CustomerService {
+public class CustomerServiceImpl implements CustomerService{
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -131,7 +135,8 @@ public class CustomerServiceImpl implements CustomerService {
                     "Покупатель с таким email уже зарегистрирован"
             );
         }
-
+        String encodePassword = new BCryptPasswordEncoder().encode(customer.getPassword());
+        customer.setPassword(encodePassword);
         customerRepository.save(customer);
 
     }
@@ -150,5 +155,14 @@ public class CustomerServiceImpl implements CustomerService {
                     String.format("Покупатель с ID: %s не найден или не может быть удалён", id)
             );
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return customerRepository.findCustomerByEmail(email)
+                .orElseThrow(() -> new CommonRuntimeException(
+                        ErrorCode.ENTITY_NOT_FOUND,
+                        String.format("Покупатель с E-mail: %s не найден", email))
+                );
     }
 }

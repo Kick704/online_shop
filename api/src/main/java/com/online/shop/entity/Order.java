@@ -58,7 +58,7 @@ public class Order extends AbstractEntity {
     private List<Goods> goodsInOrder;
 
     /**
-     * Расчёт итоговой стоимости заказа и установка статуса при создании заказа
+     * Конфигурация заказа при его создании
      */
     @PrePersist
     public void createOrder() {
@@ -67,7 +67,7 @@ public class Order extends AbstractEntity {
     }
 
     /**
-     * Расчёт итоговой стоимости заказа при обновлении заказа
+     * Конфигурация заказа при его обновлении
      */
     @PreUpdate
     public void updateOrder() {

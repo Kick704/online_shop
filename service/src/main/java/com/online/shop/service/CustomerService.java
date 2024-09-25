@@ -2,6 +2,7 @@ package com.online.shop.service;
 
 import com.online.shop.entity.Customer;
 import com.online.shop.entity.Goods;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 import java.util.UUID;
@@ -9,7 +10,7 @@ import java.util.UUID;
 /**
  * Интерфейс для управления сущностью {@link Customer} на сервисном слое
  */
-public interface CustomerService extends BaseService<Customer> {
+public interface CustomerService extends BaseService<Customer>, UserDetailsService {
 
     /**
      * Добавление/обновление покупателя в БД

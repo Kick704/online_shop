@@ -3,7 +3,11 @@ package com.online.shop.entity;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,7 +16,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "customers")
-public class Customer extends AbstractEntity {
+public class Customer extends AbstractEntity implements UserDetails {
 
     /**
      * Фамилия покупателя
@@ -58,6 +62,12 @@ public class Customer extends AbstractEntity {
     private double balance;
 
     /**
+     * Роль пользователя
+     */
+    @Column(name = "role")
+    private String role;
+
+    /**
      * Статус аккаунта покупателя:
      * <p>0 - заблокирован
      * <p>1 - активен
@@ -82,11 +92,12 @@ public class Customer extends AbstractEntity {
     private List<Goods> goodsInCart;
 
     /**
-     * Установка статуса активности аккаунта покупателя при его регистрации
+     * Конфигурация аккаунта при регистрации
      */
     @PrePersist
     public void registrateCustomer() {
         enabled = true;
+        role = "ROLE_" + CustomerRole.USER;
     }
 
     public Customer() {
@@ -133,8 +144,18 @@ public class Customer extends AbstractEntity {
         this.email = email;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role));
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return getEmail();
     }
 
     public void setPassword(String password) {
@@ -147,6 +168,14 @@ public class Customer extends AbstractEntity {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public boolean isEnabled() {

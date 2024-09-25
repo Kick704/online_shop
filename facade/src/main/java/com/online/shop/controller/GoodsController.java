@@ -10,10 +10,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+
+import static com.online.shop.entity.CustomerRole.ADMIN;
 
 /**
  * REST-контроллер для управления с товарами интернет-магазина
@@ -69,6 +72,7 @@ public class GoodsController {
      * @param goodsCreationDTO DTO {@link GoodsCreationDTO}, содержащая информацию для добавления нового товара
      * @return DTO {@link GoodsResponseDTO}, содержащий информацию о новом товаре
      */
+    @Secured(ADMIN)
     @PostMapping
     @Operation(summary = "Добавление нового товара в интернет-магазин",
             description = "Позволяет добавить новый товар в интернет-магазин")
@@ -97,6 +101,7 @@ public class GoodsController {
      * @param goodsUpdateDTO DTO {@link GoodsUpdateDTO}, содержащий новую информацию о товаре
      * @return DTO {@link CustomerResponseDTO} с обновленной информацией о товаре
      */
+    @Secured(ADMIN)
     @PutMapping("/{id}")
     @Operation(summary = "Изменение информации о товаре",
             description = "Позволяет изменить информацию о товаре")
@@ -110,6 +115,7 @@ public class GoodsController {
      * @param id идентификатор товара {@link UUID}
      * @return {@link InformationDTO} с сообщением о результате
      */
+    @Secured(ADMIN)
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление товара из интернет-магазина",
             description = "Позволяет удалить товар из интернет-магазина по его ID")
