@@ -37,11 +37,11 @@ public interface GoodsRepository extends JpaRepository<Goods, UUID> {
     /**
      * Выборка товаров по названию
      *
-     * @param name наименование товара {@link String}
-     * @return {@link List} - список товаров {@link Goods} по указанному наименованию {@code name}
+     * @param goodsName наименование товара {@link String}
+     * @return {@link List} - список товаров {@link Goods} по указанному наименованию {@code goodsName}
      */
-    @Query(value = "SELECT g FROM Goods g JOIN FETCH g.goodsCategory WHERE g.name = :name")
-    List<Goods> findAllGoodsByName(@Param("name") String name);
+    @Query(value = "SELECT g FROM Goods g JOIN FETCH g.goodsCategory WHERE g.goodsName = :goodsName")
+    List<Goods> findAllGoodsByName(@Param("goodsName") String goodsName);
 
     /**
      * Удаление товара по id

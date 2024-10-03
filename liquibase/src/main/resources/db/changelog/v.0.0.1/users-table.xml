@@ -5,8 +5,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
-    <changeSet id="create-table-customers" author="Kick704">
-        <createTable tableName="customers" remarks="Таблица покупателей интернет-магазина">
+    <changeSet id="create-table-users" author="Kick704">
+        <createTable tableName="users" remarks="Таблица пользователей интернет-магазина">
             <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -27,9 +27,6 @@
                 <constraints nullable="false"/>
             </column>
             <column name="balance" type="double" defaultValue="0.0">
-                <constraints nullable="false"/>
-            </column>
-            <column name="role" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="enabled" type="boolean">

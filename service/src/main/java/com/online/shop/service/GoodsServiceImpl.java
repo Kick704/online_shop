@@ -53,17 +53,17 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * Выборка товаров по названию
      *
-     * @param name наименование товара {@link String}
-     * @return {@link List} - список товаров {@link Goods} по указанному наименованию {@code name}, или выбрасывается
+     * @param goodsName наименование товара {@link String}
+     * @return {@link List} - список товаров {@link Goods} по указанному наименованию {@code goodsName}, или выбрасывается
      * исключение {@link CommonRuntimeException}, если таких товаров нет
      */
     @Override
-    public List<Goods> findAllGoodsByName(String name) {
-        List<Goods> goods = goodsRepository.findAllGoodsByName(name);
+    public List<Goods> findAllGoodsByName(String goodsName) {
+        List<Goods> goods = goodsRepository.findAllGoodsByName(goodsName);
         if (goods.isEmpty()) {
             throw new CommonRuntimeException(
                     ErrorCode.ENTITY_NOT_FOUND,
-                    String.format("Ни один товар не найден по наименованию %s", name)
+                    String.format("Ни один товар не найден по наименованию %s", goodsName)
             );
         }
         return goods;

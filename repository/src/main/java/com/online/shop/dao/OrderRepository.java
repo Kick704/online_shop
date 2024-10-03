@@ -24,7 +24,7 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
      * @param id идентификатор заказа {@link UUID}
      * @return {@link Optional} - контейнер, содержащий заказ {@link Order} по указанному {@code id}
      */
-    @Query(value = "SELECT o FROM Order o JOIN FETCH o.customer WHERE o.id = :id")
+    @Query(value = "SELECT o FROM Order o JOIN FETCH o.user WHERE o.id = :id")
     Optional<Order> findOrderById(@Param("id") UUID id);
 
     /**
@@ -32,7 +32,7 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
      *
      * @return {@link List} - список всех заказов {@link Order}
      */
-    @Query(value = "SELECT o FROM Order o JOIN FETCH o.customer")
+    @Query(value = "SELECT o FROM Order o JOIN FETCH o.user")
     List<Order> findAllOrders();
 
     /**
@@ -41,7 +41,7 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
      * @param status статус заказа {@link OrderStatus}
      * @return {@link List} - список заказов {@link Order} по указанному статусу {@code status}
      */
-    @Query(value = "SELECT o FROM Order o JOIN FETCH o.customer WHERE o.status = :status")
+    @Query(value = "SELECT o FROM Order o JOIN FETCH o.user WHERE o.status = :status")
     List<Order> findAllOrdersByStatus(@Param("status") OrderStatus status);
 
     /**

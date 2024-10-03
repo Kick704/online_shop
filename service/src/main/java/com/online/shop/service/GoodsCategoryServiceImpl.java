@@ -43,7 +43,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
      */
     @Override
     public List<GoodsCategory> findAll() {
-        List<GoodsCategory> categories = categoryRepository.findAllGoodsCategory();
+        List<GoodsCategory> categories = categoryRepository.findAllGoodsCategories();
         if (categories.isEmpty()) {
             throw new CommonRuntimeException(ErrorCode.ENTITY_NOT_FOUND, "Ни одна категория товаров не найдена в БД");
         }

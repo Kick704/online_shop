@@ -5,28 +5,28 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
-    <changeSet id="create-table-cart" author="Kick704">
-        <createTable tableName="cart"
-                     remarks="Дополнительная таблица для организации связи между пользователями и товарами - корзина">
+    <changeSet id="create-table-user_roles" author="Kick704">
+        <createTable tableName="user_roles"
+                     remarks="Дополнительная таблица для организации связи между пользователями и ролями">
             <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_id" type="UUID">
                 <constraints nullable="false"/>
             </column>
-            <column name="goods_id" type="UUID">
+            <column name="role_id" type="UUID">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="cart"
+        <addForeignKeyConstraint baseTableName="user_roles"
                                  baseColumnNames="user_id"
-                                 constraintName="FK_cart_users"
+                                 constraintName="FK_user_roles_users"
                                  referencedTableName="users"
                                  referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="cart"
-                                 baseColumnNames="goods_id"
-                                 constraintName="FK_cart_goods"
-                                 referencedTableName="goods"
+        <addForeignKeyConstraint baseTableName="user_roles"
+                                 baseColumnNames="role_id"
+                                 constraintName="FK_user_roles_roles"
+                                 referencedTableName="roles"
                                  referencedColumnNames="id"/>
     </changeSet>
 

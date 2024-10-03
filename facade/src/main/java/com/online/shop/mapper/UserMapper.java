@@ -1,9 +1,9 @@
 package com.online.shop.mapper;
 
-import com.online.shop.dto.request.creation.CustomerCreationDTO;
-import com.online.shop.dto.request.update.CustomerUpdateDTO;
-import com.online.shop.dto.response.CustomerResponseDTO;
-import com.online.shop.entity.Customer;
+import com.online.shop.dto.request.creation.UserCreationDTO;
+import com.online.shop.dto.request.update.UserUpdateDTO;
+import com.online.shop.dto.response.UserResponseDTO;
+import com.online.shop.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -11,13 +11,13 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import java.util.List;
 
 /**
- * Маппер для сущности {@link Customer} в DTO и обратно
+ * Маппер для сущности {@link User} в DTO и обратно
  */
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface CustomerMapper extends BaseMapper<Customer,
-        CustomerCreationDTO,
-        CustomerUpdateDTO,
-        CustomerResponseDTO> {
+public interface UserMapper extends BaseMapper<User,
+        UserCreationDTO,
+        UserUpdateDTO,
+        UserResponseDTO> {
 
     /**
      * Маппинг из сущности в DTO
@@ -26,7 +26,7 @@ public interface CustomerMapper extends BaseMapper<Customer,
      * @return ResponseDTO
      */
     @Override
-    CustomerResponseDTO toDTO(Customer entity);
+    UserResponseDTO toDTO(User entity);
 
     /**
      * Маппинг из DTO в сущность для его создания
@@ -35,16 +35,16 @@ public interface CustomerMapper extends BaseMapper<Customer,
      * @return сущность
      */
     @Override
-    Customer toEntity(CustomerCreationDTO dto);
+    User toEntity(UserCreationDTO dto);
 
     /**
      * Маппинг из списка сущностей в список DTO
      *
-     * @param customers список сущностей
+     * @param users список сущностей
      * @return список ResponseDTO
      */
     @Override
-    List<CustomerResponseDTO> toDTOList(List<Customer> customers);
+    List<UserResponseDTO> toDTOList(List<User> users);
 
     /**
      * Обновление сущности на основе DTO, игнорируя null поля и поле id
@@ -53,6 +53,6 @@ public interface CustomerMapper extends BaseMapper<Customer,
      * @param entity обновляемая сущность
      */
     @Override
-    void updateEntityFromDto(CustomerUpdateDTO dto, @MappingTarget Customer entity);
+    void updateEntityFromDto(UserUpdateDTO dto, @MappingTarget User entity);
 
 }

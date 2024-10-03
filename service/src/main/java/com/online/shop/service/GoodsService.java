@@ -10,18 +10,18 @@ import java.util.List;
 public interface GoodsService extends BaseService<Goods> {
 
     /**
+     * Выборка товаров по названию
+     *
+     * @param goodsName наименование товара {@link String}
+     * @return {@link List} - список товаров по указанному наименованию {@code goodsName}
+     */
+    List<Goods> findAllGoodsByName(String goodsName);
+
+    /**
      * Добавление/обновление товара в БД
      *
      * @param goods сущность Товар {@link Goods}
      */
     void save(Goods goods);
-
-    /**
-     * Выборка товаров по названию
-     *
-     * @param name наименование товара {@link String}
-     * @return {@link List} - список товаров по указанному наименованию {@code name}
-     */
-    List<Goods> findAllGoodsByName(String name);
 
 }

@@ -1,17 +1,17 @@
 package com.online.shop.dto.request.creation;
 
 import com.online.shop.dto.request.AbstractRequestDTO;
-import com.online.shop.entity.Customer;
+import com.online.shop.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import static com.online.shop.dto.request.ValidationConstants.MIN_CUSTOMER_PASSWORD_LENGTH;
 import static com.online.shop.dto.request.ValidationConstants.PHONE_NUMBER_REGEXP;
 
 /**
- * DTO для создания сущности Покупатель {@link Customer}
+ * DTO для создания сущности Пользователь {@link User}
  */
-@Schema(description = "DTO для регистрации покупателя")
-public class CustomerCreationDTO extends AbstractRequestDTO implements CreationDTO {
+@Schema(description = "DTO для регистрации пользователя")
+public class UserCreationDTO extends AbstractRequestDTO implements CreationDTO {
 
     @NotBlank(message = "Не введена фамилия")
     @Schema(description = "Фамилия")
@@ -90,7 +90,7 @@ public class CustomerCreationDTO extends AbstractRequestDTO implements CreationD
 
     @Override
     public String toString() {
-        return "CustomerCreationDTO{" +
+        return "UserCreationDTO{" +
                 "surname='" + surname + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", patronymic='" + patronymic + '\'' +

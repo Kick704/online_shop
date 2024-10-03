@@ -1,6 +1,6 @@
 package com.online.shop.configuration;
 
-import com.online.shop.service.CustomerService;
+import com.online.shop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static com.online.shop.entity.CustomerRole.*;
-
 /**
  * Конфигурация безопасности приложения
  */
@@ -26,12 +24,12 @@ import static com.online.shop.entity.CustomerRole.*;
 public class SecurityConfig {
 
     @Autowired
-    CustomerService customerService;
+    UserService userService;
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(customerService);
+        provider.setUserDetailsService(userService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
@@ -43,8 +41,7 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         authorizeRequest -> authorizeRequest
-                                .requestMatchers("/swagger-ui/**").hasAnyRole(USER, ADMIN)
-                                .requestMatchers("/v3/**").hasAnyRole(ADMIN)
+                                .requestMatchers("/swagger-ui/**").authenticated()
                                 .anyRequest().permitAll()
                 ).formLogin(Customizer.withDefaults())
                 .logout((logout) -> logout

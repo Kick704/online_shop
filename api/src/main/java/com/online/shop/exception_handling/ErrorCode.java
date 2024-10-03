@@ -11,7 +11,7 @@ public enum ErrorCode {
     ENTITY_NOT_FOUND(1002, "Сущность не найдена", HttpStatus.NOT_FOUND),
     OBJECT_REFERENCE_IS_NULL(1003, "Объект ссылается на null", HttpStatus.PRECONDITION_FAILED),
     UNIQUE_CONSTRAINT_VIOLATION(1004, "Нарушение ограничения уникальности", HttpStatus.CONFLICT),
-    EMPTY_CART(1005, "Корзина покупателя пуста", HttpStatus.NOT_FOUND),
+    EMPTY_CART(1005, "Корзина пользователя пуста", HttpStatus.NOT_FOUND),
 //    AUTHENTICATION_FAILED(1006, "Ошибка аутентификации", HttpStatus.UNAUTHORIZED),
     AUTHORIZATION_FAILED(1007, "Отказ в доступе", HttpStatus.FORBIDDEN),
 //    RATE_LIMIT_EXCEEDED(1008, "Превышено количество запросов", HttpStatus.TOO_MANY_REQUESTS),

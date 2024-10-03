@@ -1,7 +1,7 @@
 package com.online.shop.service;
 
 import com.online.shop.dao.OrderRepository;
-import com.online.shop.entity.Customer;
+import com.online.shop.entity.User;
 import com.online.shop.entity.Goods;
 import com.online.shop.entity.Order;
 import com.online.shop.enums.OrderStatus;
@@ -25,7 +25,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
-    private CustomerService customerService;
+    private UserService userService;
 
     /**
      * Выборка заказа по id
@@ -78,20 +78,20 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Создание заказа в БД
-     * <p> Заказ формируется из корзины покупателя, который оформляет заказ
-     * <p> При этом корзина покупателя очищается от товаров
+     * <p> Заказ формируется из корзины пользователя, который оформляет заказ
+     * <p> При этом корзина пользователя очищается от товаров
      *
      * @param order сущность Заказ {@link Order}
      */
     @Override
     @Transactional
     public void createOrder(Order order) {
-        Customer customer = order.getCustomer();
-        List<Goods> goodsInCart = new ArrayList<>(customer.getGoodsInCart());
+        User user = order.getUser();
+        List<Goods> goodsInCart = new ArrayList<>(user.getGoodsInCart());
         order.setGoodsInOrder(goodsInCart);
         orderRepository.save(order);
-        customer.getGoodsInCart().clear();
-        customerService.save(customer);
+        user.getGoodsInCart().clear();
+        userService.save(user);
     }
 
     /**
@@ -113,7 +113,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Удаление заказа по id
-     * <p> Может выбросить исключение {@link CommonRuntimeException}, если заказ {@link Customer} не был удалён
+     * <p> Может выбросить исключение {@link CommonRuntimeException}, если заказ {@link User} не был удалён
      *
      * @param id идентификатор заказа {@link UUID}
      */

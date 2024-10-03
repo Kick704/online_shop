@@ -24,7 +24,7 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
     private GoodsService goodsService;
 
     @Autowired
-    private CustomerService customerService;
+    private UserService userService;
 
     @Autowired
     private GoodsCategoryService categoryService;
@@ -100,20 +100,20 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
     }
 
 //    /**
-//     * Добавление товара в корзину покупателя
+//     * Добавление товара в корзину пользователя
 //     *
 //     * @param goodsId    идентификатор товара {@link UUID}
-//     * @param customerId идентификатор покупателя {@link UUID}
-//     * @return {@link List} - список товаров {@link GoodsResponseDTO} в корзине покупателя
+//     * @param userId идентификатор пользователя {@link UUID}
+//     * @return {@link List} - список товаров {@link GoodsResponseDTO} в корзине пользователя
 //     */
 //    @Override
 //    @Transactional
-//    public List<GoodsResponseDTO> addGoodsToCustomerCart(UUID goodsId, UUID customerId) {
+//    public List<GoodsResponseDTO> addGoodsToUserCart(UUID goodsId, UUID userId) {
 //        Goods goods = goodsService.findById(goodsId);
-//        Customer customer = customerService.findById(customerId);
-//        customer.getGoodsInCart().add(goods);
-//        customerService.save(customer);
-//        return goodsMapper.toDTOList(customer.getGoodsInCart());
+//        User user = userService.findById(userId);
+//        user.getGoodsInCart().add(goods);
+//        userService.save(user);
+//        return goodsMapper.toDTOList(user.getGoodsInCart());
 //    }
 
     /**
@@ -130,28 +130,28 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
     }
 
 //    /**
-//     * Удаление товара из корзины покупателя
+//     * Удаление товара из корзины пользователя
 //     *
 //     * @param goodsId    идентификатор товара {@link UUID}
-//     * @param customerId идентификатор покупателя {@link UUID}
+//     * @param userId идентификатор пользователя {@link UUID}
 //     * @return {@link InformationDTO} с сообщением о результате
 //     */
 //    @Override
-//    public InformationDTO removeGoodsFromCustomerCart(UUID goodsId, UUID customerId) {
+//    public InformationDTO removeGoodsFromUserCart(UUID goodsId, UUID userId) {
 //
 //        ////////////////////////////////f
 //        p
 //        Goods goods = goodsService.findById(goodsId);
-//        Customer customer = customerService.findById(customerId);
-//        if (customer.getGoodsInCart().isEmpty()) {
-//            throw new IllegalArgumentException("Корзина покупателя с ID: " + goodsId + " пуста");
+//        User user = userService.findById(userId);
+//        if (user.getGoodsInCart().isEmpty()) {
+//            throw new IllegalArgumentException("Корзина пользователя с ID: " + goodsId + " пуста");
 //        }
-//        if (!customer.getGoodsInCart().remove(goods)) {
+//        if (!user.getGoodsInCart().remove(goods)) {
 //            throw new IllegalStateException("Не удалось удалить товар с ID: " + goodsId +
-//                    " из корзины покупателя с ID: " + customerId);
+//                    " из корзины пользователя с ID: " + userId);
 //        }
-//        customerService.save(customer);
-//        return new InformationDTO("Товар с ID: " + goodsId + " удалён из корзины покупателя с ID: " + customerId);
+//        userService.save(user);
+//        return new InformationDTO("Товар с ID: " + goodsId + " удалён из корзины пользователя с ID: " + userId);
 //        // Пока нет кастомных исключений и, возможно, необходимо перенести всю логику в сервисы и не создавать новую в
 //        // фасад-сервисах
 //    }

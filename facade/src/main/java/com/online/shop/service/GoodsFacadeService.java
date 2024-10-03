@@ -21,21 +21,21 @@ public interface GoodsFacadeService extends BaseFacadeService<GoodsCreationDTO, 
     List<GoodsResponseDTO> findAllGoodsByName(String name);
 
 //    /**
-//     * Добавление товара в корзину покупателя
+//     * Добавление товара в корзину пользователя
 //     *
 //     * @param goodsId    идентификатор товара {@link UUID}
-//     * @param customerId идентификатор покупателя {@link UUID}
-//     * @return {@link List} - список товаров {@link GoodsResponseDTO} в корзине покупателя
+//     * @param userId идентификатор пользователя {@link UUID}
+//     * @return {@link List} - список товаров {@link GoodsResponseDTO} в корзине пользователя
 //     */
-//    List<GoodsResponseDTO> addGoodsToCustomerCart(UUID goodsId, UUID customerId);
+//    List<GoodsResponseDTO> addGoodsToUserCart(UUID goodsId, UUID userId);
 //
 //    /**
-//     * Удаление товара из корзины покупателя
+//     * Удаление товара из корзины пользователя
 //     *
 //     * @param goodsId    идентификатор товара {@link UUID}
-//     * @param customerId идентификатор покупателя {@link UUID}
+//     * @param userId идентификатор пользователя {@link UUID}
 //     * @return {@link InformationDTO} с сообщением о результате
 //     */
-//    InformationDTO removeGoodsFromCustomerCart(UUID goodsId, UUID customerId);
+//    InformationDTO removeGoodsFromUserCart(UUID goodsId, UUID userId);
 
 }

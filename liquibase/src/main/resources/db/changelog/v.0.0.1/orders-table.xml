@@ -10,7 +10,7 @@
             <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="customer_id" type="UUID">
+            <column name="user_id" type="UUID">
                 <constraints nullable="false"/>
             </column>
             <column name="amount" type="double">
@@ -32,9 +32,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="orders" baseColumnNames="customer_id"
-                                 constraintName="orders_customer_id_customers_id"
-                                 referencedTableName="customers"
+        <addForeignKeyConstraint baseTableName="orders"
+                                 baseColumnNames="user_id"
+                                 constraintName="FK_orders_users"
+                                 referencedTableName="users"
                                  referencedColumnNames="id"/>
     </changeSet>
 

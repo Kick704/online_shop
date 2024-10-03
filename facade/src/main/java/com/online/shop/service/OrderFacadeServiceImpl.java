@@ -4,7 +4,7 @@ import com.online.shop.dto.request.creation.OrderCreationDTO;
 import com.online.shop.dto.request.update.OrderUpdateDTO;
 import com.online.shop.dto.response.InformationDTO;
 import com.online.shop.dto.response.OrderResponseDTO;
-import com.online.shop.entity.Customer;
+import com.online.shop.entity.User;
 import com.online.shop.entity.Order;
 import com.online.shop.enums.OrderStatus;
 import com.online.shop.mapper.OrderMapper;
@@ -25,7 +25,7 @@ public class OrderFacadeServiceImpl implements OrderFacadeService {
     private OrderService orderService;
 
     @Autowired
-    private CustomerService customerService;
+    private UserService userService;
 
     @Autowired
     private GoodsService goodsService;
@@ -78,8 +78,8 @@ public class OrderFacadeServiceImpl implements OrderFacadeService {
     @Transactional
     public OrderResponseDTO addNew(OrderCreationDTO orderCreationDTO) {
         Order newOrder = orderMapper.toEntity(orderCreationDTO);
-        Customer customer = customerService.findById(orderCreationDTO.getCustomerId());
-        newOrder.setCustomer(customer);
+        User user = userService.findById(orderCreationDTO.getUserId());
+        newOrder.setUser(user);
         orderService.createOrder(newOrder);
         return orderMapper.toDTO(newOrder);
     }

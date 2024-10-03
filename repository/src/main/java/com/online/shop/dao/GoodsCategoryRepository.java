@@ -32,7 +32,7 @@ public interface GoodsCategoryRepository extends JpaRepository<GoodsCategory, UU
      * @return {@link List} - список всех категорий товаров {@link GoodsCategory}
      */
     @Query(value = "SELECT gс FROM GoodsCategory gс")
-    List<GoodsCategory> findAllGoodsCategory();
+    List<GoodsCategory> findAllGoodsCategories();
 
     /**
      * Выборка категории товаров по названию

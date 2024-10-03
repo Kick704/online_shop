@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="create-table-role_privileges" author="Kick704">
+        <createTable tableName="role_privileges"
+                     remarks="Дополнительная таблица для организации связи между ролями и привилегиями">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="role_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="privilege_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="role_privileges"
+                                 baseColumnNames="role_id"
+                                 constraintName="FK_role_privileges_roles"
+                                 referencedTableName="roles"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="role_privileges"
+                                 baseColumnNames="privilege_id"
+                                 constraintName="FK_role_privileges_privileges"
+                                 referencedTableName="privileges"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

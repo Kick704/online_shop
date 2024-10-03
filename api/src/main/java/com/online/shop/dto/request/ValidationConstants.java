@@ -5,11 +5,11 @@ package com.online.shop.dto.request;
  */
 public final class ValidationConstants {
 
-    private ValidationConstants(){
+    private ValidationConstants() {
     }
 
     /**
-     * Минимальная длина пароля для аккаунта покупателя
+     * Минимальная длина пароля для аккаунта пользователя
      */
     public static final int MIN_CUSTOMER_PASSWORD_LENGTH = 8;
 

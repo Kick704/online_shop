@@ -10,14 +10,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-
-import static com.online.shop.entity.CustomerRole.ADMIN;
-import static com.online.shop.entity.CustomerRole.USER;
 
 /**
  * REST-контроллер для управления с заказами интернет-магазина
@@ -35,7 +31,6 @@ public class OrderController {
      *
      * @return {@link List} список заказов {@link OrderResponseDTO}
      */
-    @Secured(ADMIN)
     @GetMapping
     @Operation(summary = "Получение всех заказов",
             description = "Позволяет получить список всех созданных заказов интернет-магазина")
@@ -49,7 +44,6 @@ public class OrderController {
      * @param id идентификатор заказа {@link UUID}
      * @return DTO {@link OrderResponseDTO}, содержащий информацию о заказе
      */
-    @Secured(ADMIN)
     @GetMapping("/{id}")
     @Operation(summary = "Получение заказа по ID", description = "Позволяет получить заказ по его ID")
     public OrderResponseDTO getOrder(@PathVariable UUID id) {
@@ -62,7 +56,6 @@ public class OrderController {
      * @param status статус заказа {@link OrderStatus}
      * @return {@link List} список, содержащий заказы {@link OrderResponseDTO} с указанным статусом {@code status}
      */
-    @Secured(ADMIN)
     @GetMapping(value = "/status", params = "status")
     @Operation(summary = "Получение заказа по статусу", description = "Позволяет получить заказ по текущему статусу")
     public List<OrderResponseDTO> getOrdersByStatus(@RequestParam OrderStatus status) {
@@ -75,10 +68,9 @@ public class OrderController {
      * @param orderCreationDTO DTO {@link OrderCreationDTO}, содержащая информацию для создания заказа
      * @return DTO {@link OrderResponseDTO}, содержащий информацию о заказе
      */
-    @Secured(USER)
     @PostMapping
     @Operation(summary = "Создание заказа",
-            description = "Позволяет создать заказ на основе корзины покупателя")
+            description = "Позволяет создать заказ на основе корзины пользователя")
     public OrderResponseDTO addNewOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
         return orderFacadeService.addNew(orderCreationDTO);
     }
@@ -90,7 +82,6 @@ public class OrderController {
      * @param orderUpdateDTO DTO {@link OrderUpdateDTO}, содержащий новую информацию о заказе
      * @return DTO {@link OrderResponseDTO} с обновленной информацией о заказе
      */
-    @Secured(ADMIN)
     @PutMapping("/{id}")
     @Operation(summary = "Изменение заказа",
             description = "Позволяет изменить данные заказа")
@@ -104,7 +95,6 @@ public class OrderController {
      * @param id идентификатор заказа {@link UUID}
      * @return {@link InformationDTO} с сообщением о результате
      */
-    @Secured(ADMIN)
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление заказа", description = "Позволяет удалить заказ по его ID")
     public InformationDTO deleteOrder(@PathVariable UUID id) {

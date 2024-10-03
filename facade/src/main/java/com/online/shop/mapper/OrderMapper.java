@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Маппер для сущности {@link Order} и обратно
  */
-@Mapper(componentModel = "spring", uses = {CustomerMapper.class, GoodsMapper.class},
+@Mapper(componentModel = "spring", uses = {UserMapper.class, GoodsMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface OrderMapper extends BaseMapper<Order,
         OrderCreationDTO,

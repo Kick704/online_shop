@@ -1,7 +1,7 @@
 package com.online.shop.controller;
 
 import com.online.shop.dto.request.update.GoodsUpdateDTO;
-import com.online.shop.dto.response.CustomerResponseDTO;
+import com.online.shop.dto.response.UserResponseDTO;
 import com.online.shop.dto.request.creation.GoodsCreationDTO;
 import com.online.shop.dto.response.GoodsResponseDTO;
 import com.online.shop.dto.response.InformationDTO;
@@ -10,13 +10,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-
-import static com.online.shop.entity.CustomerRole.ADMIN;
 
 /**
  * REST-контроллер для управления с товарами интернет-магазина
@@ -72,7 +69,6 @@ public class GoodsController {
      * @param goodsCreationDTO DTO {@link GoodsCreationDTO}, содержащая информацию для добавления нового товара
      * @return DTO {@link GoodsResponseDTO}, содержащий информацию о новом товаре
      */
-    @Secured(ADMIN)
     @PostMapping
     @Operation(summary = "Добавление нового товара в интернет-магазин",
             description = "Позволяет добавить новый товар в интернет-магазин")
@@ -81,27 +77,26 @@ public class GoodsController {
     }
 
 //    /**
-//     * Обработчик POST запроса для добавления товара в корзину покупателя
+//     * Обработчик POST запроса для добавления товара в корзину пользователя
 //     *
 //     * @param goodsId идентификатор товара {@link UUID}
-//     * @param customerId идентификатор покупателя {@link UUID}
-//     * @return {@link List} список товаров {@link GoodsResponseDTO} в корзине покупателя
+//     * @param userId идентификатор пользователя {@link UUID}
+//     * @return {@link List} список товаров {@link GoodsResponseDTO} в корзине пользователя
 //     */
-//    @PostMapping(value = "/{goodsId}", params = "customerId")
-//    @Operation(summary = "Добавление товара в корзину покупателя",
-//            description = "Позволяет добавить товар в корзину покупателя")
-//    public List<GoodsResponseDTO> addGoodsToCustomerCart(@PathVariable UUID goodsId, @RequestParam UUID customerId) {
-//        return goodsFacadeService.addGoodsToCustomerCart(goodsId, customerId);
+//    @PostMapping(value = "/{goodsId}", params = "userId")
+//    @Operation(summary = "Добавление товара в корзину пользователя",
+//            description = "Позволяет добавить товар в корзину пользователя")
+//    public List<GoodsResponseDTO> addGoodsToUserCart(@PathVariable UUID goodsId, @RequestParam UUID userId) {
+//        return goodsFacadeService.addGoodsToUserCart(goodsId, userId);
 //    }
 
     /**
      * Обработчик PUT запроса для обновления информации о товаре
      *
-     * @param id идентификатор товара {@link UUID}
+     * @param id             идентификатор товара {@link UUID}
      * @param goodsUpdateDTO DTO {@link GoodsUpdateDTO}, содержащий новую информацию о товаре
-     * @return DTO {@link CustomerResponseDTO} с обновленной информацией о товаре
+     * @return DTO {@link UserResponseDTO} с обновленной информацией о товаре
      */
-    @Secured(ADMIN)
     @PutMapping("/{id}")
     @Operation(summary = "Изменение информации о товаре",
             description = "Позволяет изменить информацию о товаре")
@@ -115,7 +110,6 @@ public class GoodsController {
      * @param id идентификатор товара {@link UUID}
      * @return {@link InformationDTO} с сообщением о результате
      */
-    @Secured(ADMIN)
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление товара из интернет-магазина",
             description = "Позволяет удалить товар из интернет-магазина по его ID")
@@ -124,17 +118,17 @@ public class GoodsController {
     }
 
 //    /**
-//     * Обработчик DELETE запроса для удаления товара из корзины покупателя
+//     * Обработчик DELETE запроса для удаления товара из корзины пользователя
 //     *
 //     * @param goodsId идентификатор товара {@link UUID}
-//     * @param customerId идентификатор покупателя {@link UUID}
+//     * @param userId идентификатор пользователя {@link UUID}
 //     * @return {@link InformationDTO} с сообщением о результате
 //     */
-//    @DeleteMapping(value = "/{goodsId}", params = "customerId")
-//    @Operation(summary = "Удаление товара из корзины покупателя",
-//            description = "Позволяет удалить товар из корзины покупателя")
-//    public InformationDTO removeGoodsFromCustomerCart(@PathVariable UUID goodsId, @RequestParam UUID customerId) {
-//        return goodsFacadeService.removeGoodsFromCustomerCart(goodsId, customerId);
+//    @DeleteMapping(value = "/{goodsId}", params = "userId")
+//    @Operation(summary = "Удаление товара из корзины пользователя",
+//            description = "Позволяет удалить товар из корзины пользователя")
+//    public InformationDTO removeGoodsFromUserCart(@PathVariable UUID goodsId, @RequestParam UUID userId) {
+//        return goodsFacadeService.removeGoodsFromUserCart(goodsId, userId);
 //    }
 
 }

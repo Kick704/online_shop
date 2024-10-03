@@ -1,19 +1,13 @@
-package com.online.shop.dto.request.update;
+package com.online.shop.dto.response;
 
-import com.online.shop.dto.request.AbstractRequestDTO;
-import com.online.shop.entity.Customer;
+import com.online.shop.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import static com.online.shop.dto.request.ValidationConstants.MIN_CUSTOMER_PASSWORD_LENGTH;
-import static com.online.shop.dto.request.ValidationConstants.PHONE_NUMBER_REGEXP;
 
 /**
- * DTO для изменения сущности Покупатель {@link Customer}
+ * DTO Пользователь на основе сущности {@link User}
  */
-@Schema(description = "DTO для обновления покупателя")
-public class CustomerUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
+@Schema(description = "DTO Пользователь")
+public class UserResponseDTO extends AbstractResponseDTO {
 
     @Schema(description = "Фамилия")
     private String surname;
@@ -24,18 +18,14 @@ public class CustomerUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
     @Schema(description = "Отчество")
     private String patronymic;
 
-    @Pattern(regexp = PHONE_NUMBER_REGEXP, message = "Некорректный номер телефона")
     @Schema(description = "Номер телефона")
     private String phoneNumber;
 
-    @Email(message = "Некорректный e-mail")
     @Schema(description = "E-mail")
     private String email;
 
-    @Size(min = MIN_CUSTOMER_PASSWORD_LENGTH,
-            message = "Длина пароля должна составлять минимум " + MIN_CUSTOMER_PASSWORD_LENGTH + " символов")
-    @Schema(description = "Пароль")
-    private String password;
+    @Schema(description = "Баланс")
+    private double balance;
 
     public String getSurname() {
         return surname;
@@ -77,24 +67,26 @@ public class CustomerUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public double getBalance() {
+        return balance;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     @Override
     public String toString() {
-        return "CustomerUpdateDTO{" +
-                "surname='" + surname + '\'' +
+        return "UserResponseDTO{" +
+                "id=" + id +
+                ", surname='" + surname + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", patronymic='" + patronymic + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
+                ", balance=" + balance +
                 '}';
     }
 
 }
+
