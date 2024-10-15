@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Реализация интерфейса для управления сущностью {@link Order} на сервисном слое
+ * Сервис для управления сущностью {@link Order}
  */
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -31,23 +31,21 @@ public class OrderServiceImpl implements OrderService {
      * Выборка заказа по id
      *
      * @param id идентификатор заказа {@link UUID}
-     * @return {@link Order} - заказ по указанному {@code id}, или выбрасывается исключение
-     * {@link CommonRuntimeException}, если такого заказа нет
+     * @return {@link Order} - заказ по указанному {@code id}
      */
     @Override
     public Order findById(UUID id) {
         return orderRepository.findOrderById(id)
                 .orElseThrow(() -> new CommonRuntimeException(
                         ErrorCode.ENTITY_NOT_FOUND,
-                        String.format("Заказ с ID: %s не найден", id))
+                        String.format("Заказ с ID %s не найден", id))
                 );
     }
 
     /**
      * Выборка всех заказов
      *
-     * @return {@link List} - список всех заказов {@link Order}, или выбрасывается исключение
-     * {@link CommonRuntimeException}, если заказов ещё нет
+     * @return {@link List} - список всех заказов {@link Order}
      */
     @Override
     public List<Order> findAll() {
@@ -62,15 +60,14 @@ public class OrderServiceImpl implements OrderService {
      * Выборка заказов по статусу
      *
      * @param status статус заказа {@link String}
-     * @return {@link List} - список заказов {@link Order} по указанному статусу {@code status}, или выбрасывается
-     * исключение {@link CommonRuntimeException}, если таких заказов нет
+     * @return {@link List} - список заказов {@link Order} по указанному статусу {@code status}
      */
     @Override
-    public List<Order> findAllOrdersByStatus(OrderStatus status) {
+    public List<Order> findAllByStatus(OrderStatus status) {
         List<Order> orders = orderRepository.findAllOrdersByStatus(status);
         if (orders.isEmpty()) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_NOT_FOUND, String.format("Ни один заказ не найден по статусу %s", status)
+                    ErrorCode.ENTITY_NOT_FOUND, String.format("Ни один заказ не найден по статусу '%s'", status)
             );
         }
         return orders;
@@ -85,7 +82,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     @Transactional
-    public void createOrder(Order order) {
+    public void create(Order order) {
         User user = order.getUser();
         List<Goods> goodsInCart = new ArrayList<>(user.getGoodsInCart());
         order.setGoodsInOrder(goodsInCart);
@@ -96,12 +93,11 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Обновление заказа в БД
-     * <p> Может выбросить исключение {@link CommonRuntimeException},
-     * если сущность ссылается на null или не проходит проверку уникальности
+     *
      * @param order сущность Заказ {@link Order}
      */
     @Override
-    public void updateOrder(Order order) {
+    public void update(Order order) {
         if (order == null) {
             throw new CommonRuntimeException(
                     ErrorCode.OBJECT_REFERENCE_IS_NULL,
@@ -113,7 +109,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Удаление заказа по id
-     * <p> Может выбросить исключение {@link CommonRuntimeException}, если заказ {@link User} не был удалён
      *
      * @param id идентификатор заказа {@link UUID}
      */
@@ -122,7 +117,7 @@ public class OrderServiceImpl implements OrderService {
         if (orderRepository.deleteOrderById(id) == 0) {
             throw new CommonRuntimeException(
                     ErrorCode.ENTITY_NOT_FOUND,
-                    String.format("Заказ с ID: %s не найден или не может быть удалён", id)
+                    String.format("Заказ с ID %s не найден или не может быть удалён", id)
             );
         }
     }

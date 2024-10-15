@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Репозиторий для управления сущностями {@link Order} между приложением и БД
+ * Репозиторий для управления сущностью {@link Order} между приложением и БД
  */
 @Repository
 public interface OrderRepository extends JpaRepository<Order, UUID> {

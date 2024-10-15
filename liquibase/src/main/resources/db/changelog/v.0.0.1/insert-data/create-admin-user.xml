@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="insert-admin-user" author="Kick704">
+        <insert tableName="users">
+            <column name="id" valueComputed="gen_random_uuid()" />
+            <column name="surname" value="Федоров" />
+            <column name="firstname" value="Максим" />
+            <column name="patronymic" value="Иванович" />
+            <column name="phone_number" value="9874786948" />
+            <column name="email" value="sprint.text@mail.ru" />
+            <column name="password" value="$2y$04$wTOeoQSVmjl/08jLwOPLueYquC4y8UDAnd.2YWvY4HsQVQpX7slpu" /><!--admin-->
+            <column name="balance" value="1000000" />
+            <column name="enabled" value="true" />
+            <column name="modified" valueComputed="CURRENT_TIMESTAMP" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="set-admin-role" author="Kick704">
+        <insert tableName="user_roles">
+            <column name="user_id" valueComputed="(SELECT id FROM users WHERE email = 'sprint.text@mail.ru')" />
+            <column name="role_id" valueComputed="(SELECT id FROM roles WHERE name = 'ADMIN')" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

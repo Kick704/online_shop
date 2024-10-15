@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Репозиторий для управления сущностями {@link User} между приложением и БД
+ * Репозиторий для управления сущностью {@link User} между приложением и БД
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
@@ -23,10 +23,16 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      * @param id идентификатор пользователя {@link UUID}
      * @return {@link Optional} - контейнер, содержащий пользователя {@link User} по указанному {@code id}
      */
-    @Query(value = "SELECT c FROM User c WHERE c.id = :id")
+    @Query(value = "SELECT u FROM User u WHERE u.id = :id")
     Optional<User> findUserById(@Param("id") UUID id);
 
-    @Query(value = "SELECT c FROM User c WHERE c.email = :email")
+    /**
+     * Выборка пользователя по email
+     * 
+     * @param email электронная почта пользователя
+     * @return {@link Optional} - контейнер, содержащий пользователя {@link User} по указанному {@code email}
+     */
+    @Query(value = "SELECT u FROM User u WHERE u.email = :email")
     Optional<User> findUserByEmail(@Param("email") String email);
 
     /**
@@ -34,7 +40,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      *
      * @return {@link List} - список, содержащий список всех пользователей {@link User}
      */
-    @Query(value = "SELECT c FROM User c")
+    @Query(value = "SELECT u FROM User u")
     List<User> findAllUsers();
 
     /**
@@ -44,7 +50,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      * @return {@link List} - список, содержащий список всех пользователей {@link User} по указанному состоянию
      * аккаунта {@code enabled}
      */
-    @Query(value = "SELECT c FROM User c WHERE c.enabled = :enabled")
+    @Query(value = "SELECT u FROM User u WHERE u.enabled = :enabled")
     List<User> findAllUsersByEnabled(@Param("enabled") boolean enabled);
 
     /**
@@ -54,7 +60,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      * @return количество удалённых строк {@link int}
      */
     @Modifying
-    @Query(value = "DELETE FROM User c WHERE c.id = :id")
+    @Query(value = "DELETE FROM User u WHERE u.id = :id")
     int deleteUserById(@Param("id") UUID id);
 
     /**
@@ -65,8 +71,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     boolean existsByPhoneNumber(String phoneNumber);
 
     /**
-     * Проверка существования пользователя в БД с указанным e-mail
-     * @param email e-mail пользователя
+     * Проверка существования пользователя в БД с указанным email
+     * @param email электронная почта пользователя
      * @return результат проверки
      */
     boolean existsByEmail(String email);

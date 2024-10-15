@@ -17,11 +17,11 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * REST-контроллер для взаимодействия с пользователями интернет-магазина
+ * REST-контроллер для управления пользователями интернет-магазина
  */
 @RestController
 @RequestMapping(ApiPath.API_BASE + "/user")
-@Tag(name = "Пользователи", description = "Взаимодействие с пользователями интернет-магазина")
+@Tag(name = "Пользователи", description = "Управление пользователями интернет-магазина")
 public class UserController {
 
     @Autowired
@@ -32,10 +32,10 @@ public class UserController {
      *
      * @return {@link List} список пользователей {@link UserResponseDTO}
      */
-    @PreAuthorize("hasAuthority(T(com.online.shop.enums.PrivilegeEnum).MANAGE_USERS.name())")
+    @PreAuthorize("hasAuthority('MANAGE_USERS')")
     @GetMapping
     @Operation(summary = "Получение всех пользователей",
-            description = "Позволяет получить список всех пользователей(клиентов) интернет-магазина")
+            description = "Позволяет получить список всех пользователей интернет-магазина")
     public List<UserResponseDTO> getAllUsers() {
         return userFacadeService.findAll();
     }
@@ -46,6 +46,7 @@ public class UserController {
      * @param id идентификатор пользователя {@link UUID}
      * @return DTO {@link UserResponseDTO}, содержащий информацию о пользователе
      */
+    @PreAuthorize("hasAuthority('MANAGE_USERS')")
     @GetMapping("/{id}")
     @Operation(summary = "Получение пользователя по ID", description = "Позволяет получить пользователя по его ID")
     public UserResponseDTO getUser(@PathVariable UUID id) {
@@ -58,6 +59,7 @@ public class UserController {
      * @param id идентификатор пользователя {@link UUID}
      * @return {@link List} список товаров {@link GoodsResponseDTO} в корзине пользователя
      */
+    @PreAuthorize("hasAuthority('MANAGE_USERS')")
     @GetMapping(value = "/cart", params = "id")
     @Operation(summary = "Получение корзины пользователя",
             description = "Позволяет получить список товаров в корзине по ID пользователя")
@@ -71,11 +73,12 @@ public class UserController {
      * @param enabled состояние аккаунта {@link boolean}
      * @return {@link List} список пользователей {@link UserResponseDTO} по указанному состоянию аккаунта {@code enabled}
      */
+    @PreAuthorize("hasAuthority('MANAGE_USERS')")
     @GetMapping(value = "/by-enabled", params = "enabled")
     @Operation(summary = "Получение всех пользователей по состоянию аккаунта",
             description = "Позволяет получить список всех активных/неактивных аккаунтов пользователей")
     public List<UserResponseDTO> getAllUsersByEnabled(@RequestParam boolean enabled) {
-        return userFacadeService.findAllUsersByEnabled(enabled);
+        return userFacadeService.findAllByEnabled(enabled);
     }
 
     /**
@@ -98,6 +101,7 @@ public class UserController {
      * @param userUpdateDTO DTO {@link UserUpdateDTO}, содержащий новую информацию о пользователе
      * @return DTO {@link UserResponseDTO} с обновленной информацией о пользователе
      */
+    @PreAuthorize("hasAuthority('MANAGE_USERS')")
     @PutMapping("/{id}")
     @Operation(summary = "Изменение информации о пользователе", description = "Позволяет изменить данные пользователя")
     public UserResponseDTO updateUser(@PathVariable UUID id,
@@ -111,6 +115,7 @@ public class UserController {
      * @param id идентификатор пользователя {@link UUID}
      * @return {@link InformationDTO} с сообщением о результате
      */
+    @PreAuthorize("hasAuthority('MANAGE_USERS')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление пользователя", description = "Позволяет удалить пользователя по его ID")
     public InformationDTO deleteUser(@PathVariable UUID id) {

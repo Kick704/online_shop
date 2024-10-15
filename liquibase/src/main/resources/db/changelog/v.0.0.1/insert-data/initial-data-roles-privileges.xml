@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="insert-into-roles" author="Kick704">
+        <sql>
+            INSERT INTO roles (name)
+            VALUES
+                ('ADMIN'),
+                ('SELLER'),
+                ('CUSTOMER');
+        </sql>
+    </changeSet>
+
+    <changeSet id="insert-into-privileges" author="Kick704">
+        <sql>
+            INSERT INTO privileges (name)
+            VALUES
+                ('READ_GOODS'),
+                ('CREATE_GOODS'),
+                ('EDIT_GOODS'),
+                ('DELETE_GOODS'),
+                ('READ_ORDER'),
+                ('CREATE_ORDER'),
+                ('EDIT_ORDER'),
+                ('DELETE_ORDER'),
+                ('MANAGE_USERS');
+        </sql>
+    </changeSet>
+
+    <changeSet id="insert-into-role_privileges" author="Kick704">
+        <sql>
+            INSERT INTO role_privileges (role_id, privilege_id)
+            SELECT
+                (SELECT id FROM roles WHERE name = 'ADMIN'),
+                p.id
+            FROM privileges p;
+        </sql>
+        <sql>
+            INSERT INTO role_privileges (role_id, privilege_id)
+            SELECT
+                (SELECT id FROM roles WHERE name = 'SELLER'),
+                p.id
+            FROM privileges p WHERE p.name in ('READ_GOODS', 'CREATE_GOODS', 'EDIT_GOODS', 'READ_ORDER', 'EDIT_ORDER');
+        </sql>
+        <sql>
+            INSERT INTO role_privileges (role_id, privilege_id)
+            SELECT
+                (SELECT id FROM roles WHERE name = 'CUSTOMER'),
+                p.id
+            FROM privileges p WHERE p.name in ('READ_GOODS', 'CREATE_ORDER');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

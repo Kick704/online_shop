@@ -24,6 +24,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Online shop API")
                         .version(applicationVersion)
-                        .description(applicationDescription));
+                        .description(applicationDescription)
+                        .summary("API for managing orders, users, and goods in the online shop"));
     }
 }

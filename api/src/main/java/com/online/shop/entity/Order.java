@@ -192,7 +192,7 @@ public class Order extends AbstractEntity {
             if (user == null || deliveryAddress == null) {
                 throw new CommonRuntimeException(
                         ErrorCode.INTERNAL_SERVER_ERROR,
-                        "Order: одно или несколько полей (user, deliveryAddress) ссылаются на null"
+                        "Order: одно или несколько полей (user, deliveryAddress) не могут быть null"
                 );
             }
             return new Order(this);

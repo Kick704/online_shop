@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Репозиторий для управления сущностями {@link Goods} между приложением и БД
+ * Репозиторий для управления сущностью {@link Goods} между приложением и БД
  */
 @Repository
 public interface GoodsRepository extends JpaRepository<Goods, UUID> {
@@ -37,11 +37,11 @@ public interface GoodsRepository extends JpaRepository<Goods, UUID> {
     /**
      * Выборка товаров по названию
      *
-     * @param goodsName наименование товара {@link String}
-     * @return {@link List} - список товаров {@link Goods} по указанному наименованию {@code goodsName}
+     * @param name название товара {@link String}
+     * @return {@link List} - список товаров {@link Goods} по указанному названию {@code goodsName}
      */
-    @Query(value = "SELECT g FROM Goods g JOIN FETCH g.goodsCategory WHERE g.goodsName = :goodsName")
-    List<Goods> findAllGoodsByName(@Param("goodsName") String goodsName);
+    @Query(value = "SELECT g FROM Goods g JOIN FETCH g.goodsCategory WHERE g.name = :name")
+    List<Goods> findAllGoodsByName(@Param("name") String name);
 
     /**
      * Удаление товара по id

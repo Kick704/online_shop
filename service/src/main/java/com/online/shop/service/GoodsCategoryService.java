@@ -3,17 +3,17 @@ package com.online.shop.service;
 import com.online.shop.entity.GoodsCategory;
 
 /**
- * Интерфейс для управления сущностью {@link GoodsCategory} на сервисном слое
+ * Сервис для управления сущностью {@link GoodsCategory}
  */
 public interface GoodsCategoryService extends BaseService<GoodsCategory> {
 
     /**
      * Выборка категории товаров по названию
      *
-     * @param name наименование категории товаров {@link String}
-     * @return {@link GoodsCategory} - категория товаров по указанному наименованию {@code name}
+     * @param name название категории товаров {@link String}
+     * @return {@link GoodsCategory} - категория товаров по указанному названию {@code name}
      */
-    GoodsCategory findGoodsCategoryByName(String name);
+    GoodsCategory findByName(String name);
 
     /**
      * Добавление/обновление категории товаров в БД
@@ -21,5 +21,12 @@ public interface GoodsCategoryService extends BaseService<GoodsCategory> {
      * @param category сущность Категория товаров {@link GoodsCategory}
      */
     void save(GoodsCategory category);
+
+    /**
+     * Проверка названия категории товаров на уникальность в БД
+     *
+     * @param name название категории товаров
+     */
+    void validateNameUniqueness(String name);
 
 }

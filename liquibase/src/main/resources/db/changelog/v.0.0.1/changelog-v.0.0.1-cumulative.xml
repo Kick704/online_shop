@@ -9,15 +9,17 @@
         <tagDatabase tag="v.0.0.1"/>
     </changeSet>
 
-    <include file="users-table.xml" relativeToChangelogFile="true"/>
-    <include file="orders-table.xml" relativeToChangelogFile="true"/>
-    <include file="goods_categories-table.xml" relativeToChangelogFile="true"/>
-    <include file="goods-table.xml" relativeToChangelogFile="true"/>
-    <include file="order_item-table.xml" relativeToChangelogFile="true"/>
-    <include file="cart-table.xml" relativeToChangelogFile="true"/>
-    <include file="roles-table.xml" relativeToChangelogFile="true"/>
-    <include file="privileges-table.xml" relativeToChangelogFile="true"/>
-    <include file="user_roles-table.xml" relativeToChangelogFile="true"/>
-    <include file="roles_privileges-table.xml" relativeToChangelogFile="true"/>
+    <include file="create-table/users-table.xml" relativeToChangelogFile="true" />
+    <include file="create-table/orders-table.xml" relativeToChangelogFile="true"/>
+    <include file="create-table/goods_categories-table.xml" relativeToChangelogFile="true"/>
+    <include file="create-table/goods-table.xml" relativeToChangelogFile="true"/>
+    <include file="create-table/order_item-table.xml" relativeToChangelogFile="true"/>
+    <include file="create-table/cart-table.xml" relativeToChangelogFile="true"/>
+    <include file="create-table/roles-table.xml" relativeToChangelogFile="true"/>
+    <include file="create-table/privileges-table.xml" relativeToChangelogFile="true"/>
+    <include file="create-table/user_roles-table.xml" relativeToChangelogFile="true"/>
+    <include file="create-table/roles_privileges-table.xml" relativeToChangelogFile="true"/>
+    <include file="insert-data/initial-data-roles-privileges.xml" relativeToChangelogFile="true"/>
+    <include file="insert-data/create-admin-user.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

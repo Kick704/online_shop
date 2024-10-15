@@ -73,8 +73,8 @@ public class UserFacadeServiceImpl implements UserFacadeService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<UserResponseDTO> findAllUsersByEnabled(boolean enabled) {
-        return userMapper.toDTOList(userService.findAllUsersByEnabled(enabled));
+    public List<UserResponseDTO> findAllByEnabled(boolean enabled) {
+        return userMapper.toDTOList(userService.findAllByEnabled(enabled));
     }
 
     /**
@@ -87,6 +87,8 @@ public class UserFacadeServiceImpl implements UserFacadeService {
     @Transactional
     public UserResponseDTO addNew(UserCreationDTO userCreationDTO) {
         User newUser = userMapper.toEntity(userCreationDTO);
+        userService.validatePhoneNumberUniqueness(newUser.getPhoneNumber());
+        userService.validateEmailUniqueness(newUser.getEmail());
         userService.save(newUser);
         return userMapper.toDTO(newUser);
     }
@@ -94,7 +96,7 @@ public class UserFacadeServiceImpl implements UserFacadeService {
     /**
      * Обновление пользователя в БД
      *
-     * @param id                идентификатор пользователя {@link UUID}
+     * @param id идентификатор пользователя {@link UUID}
      * @param userUpdateDTO DTO Пользователь {@link UserUpdateDTO} с изменёнными полями
      * @return обновлённый DTO Пользователь {@link UserResponseDTO}
      */
@@ -102,6 +104,14 @@ public class UserFacadeServiceImpl implements UserFacadeService {
     @Transactional
     public UserResponseDTO update(UUID id, UserUpdateDTO userUpdateDTO) {
         User user = userService.findById(id);
+        if (!user.getPhoneNumber().equals(userUpdateDTO.getPhoneNumber())) {
+            userService.validatePhoneNumberUniqueness(
+                    userMapper.mapPhoneNumberToEntity(userUpdateDTO.getPhoneNumber())
+            );
+        }
+        if (!user.getEmail().equals(userUpdateDTO.getEmail())) {
+            userService.validateEmailUniqueness(userUpdateDTO.getEmail());
+        }
         userMapper.updateEntityFromDto(userUpdateDTO, user);
         userService.save(user);
         return userMapper.toDTO(user);
@@ -117,7 +127,7 @@ public class UserFacadeServiceImpl implements UserFacadeService {
     @Transactional
     public InformationDTO deleteById(UUID id) {
         userService.deleteById(id);
-        return new InformationDTO(String.format("Пользователь с ID: %s удалён", id));
+        return new InformationDTO(String.format("Пользователь с ID %s удалён", id));
     }
 
 }

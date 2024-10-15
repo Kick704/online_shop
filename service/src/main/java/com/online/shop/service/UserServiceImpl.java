@@ -4,23 +4,20 @@ import com.online.shop.dao.UserRepository;
 import com.online.shop.entity.Role;
 import com.online.shop.entity.User;
 import com.online.shop.entity.Goods;
-import com.online.shop.enums.RoleEnum;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 /**
- * Реализация интерфейса для управления сущностью {@link User} на сервисном слое
+ * Сервис для управления сущностью {@link User}
  */
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,7 +40,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findUserById(id)
                 .orElseThrow(() -> new CommonRuntimeException(
                         ErrorCode.ENTITY_NOT_FOUND,
-                        String.format("Пользователь с ID: %s не найден", id))
+                        String.format("Пользователь с ID %s не найден", id))
                 );
     }
 
@@ -75,7 +72,7 @@ public class UserServiceImpl implements UserService {
         if (goodsInCart.isEmpty()) {
             throw new CommonRuntimeException(
                     ErrorCode.EMPTY_CART,
-                    String.format("Корзина пользователя c ID: %s пуста", id)
+                    String.format("Корзина пользователя c ID %s пуста", id)
             );
         }
         return goodsInCart;
@@ -101,12 +98,13 @@ public class UserServiceImpl implements UserService {
      * выбрасывается исключение {@link CommonRuntimeException}, если таких пользователей нет
      */
     @Override
-    public List<User> findAllUsersByEnabled(boolean enabled) {
+    public List<User> findAllByEnabled(boolean enabled) {
         List<User> users = userRepository.findAllUsersByEnabled(enabled);
         if (users.isEmpty()) {
             throw new CommonRuntimeException(
                     ErrorCode.ENTITY_NOT_FOUND,
-                    String.format("Ни один пользователь не найден по указанному состоянию аккаунта: %s", enabled)
+                    String.format("Ни один пользователь не найден по указанному состоянию аккаунта '%s'",
+                            enabled ? "Активен" : "Заблокирован")
             );
         }
         return users;
@@ -114,49 +112,26 @@ public class UserServiceImpl implements UserService {
 
     /**
      * Добавление/обновление пользователя в БД
-     * <p> Может выбросить исключение {@link CommonRuntimeException},
-     * если сущность ссылается на null или не проходит проверку уникальности
      *
      * @param user сущность Пользователь {@link User}
      */
     @Override
     public void save(User user) {
-
         if (user == null) {
             throw new CommonRuntimeException(
                     ErrorCode.OBJECT_REFERENCE_IS_NULL,
                     "User: предан пустой объект для сохранения"
             );
         }
-
-        if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
-            throw new CommonRuntimeException(
-                    ErrorCode.UNIQUE_CONSTRAINT_VIOLATION,
-                    "Пользователь с таким номером телефона уже зарегистрирован"
-            );
+        if (CollectionUtils.isEmpty(user.getRoles())) {
+            Role role = roleService.findByName("CUSTOMER");
+            user.setRoles(Set.of(role));
         }
-
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new CommonRuntimeException(
-                    ErrorCode.UNIQUE_CONSTRAINT_VIOLATION,
-                    "Пользователь с таким email уже зарегистрирован"
-            );
-        }
-        String encodePassword = new BCryptPasswordEncoder().encode(user.getPassword());
-        user.setPassword(encodePassword);
-
-        if (CollectionUtils.isEmpty(user.getUserRoles())) {
-            Role role = roleService.createRoleFromEnum(RoleEnum.CUSTOMER);
-            user.setUserRoles(Set.of(role));
-        }
-
         userRepository.save(user);
-
     }
 
     /**
      * Удаление пользователя по id
-     * <p> Может выбросить исключение {@link CommonRuntimeException}, если пользователь {@link User} не был удалён
      *
      * @param id идентификатор пользователя {@link UUID}
      */
@@ -165,17 +140,55 @@ public class UserServiceImpl implements UserService {
         if (userRepository.deleteUserById(id) == 0) {
             throw new CommonRuntimeException(
                     ErrorCode.ENTITY_NOT_FOUND,
-                    String.format("Пользователь с ID: %s не найден или не может быть удалён", id)
+                    String.format("Пользователь с ID %s не найден или не может быть удалён", id)
             );
         }
     }
 
+    /**
+     * Проверка номера телефона пользователя на уникальность в БД
+     *
+     * @param phoneNumber номер телефона пользователя
+     */
+    @Override
+    public void validatePhoneNumberUniqueness(String phoneNumber) {
+        if (userRepository.existsByPhoneNumber(phoneNumber)) {
+            throw new CommonRuntimeException(
+                    ErrorCode.UNIQUE_CONSTRAINT_VIOLATION,
+                    "Пользователь с таким номером телефона уже зарегистрирован"
+            );
+        }
+    }
+
+    /**
+     * Проверка email пользователя на уникальность в БД
+     *
+     * @param email электронная почта пользователя
+     */
+    @Override
+    public void validateEmailUniqueness(String email) {
+        if (userRepository.existsByEmail(email)) {
+            throw new CommonRuntimeException(
+                    ErrorCode.UNIQUE_CONSTRAINT_VIOLATION,
+                    "Пользователь с таким email уже зарегистрирован"
+            );
+        }
+    }
+
+    /**
+     * Загрузка пользователя из БД для аутентификации по email
+     *
+     * @param email электронная почта пользователя
+     * @return пользователь со всеми данными для аутентификации
+     * @throws UsernameNotFoundException, если пользователь не найден
+     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new CommonRuntimeException(
                         ErrorCode.ENTITY_NOT_FOUND,
-                        String.format("Пользователь с E-mail: %s не найден", email))
+                        String.format("Пользователь с email %s не найден", email))
                 );
     }
+
 }

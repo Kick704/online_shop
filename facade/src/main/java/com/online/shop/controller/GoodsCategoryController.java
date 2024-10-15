@@ -51,16 +51,16 @@ public class GoodsCategoryController {
     }
 
     /**
-     * Обработчик GET запроса для получения информации о категории товаров по его наименованию {@code name}
+     * Обработчик GET запроса для получения информации о категории товаров по его названию {@code name}
      *
-     * @param name наименование категории товаров {@link String}
+     * @param name название категории товаров {@link String}
      * @return DTO {@link GoodsCategoryResponseDTO}, содержащий информацию о категории товаров
      */
     @GetMapping(value = "/name", params = "name")
     @Operation(summary = "Получение категории товаров по названию",
             description = "Позволяет получить категорию товаров по его названию")
     public GoodsCategoryResponseDTO getGoodsCategoryByName(@RequestParam String name) {
-        return categoryFacadeService.findGoodsCategoryByName(name);
+        return categoryFacadeService.findByName(name);
     }
 
     /**

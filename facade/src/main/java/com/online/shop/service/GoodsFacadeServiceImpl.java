@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Фасад-сервис слоя представления для управления DTO на основе сущности {@link Goods}
+ * Фасад-сервис для управления DTO на основе сущности {@link Goods}
  */
 @Service
 public class GoodsFacadeServiceImpl implements GoodsFacadeService {
@@ -58,17 +58,17 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
     /**
      * Выборка товаров по названию
      *
-     * @param name наименование товара {@link String}
-     * @return {@link List} - список товаров {@link GoodsResponseDTO} по указанному наименованию {@code name}
+     * @param name название товара {@link String}
+     * @return {@link List} - список товаров {@link GoodsResponseDTO} по указанному названию {@code name}
      */
     @Override
     @Transactional(readOnly = true)
-    public List<GoodsResponseDTO> findAllGoodsByName(String name) {
-        return goodsMapper.toDTOList(goodsService.findAllGoodsByName(name));
+    public List<GoodsResponseDTO> findAllByName(String name) {
+        return goodsMapper.toDTOList(goodsService.findAllByName(name));
     }
 
     /**
-     * Добавление нового товара в БД
+     * Добавление нового товара
      *
      * @param goodsCreationDTO DTO новый Товар {@link GoodsCreationDTO}
      * @return DTO Товар {@link GoodsResponseDTO}
@@ -84,9 +84,9 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
     }
 
     /**
-     * Обновление товара в БД
+     * Обновление существующего товара
      *
-     * @param id             идентификатор товара {@link UUID}
+     * @param id идентификатор товара {@link UUID}
      * @param goodsUpdateDTO DTO Товар {@link GoodsUpdateDTO} с изменёнными полями
      * @return обновлённый DTO Товар {@link GoodsResponseDTO}
      */
@@ -99,23 +99,6 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
         return goodsMapper.toDTO(goods);
     }
 
-//    /**
-//     * Добавление товара в корзину пользователя
-//     *
-//     * @param goodsId    идентификатор товара {@link UUID}
-//     * @param userId идентификатор пользователя {@link UUID}
-//     * @return {@link List} - список товаров {@link GoodsResponseDTO} в корзине пользователя
-//     */
-//    @Override
-//    @Transactional
-//    public List<GoodsResponseDTO> addGoodsToUserCart(UUID goodsId, UUID userId) {
-//        Goods goods = goodsService.findById(goodsId);
-//        User user = userService.findById(userId);
-//        user.getGoodsInCart().add(goods);
-//        userService.save(user);
-//        return goodsMapper.toDTOList(user.getGoodsInCart());
-//    }
-
     /**
      * Удаление товара по id
      *
@@ -126,34 +109,7 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
     @Transactional
     public InformationDTO deleteById(UUID id) {
         goodsService.deleteById(id);
-        return new InformationDTO(String.format("Товар с ID: %s удалён", id));
+        return new InformationDTO(String.format("Товар с ID %s удалён", id));
     }
-
-//    /**
-//     * Удаление товара из корзины пользователя
-//     *
-//     * @param goodsId    идентификатор товара {@link UUID}
-//     * @param userId идентификатор пользователя {@link UUID}
-//     * @return {@link InformationDTO} с сообщением о результате
-//     */
-//    @Override
-//    public InformationDTO removeGoodsFromUserCart(UUID goodsId, UUID userId) {
-//
-//        ////////////////////////////////f
-//        p
-//        Goods goods = goodsService.findById(goodsId);
-//        User user = userService.findById(userId);
-//        if (user.getGoodsInCart().isEmpty()) {
-//            throw new IllegalArgumentException("Корзина пользователя с ID: " + goodsId + " пуста");
-//        }
-//        if (!user.getGoodsInCart().remove(goods)) {
-//            throw new IllegalStateException("Не удалось удалить товар с ID: " + goodsId +
-//                    " из корзины пользователя с ID: " + userId);
-//        }
-//        userService.save(user);
-//        return new InformationDTO("Товар с ID: " + goodsId + " удалён из корзины пользователя с ID: " + userId);
-//        // Пока нет кастомных исключений и, возможно, необходимо перенести всю логику в сервисы и не создавать новую в
-//        // фасад-сервисах
-//    }
 
 }

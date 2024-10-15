@@ -1,6 +1,5 @@
 package com.online.shop.entity;
 
-import com.online.shop.enums.PrivilegeEnum;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
 import jakarta.persistence.*;
@@ -43,7 +42,7 @@ public class User extends AbstractEntity implements UserDetails {
     private String phoneNumber;
 
     /**
-     * E-mail пользователя
+     * Email пользователя
      */
     @Column(name = "email")
     private String email;
@@ -69,11 +68,14 @@ public class User extends AbstractEntity implements UserDetails {
     @Column(name = "enabled")
     private boolean enabled;
 
+    /**
+     * Набор ролей пользователя
+     */
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> userRoles;
+    private Set<Role> roles;
 
     /**
      * Список заказов пользователя
@@ -91,10 +93,10 @@ public class User extends AbstractEntity implements UserDetails {
     private List<Goods> goodsInCart;
 
     /**
-     * Конфигурация аккаунта при регистрации
+     * Конфигурация аккаунта при регистрации пользователя
      */
     @PrePersist
-    public void registrateUser() {
+    public void createUser() {
         enabled = true;
     }
 
@@ -144,14 +146,14 @@ public class User extends AbstractEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return userRoles == null ? Collections.emptyList() : userRoles.stream()
+        return roles == null ? Collections.emptyList() : roles.stream()
                 .flatMap(role -> role.getPrivileges().stream()
-                        .map(Privilege::getPrivilegeName)
-                        .map(PrivilegeEnum::name)
+                        .map(Privilege::getName)
                         .map(SimpleGrantedAuthority::new))
                 .collect(Collectors.toSet());
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -181,12 +183,12 @@ public class User extends AbstractEntity implements UserDetails {
         this.enabled = enabled;
     }
 
-    public Set<Role> getUserRoles() {
-        return userRoles;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setUserRoles(Set<Role> userRoles) {
-        this.userRoles = userRoles;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public List<Order> getOrders() {

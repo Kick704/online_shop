@@ -1,25 +1,34 @@
 package com.online.shop.entity;
 
-import com.online.shop.enums.RoleEnum;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
 import jakarta.persistence.*;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Класс-сущность роли пользователя интернет-магазина
+ */
 @Entity
 @Table(name = "roles")
 public class Role extends AbstractEntity {
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role_name")
-    private RoleEnum roleName;
+    /**
+     * Название роли
+     */
+    @Column(name = "name")
+    private String name;
 
-    @ManyToMany(mappedBy = "userRoles")
+    /**
+     * Набор пользователей с данной ролью
+     */
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
+    /**
+     * Набор привилегий у данной роли
+     */
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_privileges",
             joinColumns = @JoinColumn(name = "role_id"),
@@ -30,16 +39,16 @@ public class Role extends AbstractEntity {
     }
 
     private Role(Builder builder) {
-        roleName = builder.roleName;
+        name = builder.name;
         privileges = builder.privileges;
     }
 
-    public RoleEnum getRoleName() {
-        return roleName;
+    public String getName() {
+        return name;
     }
 
-    public void setRoleName(RoleEnum roleName) {
-        this.roleName = roleName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Set<User> getUsers() {
@@ -64,24 +73,25 @@ public class Role extends AbstractEntity {
         if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
         return Objects.equals(id, role.id) &&
-                Objects.equals(roleName, role.roleName);
+                Objects.equals(name, role.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roleName);
+        return Objects.hash(id, name);
     }
 
     @Override
     public String toString() {
         return "Role{" +
                 "id=" + id +
-                ", roleName='" + roleName + '\'' +
+                ", name='" + name + '\'' +
+                ", privileges=" + privileges +
                 '}';
     }
 
     public static final class Builder {
-        private RoleEnum roleName;
+        private String name;
         private Set<Privilege> privileges;
 
         private Builder() {
@@ -91,8 +101,8 @@ public class Role extends AbstractEntity {
             return new Builder();
         }
 
-        public Builder roleName(RoleEnum val) {
-            roleName = val;
+        public Builder name(String val) {
+            name = val;
             return this;
         }
 
@@ -102,10 +112,10 @@ public class Role extends AbstractEntity {
         }
 
         public Role build() {
-            if (roleName == null || CollectionUtils.isEmpty(privileges)) {
+            if (name == null) {
                 throw new CommonRuntimeException(
                         ErrorCode.INTERNAL_SERVER_ERROR,
-                        "Role: одно или несколько полей (roleName, privileges) пустые или ссылаются на null"
+                        "Role: поле name не может быть null"
                 );
             }
             return new Role(this);

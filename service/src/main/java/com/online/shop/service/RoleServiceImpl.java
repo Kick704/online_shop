@@ -1,28 +1,23 @@
 package com.online.shop.service;
 
-import com.online.shop.dao.PrivilegeRepository;
 import com.online.shop.dao.RoleRepository;
-import com.online.shop.entity.Privilege;
 import com.online.shop.entity.Role;
-import com.online.shop.enums.RoleEnum;
-import com.online.shop.enums.PrivilegeEnum;
+import com.online.shop.exception_handling.CommonRuntimeException;
+import com.online.shop.exception_handling.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Сервис для управления сущностью {@link Role}
+ */
 @Service
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleRepository roleRepository;
-
-    @Autowired
-    private PrivilegeRepository privilegeRepository;
 
     /**
      * Выборка сущности по id
@@ -32,7 +27,11 @@ public class RoleServiceImpl implements RoleService {
      */
     @Override
     public Role findById(UUID id) {
-        return null;
+        return roleRepository.findById(id)
+                .orElseThrow(() -> new CommonRuntimeException(
+                        ErrorCode.ENTITY_NOT_FOUND,
+                        String.format("Роль с ID %s не найдена", id))
+                );
     }
 
     /**
@@ -42,44 +41,26 @@ public class RoleServiceImpl implements RoleService {
      */
     @Override
     public List<Role> findAll() {
-        return List.of();
+        List<Role> roles = roleRepository.findAll();
+        if (roles.isEmpty()) {
+            throw new CommonRuntimeException(ErrorCode.ENTITY_NOT_FOUND, "Ни одна роль не найдена в БД");
+        }
+        return roles;
     }
 
     /**
      * Выборка роли по названию
      *
-     * @param roleName название роли {@link String}
-     * @return {@link Role} - роль по указанному наименованию {@code roleName}
+     * @param name название роли {@link String}
+     * @return {@link Role} - роль по указанному названию {@code name}
      */
     @Override
-    public Role findRoleByName(String roleName) {
-        return null;
-    }
-
-    /**
-     * Создание роли на основе набора ролей, включающих в себя набор привилегий
-     *
-     * @param roleEnum набор ролей {@link RoleEnum}
-     * @return {@link Role} - роль с набором привилегий из {@link PrivilegeEnum}
-     */
-    @Override
-    @Transactional
-    public Role createRoleFromEnum(RoleEnum roleEnum) {
-        Set<Privilege> privileges = new HashSet<>();
-        for (PrivilegeEnum privilegeEnum : roleEnum.getPrivileges()) {
-            Privilege privilege = privilegeRepository.findPrivilegeByName(privilegeEnum)
-                    .orElseGet(() -> privilegeRepository.save(
-                            Privilege.Builder.newBuilder()
-                                    .privilegeName(privilegeEnum)
-                                    .build()));
-            privileges.add(privilege);
-        }
-        Role role = roleRepository.findRoleByName(roleEnum)
-                .orElseGet(() -> Role.Builder.newBuilder()
-                        .roleName(roleEnum)
-                        .privileges(privileges)
-                        .build());
-        return roleRepository.save(role);
+    public Role findByName(String name) {
+        return roleRepository.findRoleByName(name)
+                .orElseThrow(() -> new CommonRuntimeException(
+                        ErrorCode.ENTITY_NOT_FOUND,
+                        String.format("Роль с названием '%s' не найдена", name))
+                );
     }
 
     /**
@@ -89,6 +70,11 @@ public class RoleServiceImpl implements RoleService {
      */
     @Override
     public void deleteById(UUID id) {
-
+        if (roleRepository.deleteRoleById(id) == 0) {
+            throw new CommonRuntimeException(
+                    ErrorCode.ENTITY_NOT_FOUND,
+                    String.format("Роль с ID %s не найдена или не может быть удалена", id)
+            );
+        }
     }
 }

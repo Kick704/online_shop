@@ -15,22 +15,25 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractEntity {
 
+    /**
+     * Идентификатор сущности
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     protected UUID id;
 
     /**
-     * Дата и время создания записи о товаре
-     * <p>Устанавливается на уровне БД в момент создания записи, неизменно
+     * Дата и время создания сущности
+     * <p>Устанавливается при создании сущности, неизменно
      */
     @CreatedDate
     @Column(name = "created", updatable = false)
     protected ZonedDateTime created;
 
     /**
-     * Дата и время обновления записи о товаре
-     * <p>Изменяется в момент обновления записи
+     * Дата и время обновления сущности
+     * <p>Изменяется при обновлении сущности
      */
     @LastModifiedDate
     @Column(name = "modified")

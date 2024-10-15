@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Фасад-сервис слоя представления для управления DTO на основе сущности {@link User}
+ * Фасад-сервис для управления DTO на основе сущности {@link User}
  */
 public interface UserFacadeService
         extends BaseFacadeService<UserCreationDTO, UserUpdateDTO, UserResponseDTO> {
@@ -29,6 +29,6 @@ public interface UserFacadeService
      * @return {@link List} - список всех пользователей {@link UserResponseDTO} по указанному состоянию аккаунта
      * {@code enabled}
      */
-    List<UserResponseDTO> findAllUsersByEnabled(boolean enabled);
+    List<UserResponseDTO> findAllByEnabled(boolean enabled);
 
 }

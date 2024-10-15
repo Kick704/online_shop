@@ -15,10 +15,10 @@ import java.util.Objects;
 public class GoodsCategory extends AbstractEntity {
 
     /**
-     * Наименование категории товара
+     * Название категории товара
      */
-    @Column(name = "category_name")
-    private String categoryName;
+    @Column(name = "name")
+    private String name;
 
     /**
      * Список товаров данной категории
@@ -30,15 +30,15 @@ public class GoodsCategory extends AbstractEntity {
     }
 
     private GoodsCategory(Builder builder) {
-        setCategoryName(builder.categoryName);
+        setName(builder.name);
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public String getName() {
+        return name;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<Goods> getGoodsInThisCategory() {
@@ -55,25 +55,25 @@ public class GoodsCategory extends AbstractEntity {
         if (o == null || getClass() != o.getClass()) return false;
         GoodsCategory that = (GoodsCategory) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(categoryName, that.categoryName);
+                Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, categoryName);
+        return Objects.hash(id, name);
     }
 
     @Override
     public String toString() {
         return "GoodsCategory{" +
                 "id=" + id +
-                ", categoryName='" + categoryName + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 
 
     public static final class Builder {
-        private String categoryName;
+        private String name;
 
         private Builder() {
         }
@@ -83,15 +83,15 @@ public class GoodsCategory extends AbstractEntity {
         }
 
         public Builder categoryName(String val) {
-            categoryName = val;
+            name = val;
             return this;
         }
 
         public GoodsCategory build() {
-            if (categoryName == null) {
+            if (name == null) {
                 throw new CommonRuntimeException(
                         ErrorCode.INTERNAL_SERVER_ERROR,
-                        "GoodsCategory: поле categoryName ссылается на null"
+                        "GoodsCategory: поле name не может быть null"
                 );
             }
             return new GoodsCategory(this);

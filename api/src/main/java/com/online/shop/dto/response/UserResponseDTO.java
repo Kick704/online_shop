@@ -21,7 +21,7 @@ public class UserResponseDTO extends AbstractResponseDTO {
     @Schema(description = "Номер телефона")
     private String phoneNumber;
 
-    @Schema(description = "E-mail")
+    @Schema(description = "Email")
     private String email;
 
     @Schema(description = "Баланс")

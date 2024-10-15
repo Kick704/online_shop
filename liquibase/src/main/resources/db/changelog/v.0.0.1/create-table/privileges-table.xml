@@ -5,18 +5,18 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
-    <changeSet id="create-table-roles" author="Kick704">
-        <createTable tableName="roles" remarks="Таблица ролей пользователей">
-            <column name="id" type="UUID">
+    <changeSet id="create-table-privileges" author="Kick704">
+        <createTable tableName="privileges" remarks="Таблица привилегий ролей">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="role_name" type="varchar(255)">
+            <column name="name" type="varchar(255)">
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="created" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="modified" type="timestamp with time zone">
+            <column name="modified" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
         </createTable>

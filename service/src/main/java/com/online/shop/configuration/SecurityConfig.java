@@ -41,8 +41,7 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         authorizeRequest -> authorizeRequest
-                                .requestMatchers("/swagger-ui/**").authenticated()
-                                .anyRequest().permitAll()
+                                .anyRequest().authenticated()
                 ).formLogin(Customizer.withDefaults())
                 .logout((logout) -> logout
                         .logoutUrl("/logout")

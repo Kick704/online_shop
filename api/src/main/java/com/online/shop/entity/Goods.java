@@ -15,10 +15,10 @@ import java.util.Objects;
 public class Goods extends AbstractEntity {
 
     /**
-     * Наименование товара
+     * Название товара
      */
-    @Column(name = "goods_name")
-    private String goodsName;
+    @Column(name = "name")
+    private String name;
 
     /**
      * Категория товара
@@ -58,19 +58,19 @@ public class Goods extends AbstractEntity {
     }
 
     private Goods(Builder builder) {
-        setGoodsName(builder.goodsName);
+        setName(builder.name);
         setGoodsCategory(builder.goodsCategory);
         setPrice(builder.price);
         setCount(builder.count);
         setDiscount(builder.discount);
     }
 
-    public String getGoodsName() {
-        return goodsName;
+    public String getName() {
+        return name;
     }
 
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public GoodsCategory getGoodsCategory() {
@@ -122,20 +122,19 @@ public class Goods extends AbstractEntity {
                 Double.compare(price, goods.price) == 0 &&
                 count == goods.count &&
                 Double.compare(discount, goods.discount) == 0 &&
-                Objects.equals(goodsName, goods.goodsName) &&
-                Objects.equals(goodsCategory, goods.goodsCategory);
+                Objects.equals(name, goods.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, goodsName, goodsCategory, price, count, discount);
+        return Objects.hash(id, name, price, count, discount);
     }
 
     @Override
     public String toString() {
         return "Goods{" +
                 "id=" + id +
-                ", goodsName='" + goodsName + '\'' +
+                ", name='" + name + '\'' +
                 ", goodsCategory=" + goodsCategory +
                 ", price=" + price +
                 ", count=" + count +
@@ -144,7 +143,7 @@ public class Goods extends AbstractEntity {
     }
 
     public static final class Builder {
-        private String goodsName;
+        private String name;
         private GoodsCategory goodsCategory;
         private double price;
         private int count;
@@ -158,7 +157,7 @@ public class Goods extends AbstractEntity {
         }
 
         public Builder name(String val) {
-            goodsName = val;
+            name = val;
             return this;
         }
 
@@ -183,10 +182,10 @@ public class Goods extends AbstractEntity {
         }
 
         public Goods build() {
-            if (goodsName == null || goodsCategory == null) {
+            if (name == null || goodsCategory == null) {
                 throw new CommonRuntimeException(
                         ErrorCode.INTERNAL_SERVER_ERROR,
-                        "Goods: одно или несколько полей (goodsName, goodsCategory) ссылаются на null"
+                        "Goods: одно или несколько полей (name, goodsCategory) не могут быть null"
                 );
             }
             return new Goods(this);

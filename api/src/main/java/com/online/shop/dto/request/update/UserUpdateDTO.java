@@ -6,7 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import static com.online.shop.dto.request.ValidationConstants.MIN_CUSTOMER_PASSWORD_LENGTH;
+
+import static com.online.shop.dto.request.ValidationConstants.MIN_USER_PASSWORD_LENGTH;
 import static com.online.shop.dto.request.ValidationConstants.PHONE_NUMBER_REGEXP;
 
 /**
@@ -28,12 +29,12 @@ public class UserUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
     @Schema(description = "Номер телефона")
     private String phoneNumber;
 
-    @Email(message = "Некорректный e-mail")
-    @Schema(description = "E-mail")
+    @Email(message = "Некорректный email")
+    @Schema(description = "Email")
     private String email;
 
-    @Size(min = MIN_CUSTOMER_PASSWORD_LENGTH,
-            message = "Длина пароля должна составлять минимум " + MIN_CUSTOMER_PASSWORD_LENGTH + " символов")
+    @Size(min = MIN_USER_PASSWORD_LENGTH,
+            message = "Длина пароля должна составлять минимум " + MIN_USER_PASSWORD_LENGTH + " символов")
     @Schema(description = "Пароль")
     private String password;
 

@@ -1,22 +1,28 @@
 package com.online.shop.entity;
 
-import com.online.shop.enums.PrivilegeEnum;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
 import jakarta.persistence.*;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Класс-сущность привилегий для роли
+ */
 @Entity
 @Table(name = "privileges")
 public class Privilege extends AbstractEntity {
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "privilege_name")
-    private PrivilegeEnum privilegeName;
+    /**
+     * Название привилегии
+     */
+    @Column(name = "name")
+    private String name;
 
+    /**
+     * Набор ролей с данной привилегией
+     */
     @ManyToMany(mappedBy = "privileges")
     private Set<Role> roles;
 
@@ -24,15 +30,15 @@ public class Privilege extends AbstractEntity {
     }
 
     private Privilege(Builder builder) {
-        privilegeName = builder.privilegeName;
+        name = builder.name;
     }
 
-    public PrivilegeEnum getPrivilegeName() {
-        return privilegeName;
+    public String getName() {
+        return name;
     }
 
-    public void setPrivilegeName(PrivilegeEnum privilegeName) {
-        this.privilegeName = privilegeName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Set<Role> getRoles() {
@@ -48,25 +54,24 @@ public class Privilege extends AbstractEntity {
         if (this == o) return true;
         if (!(o instanceof Privilege privilege)) return false;
         return Objects.equals(id, privilege.id) &&
-                Objects.equals(privilegeName, privilege.privilegeName) &&
-                Objects.equals(roles, privilege.roles);
+                Objects.equals(name, privilege.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, privilegeName, roles);
+        return Objects.hash(id, name);
     }
 
     @Override
     public String toString() {
         return "Privilege{" +
                 "id=" + id +
-                ", privilegeName='" + privilegeName + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 
     public static final class Builder {
-        private PrivilegeEnum privilegeName;
+        private String name;
 
         private Builder() {
         }
@@ -75,16 +80,16 @@ public class Privilege extends AbstractEntity {
             return new Builder();
         }
 
-        public Builder privilegeName(PrivilegeEnum val) {
-            privilegeName = val;
+        public Builder name(String val) {
+            name = val;
             return this;
         }
 
         public Privilege build() {
-            if (privilegeName == null) {
+            if (name == null) {
                 throw new CommonRuntimeException(
                         ErrorCode.INTERNAL_SERVER_ERROR,
-                        "Privilege: поле privilegeName ссылается на null"
+                        "Privilege: поле name не может быть null"
                 );
             }
             return new Privilege(this);
