@@ -6,25 +6,25 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * DTO Категория товаров на основе сущности {@link GoodsCategory}
  */
-@Schema(description = "DTO категория товаров")
+@Schema(description = "DTO Категория товаров")
 public class GoodsCategoryResponseDTO extends AbstractResponseDTO {
 
-    @Schema(description = "Наименование категории товаров")
-    private String categoryName;
+    @Schema(description = "Название категории товаров")
+    private String name;
 
-    public String getCategoryName() {
-        return categoryName;
+    public String getName() {
+        return name;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
         return "GoodsCategoryResponseDTO{" +
                 "id=" + id +
-                ", categoryName='" + categoryName + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 

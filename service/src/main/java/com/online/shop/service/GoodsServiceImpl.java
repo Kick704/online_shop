@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Реализация интерфейса для управления сущностью {@link Goods} на сервисном слое
+ * Сервис для управления сущностью {@link Goods}
  */
 @Service
 public class GoodsServiceImpl implements GoodsService {
@@ -23,23 +23,21 @@ public class GoodsServiceImpl implements GoodsService {
      * Выборка товара по id
      *
      * @param id идентификатор товара {@link UUID}
-     * @return {@link Goods} - товар по указанному {@code id}, или выбрасывается исключение
-     * {@link CommonRuntimeException}, если такого товара нет
+     * @return {@link Goods} - товар по указанному {@code id}
      */
     @Override
     public Goods findById(UUID id) {
         return goodsRepository.findGoodsById(id)
                 .orElseThrow(() -> new CommonRuntimeException(
                         ErrorCode.ENTITY_NOT_FOUND,
-                        String.format("Товар с ID: %s не найден", id))
+                        String.format("Товар с ID %s не найден", id))
                 );
     }
 
     /**
      * Выборка всех товаров
      *
-     * @return {@link List} - список всех товаров {@link Goods}, или выбрасывается исключение
-     * {@link CommonRuntimeException}, если товаров ещё нет
+     * @return {@link List} - список всех товаров {@link Goods}
      */
     @Override
     public List<Goods> findAll() {
@@ -53,17 +51,16 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * Выборка товаров по названию
      *
-     * @param name наименование товара {@link String}
-     * @return {@link List} - список товаров {@link Goods} по указанному наименованию {@code name}, или выбрасывается
-     * исключение {@link CommonRuntimeException}, если таких товаров нет
+     * @param name название товара {@link String}
+     * @return {@link List} - список товаров {@link Goods} по указанному названию {@code name}
      */
     @Override
-    public List<Goods> findAllGoodsByName(String name) {
+    public List<Goods> findAllByName(String name) {
         List<Goods> goods = goodsRepository.findAllGoodsByName(name);
         if (goods.isEmpty()) {
             throw new CommonRuntimeException(
                     ErrorCode.ENTITY_NOT_FOUND,
-                    String.format("Ни один товар не найден по наименованию %s", name)
+                    String.format("Ни один товар не найден по названию '%s'", name)
             );
         }
         return goods;
@@ -71,8 +68,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * Добавление/обновление товара в БД
-     * <p> Может выбросить исключение {@link CommonRuntimeException},
-     * если сущность ссылается на null или не проходит проверку уникальности
+     *
      * @param goods сущность Товар {@link Goods}
      */
     @Override
@@ -88,7 +84,6 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * Удаление товара по id
-     * <p> Может выбросить исключение {@link CommonRuntimeException}, если товар {@link Goods} не был удалён
      *
      * @param id идентификатор товара {@link UUID}
      */
@@ -97,7 +92,7 @@ public class GoodsServiceImpl implements GoodsService {
         if (goodsRepository.deleteGoodsById(id) == 0) {
             throw new CommonRuntimeException(
                     ErrorCode.ENTITY_NOT_FOUND,
-                    String.format("Товар с ID: %s не найден или не может быть удалён", id)
+                    String.format("Товар с ID %s не найден или не может быть удалён", id)
             );
         }
     }

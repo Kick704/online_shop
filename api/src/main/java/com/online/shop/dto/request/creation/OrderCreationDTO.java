@@ -14,20 +14,20 @@ import java.util.UUID;
 @Schema(description = "DTO для создания заказа")
 public class OrderCreationDTO extends AbstractRequestDTO implements CreationDTO {
 
-    @NotNull(message = "Не введён ID покупателя")
-    @Schema(description = "ID покупателя")
-    private UUID customerId;
+    @NotNull(message = "Не введён ID пользователя")
+    @Schema(description = "ID пользователя")
+    private UUID userId;
 
     @NotBlank(message = "Не введён адрес доставки")
     @Schema(description = "Адрес доставки")
     private String deliveryAddress;
 
-    public UUID getCustomerId() {
-        return customerId;
+    public UUID getUserId() {
+        return userId;
     }
 
-    public void setCustomerId(UUID customerId) {
-        this.customerId = customerId;
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public String getDeliveryAddress() {
@@ -41,7 +41,7 @@ public class OrderCreationDTO extends AbstractRequestDTO implements CreationDTO 
     @Override
     public String toString() {
         return "OrderCreationDTO{" +
-                "customerId=" + customerId +
+                "userId=" + userId +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 '}';
     }

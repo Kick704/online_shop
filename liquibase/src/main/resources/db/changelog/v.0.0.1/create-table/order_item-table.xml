@@ -6,6 +6,12 @@
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
     <changeSet id="create-table-order_item" author="Kick704">
+        <preConditions>
+            <not>
+                <tableExists tableName="order_item" />
+            </not>
+        </preConditions>
+
         <createTable tableName="order_item"
                      remarks="Дополнительная таблица для организации связи между заказами и товарами">
             <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
@@ -20,12 +26,12 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="order_item"
                                  baseColumnNames="order_id"
-                                 constraintName="order_item_order_id_orders_id"
+                                 constraintName="FK_order_item_orders"
                                  referencedTableName="orders"
                                  referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="order_item"
                                  baseColumnNames="goods_id"
-                                 constraintName="order_item_goods_id_goods_id"
+                                 constraintName="FK_order_item_goods"
                                  referencedTableName="goods"
                                  referencedColumnNames="id"/>
     </changeSet>

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,16 +52,16 @@ public class GoodsCategoryController {
     }
 
     /**
-     * Обработчик GET запроса для получения информации о категории товаров по его наименованию {@code name}
+     * Обработчик GET запроса для получения информации о категории товаров по его названию {@code name}
      *
-     * @param name наименование категории товаров {@link String}
+     * @param name название категории товаров {@link String}
      * @return DTO {@link GoodsCategoryResponseDTO}, содержащий информацию о категории товаров
      */
     @GetMapping(value = "/name", params = "name")
     @Operation(summary = "Получение категории товаров по названию",
             description = "Позволяет получить категорию товаров по его названию")
     public GoodsCategoryResponseDTO getGoodsCategoryByName(@RequestParam String name) {
-        return categoryFacadeService.findGoodsCategoryByName(name);
+        return categoryFacadeService.findByName(name);
     }
 
     /**
@@ -70,6 +71,7 @@ public class GoodsCategoryController {
      * категории товаров
      * @return DTO {@link GoodsCategoryResponseDTO}, содержащий информацию о категории товаров
      */
+    @PreAuthorize("hasAuthority('CREATE_GOODS_CATEGORY')")
     @PostMapping
     @Operation(summary = "Добавление категории товаров", description = "Позволяет добавить новую категорию товаров")
     public GoodsCategoryResponseDTO addNewGoodsCategory(@Valid @RequestBody GoodsCategoryCreationDTO categoryCreationDTO) {
@@ -83,6 +85,7 @@ public class GoodsCategoryController {
      * @param categoryUpdateDTO DTO {@link GoodsCategoryUpdateDTO}, содержащий новую информацию о категории товаров
      * @return DTO {@link GoodsCategoryResponseDTO} с обновленной информацией о категории товаров
      */
+    @PreAuthorize("hasAuthority('EDIT_GOODS_CATEGORY')")
     @PutMapping("/{id}")
     @Operation(summary = "Изменение информации о категории товаров",
             description = "Позволяет изменить информацию о категории товаров")
@@ -97,6 +100,7 @@ public class GoodsCategoryController {
      * @param id идентификатор категории товаров {@link UUID}
      * @return {@link InformationDTO} с сообщением о результате
      */
+    @PreAuthorize("hasAuthority('DELETE_GOODS_CATEGORY')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление категории товаров", description = "Позволяет удалить категорию товаров по его ID")
     public InformationDTO deleteGoodsCategory(@PathVariable UUID id) {

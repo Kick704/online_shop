@@ -1,7 +1,7 @@
 package com.online.shop.service;
 
 import com.online.shop.dao.OrderRepository;
-import com.online.shop.entity.Customer;
+import com.online.shop.entity.User;
 import com.online.shop.entity.Goods;
 import com.online.shop.entity.Order;
 import com.online.shop.enums.OrderStatus;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Реализация интерфейса для управления сущностью {@link Order} на сервисном слое
+ * Сервис для управления сущностью {@link Order}
  */
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -25,29 +25,27 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
-    private CustomerService customerService;
+    private UserService userService;
 
     /**
      * Выборка заказа по id
      *
      * @param id идентификатор заказа {@link UUID}
-     * @return {@link Order} - заказ по указанному {@code id}, или выбрасывается исключение
-     * {@link CommonRuntimeException}, если такого заказа нет
+     * @return {@link Order} - заказ по указанному {@code id}
      */
     @Override
     public Order findById(UUID id) {
         return orderRepository.findOrderById(id)
                 .orElseThrow(() -> new CommonRuntimeException(
                         ErrorCode.ENTITY_NOT_FOUND,
-                        String.format("Заказ с ID: %s не найден", id))
+                        String.format("Заказ с ID %s не найден", id))
                 );
     }
 
     /**
      * Выборка всех заказов
      *
-     * @return {@link List} - список всех заказов {@link Order}, или выбрасывается исключение
-     * {@link CommonRuntimeException}, если заказов ещё нет
+     * @return {@link List} - список всех заказов {@link Order}
      */
     @Override
     public List<Order> findAll() {
@@ -62,15 +60,14 @@ public class OrderServiceImpl implements OrderService {
      * Выборка заказов по статусу
      *
      * @param status статус заказа {@link String}
-     * @return {@link List} - список заказов {@link Order} по указанному статусу {@code status}, или выбрасывается
-     * исключение {@link CommonRuntimeException}, если таких заказов нет
+     * @return {@link List} - список заказов {@link Order} по указанному статусу {@code status}
      */
     @Override
-    public List<Order> findAllOrdersByStatus(OrderStatus status) {
+    public List<Order> findAllByStatus(OrderStatus status) {
         List<Order> orders = orderRepository.findAllOrdersByStatus(status);
         if (orders.isEmpty()) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_NOT_FOUND, String.format("Ни один заказ не найден по статусу %s", status)
+                    ErrorCode.ENTITY_NOT_FOUND, String.format("Ни один заказ не найден по статусу '%s'", status)
             );
         }
         return orders;
@@ -78,30 +75,35 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Создание заказа в БД
-     * <p> Заказ формируется из корзины покупателя, который оформляет заказ
-     * <p> При этом корзина покупателя очищается от товаров
+     * <p> Заказ формируется из корзины пользователя, который оформляет заказ
+     * <p> При этом корзина пользователя очищается от товаров
      *
      * @param order сущность Заказ {@link Order}
      */
     @Override
     @Transactional
-    public void createOrder(Order order) {
-        Customer customer = order.getCustomer();
-        List<Goods> goodsInCart = new ArrayList<>(customer.getGoodsInCart());
+    public void create(Order order) {
+        if (order == null) {
+            throw new CommonRuntimeException(
+                    ErrorCode.OBJECT_REFERENCE_IS_NULL,
+                    "Order: предан пустой объект для сохранения"
+            );
+        }
+        User user = order.getUser();
+        List<Goods> goodsInCart = new ArrayList<>(user.getGoodsInCart());
         order.setGoodsInOrder(goodsInCart);
         orderRepository.save(order);
-        customer.getGoodsInCart().clear();
-        customerService.save(customer);
+        user.getGoodsInCart().clear();
+        userService.update(user);
     }
 
     /**
      * Обновление заказа в БД
-     * <p> Может выбросить исключение {@link CommonRuntimeException},
-     * если сущность ссылается на null или не проходит проверку уникальности
+     *
      * @param order сущность Заказ {@link Order}
      */
     @Override
-    public void updateOrder(Order order) {
+    public void update(Order order) {
         if (order == null) {
             throw new CommonRuntimeException(
                     ErrorCode.OBJECT_REFERENCE_IS_NULL,
@@ -113,7 +115,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Удаление заказа по id
-     * <p> Может выбросить исключение {@link CommonRuntimeException}, если заказ {@link Customer} не был удалён
      *
      * @param id идентификатор заказа {@link UUID}
      */
@@ -122,7 +123,7 @@ public class OrderServiceImpl implements OrderService {
         if (orderRepository.deleteOrderById(id) == 0) {
             throw new CommonRuntimeException(
                     ErrorCode.ENTITY_NOT_FOUND,
-                    String.format("Заказ с ID: %s не найден или не может быть удалён", id)
+                    String.format("Заказ с ID %s не найден или не может быть удалён", id)
             );
         }
     }

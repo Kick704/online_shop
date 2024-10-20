@@ -9,7 +9,7 @@ import com.online.shop.enums.OrderStatus;
 import java.util.List;
 
 /**
- * Фасад-сервис слоя представления для управления DTO на основе сущности {@link Order}
+ * Фасад-сервис для управления DTO на основе сущности {@link Order}
  */
 public interface OrderFacadeService extends BaseFacadeService<OrderCreationDTO, OrderUpdateDTO, OrderResponseDTO> {
 
@@ -19,6 +19,6 @@ public interface OrderFacadeService extends BaseFacadeService<OrderCreationDTO, 
      * @param status статус заказа {@link OrderStatus}
      * @return {@link List} - список заказов {@link OrderResponseDTO} по указанному статусу {@code status}
      */
-    List<OrderResponseDTO> findAllOrdersByStatus(OrderStatus status);
+    List<OrderResponseDTO> findAllByStatus(OrderStatus status);
 
 }

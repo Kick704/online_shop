@@ -6,12 +6,18 @@
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
     <changeSet id="create-table-cart" author="Kick704">
+        <preConditions>
+            <not>
+                <tableExists tableName="cart" />
+            </not>
+        </preConditions>
+
         <createTable tableName="cart"
-                     remarks="Дополнительная таблица для организации связи между покупателями и товарами - корзина">
+                     remarks="Дополнительная таблица для организации связи между пользователями и товарами - корзина">
             <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="customer_id" type="UUID">
+            <column name="user_id" type="UUID">
                 <constraints nullable="false"/>
             </column>
             <column name="goods_id" type="UUID">
@@ -19,13 +25,13 @@
             </column>
         </createTable>
         <addForeignKeyConstraint baseTableName="cart"
-                                 baseColumnNames="customer_id"
-                                 constraintName="cart_customer_id_customers_id"
-                                 referencedTableName="customers"
+                                 baseColumnNames="user_id"
+                                 constraintName="FK_cart_users"
+                                 referencedTableName="users"
                                  referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="cart"
                                  baseColumnNames="goods_id"
-                                 constraintName="cart_goods_id_goods_id"
+                                 constraintName="FK_cart_goods"
                                  referencedTableName="goods"
                                  referencedColumnNames="id"/>
     </changeSet>

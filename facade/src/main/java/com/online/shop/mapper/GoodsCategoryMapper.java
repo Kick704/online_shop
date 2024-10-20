@@ -11,7 +11,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import java.util.List;
 
 /**
- * Маппер для сущности {@link GoodsCategory} и обратно
+ * Маппер для сущности {@link GoodsCategory}
  */
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface GoodsCategoryMapper extends BaseMapper<GoodsCategory,
@@ -47,7 +47,7 @@ public interface GoodsCategoryMapper extends BaseMapper<GoodsCategory,
     List<GoodsCategoryResponseDTO> toDTOList(List<GoodsCategory> goodsCategories);
 
     /**
-     * Обновление сущности на основе DTO, игнорируя null поля и поле id
+     * Обновление сущности на основе DTO, игнорируя null поля
      *
      * @param dto    RequestDTO, проинициализированные поля которого будут обновлены в сущности
      * @param entity обновляемая сущность

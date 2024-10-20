@@ -6,7 +6,7 @@ import com.online.shop.enums.OrderStatus;
 import java.util.List;
 
 /**
- * Интерфейс для управления сущностью {@link Order} на сервисном слое
+ * Сервис для управления сущностью {@link Order}
  */
 public interface OrderService extends BaseService<Order> {
 
@@ -16,19 +16,20 @@ public interface OrderService extends BaseService<Order> {
      * @param status статус заказа {@link OrderStatus}
      * @return {@link List} - список заказов {@link Order} по указанному статусу {@code status}
      */
-    List<Order> findAllOrdersByStatus(OrderStatus status);
+    List<Order> findAllByStatus(OrderStatus status);
 
     /**
      * Создание заказа в БД
+     *
      * @param order сущность Заказ {@link Order}
      */
-    void createOrder(Order order);
+    void create(Order order);
 
     /**
      * Обновление заказа в БД
      *
      * @param order сущность Заказ {@link Order}
      */
-    void updateOrder(Order order);
+    void update(Order order);
 
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- *  Базовый интерфейс для всех фасад-сервисов
+ *  Базовый интерфейс фасад-сервисов для управления DTO
  *
  * @param <CreationRequestDTO> DTO, содержащий информацию для создания сущности
  * @param <UpdateRequestDTO> DTO, содержащий информацию для изменения сущности
@@ -20,9 +20,9 @@ public interface BaseFacadeService<CreationRequestDTO extends CreationDTO,
         ResponseDTO extends AbstractResponseDTO> {
 
     /**
-     * Выборка объектов по id
+     * Выборка объекта по id
      *
-     * @param id идентификатор объекта {@link UUID}
+     * @param id идентификатор {@link UUID}
      * @return {@link ResponseDTO} по указанному {@code id}
      */
     ResponseDTO findById(UUID id);

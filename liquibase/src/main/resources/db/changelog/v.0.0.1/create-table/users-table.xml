@@ -5,24 +5,37 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
-    <changeSet id="create-table-goods" author="Kick704">
-        <createTable tableName="goods" remarks="Таблица товаров интернет-магазина">
+    <changeSet id="create-table-users" author="Kick704">
+        <preConditions>
+            <not>
+                <tableExists tableName="users" />
+            </not>
+        </preConditions>
+
+        <createTable tableName="users" remarks="Таблица пользователей интернет-магазина">
             <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(255)">
+            <column name="surname" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="category_id" type="UUID">
+            <column name="firstname" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="price" type="double">
+            <column name="patronymic" type="varchar(255)"/>
+            <column name="phone_number" type="varchar(10)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="count" type="int">
+            <column name="balance" type="double" defaultValue="0.0">
                 <constraints nullable="false"/>
             </column>
-            <column name="discount" type="int">
+            <column name="enabled" type="boolean">
                 <constraints nullable="false"/>
             </column>
             <column name="created" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
@@ -32,11 +45,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="goods"
-                                 baseColumnNames="category_id"
-                                 constraintName="goods_category_id_goods_categories_id"
-                                 referencedTableName="goods_categories"
-                                 referencedColumnNames="id"/>
     </changeSet>
 
 </databaseChangeLog>

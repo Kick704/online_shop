@@ -5,17 +5,17 @@ package com.online.shop.dto.request;
  */
 public final class ValidationConstants {
 
-    private ValidationConstants(){
+    private ValidationConstants() {
     }
 
     /**
-     * Минимальная длина пароля для аккаунта покупателя
+     * Минимальная длина пароля для аккаунта пользователя
      */
-    public static final int MIN_CUSTOMER_PASSWORD_LENGTH = 8;
+    public static final int MIN_USER_PASSWORD_LENGTH = 8;
 
     /**
      * Шаблон номера телефона
      */
-    public static final String PHONE_NUMBER_REGEXP = "^8\\d{10}$";
+    public static final String PHONE_NUMBER_REGEXP = "^(\\+7|8)\\d{10}$";
 
 }

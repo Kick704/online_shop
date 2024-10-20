@@ -16,11 +16,11 @@ import java.util.Objects;
 public class Order extends AbstractEntity {
 
     /**
-     * Покупатель
+     * Пользователь
      */
     @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     /**
      * Итоговая стоимость заказа
@@ -29,7 +29,7 @@ public class Order extends AbstractEntity {
     private double amount;
 
     /**
-     * Адрес доставки товара, указанный покупателем
+     * Адрес доставки товара, указанный пользователем
      */
     @Column(name = "delivery_address")
     private String deliveryAddress;
@@ -58,7 +58,7 @@ public class Order extends AbstractEntity {
     private List<Goods> goodsInOrder;
 
     /**
-     * Расчёт итоговой стоимости заказа и установка статуса при создании заказа
+     * Конфигурация заказа при его создании
      */
     @PrePersist
     public void createOrder() {
@@ -67,7 +67,7 @@ public class Order extends AbstractEntity {
     }
 
     /**
-     * Расчёт итоговой стоимости заказа при обновлении заказа
+     * Конфигурация заказа при его обновлении
      */
     @PreUpdate
     public void updateOrder() {
@@ -78,17 +78,17 @@ public class Order extends AbstractEntity {
     }
 
     private Order(Builder builder) {
-        setCustomer(builder.customer);
+        setUser(builder.user);
         setDeliveryAddress(builder.deliveryAddress);
         setReceiptCode(builder.receiptCode);
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public User getUser() {
+        return user;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public double getAmount() {
@@ -139,21 +139,21 @@ public class Order extends AbstractEntity {
         return Objects.equals(id, order.id) &&
                 Double.compare(amount, order.amount) == 0 &&
                 receiptCode == order.receiptCode &&
-                Objects.equals(customer, order.customer) &&
+                Objects.equals(user, order.user) &&
                 Objects.equals(deliveryAddress, order.deliveryAddress) &&
                 status == order.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, customer, amount, deliveryAddress, receiptCode, status);
+        return Objects.hash(id, user, amount, deliveryAddress, receiptCode, status);
     }
 
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", customer=" + customer +
+                ", user=" + user +
                 ", amount=" + amount +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 ", receiptCode=" + receiptCode +
@@ -162,7 +162,7 @@ public class Order extends AbstractEntity {
     }
 
     public static final class Builder {
-        private Customer customer;
+        private User user;
         private String deliveryAddress;
         private int receiptCode;
 
@@ -173,8 +173,8 @@ public class Order extends AbstractEntity {
             return new Builder();
         }
 
-        public Builder customer(Customer val) {
-            customer = val;
+        public Builder user(User val) {
+            user = val;
             return this;
         }
 
@@ -189,10 +189,10 @@ public class Order extends AbstractEntity {
         }
 
         public Order build() {
-            if (customer == null || deliveryAddress == null) {
+            if (user == null || deliveryAddress == null) {
                 throw new CommonRuntimeException(
                         ErrorCode.INTERNAL_SERVER_ERROR,
-                        "Order: одно или несколько полей (customer, deliveryAddress) ссылаются на null"
+                        "Order: одно или несколько полей (user, deliveryAddress) не могут быть null"
                 );
             }
             return new Order(this);

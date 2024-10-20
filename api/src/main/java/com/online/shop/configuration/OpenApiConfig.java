@@ -12,9 +12,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
 
-    @Value("${application-description}")
-    private String applicationDescription;
-
     @Value("${application-version}")
     private String applicationVersion;
 
@@ -24,6 +21,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Online shop API")
                         .version(applicationVersion)
-                        .description(applicationDescription));
+                        .description("API для управления заказами, пользователями и товарами интернет-магазина"));
     }
 }

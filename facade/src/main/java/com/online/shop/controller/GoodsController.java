@@ -1,7 +1,7 @@
 package com.online.shop.controller;
 
 import com.online.shop.dto.request.update.GoodsUpdateDTO;
-import com.online.shop.dto.response.CustomerResponseDTO;
+import com.online.shop.dto.response.UserResponseDTO;
 import com.online.shop.dto.request.creation.GoodsCreationDTO;
 import com.online.shop.dto.response.GoodsResponseDTO;
 import com.online.shop.dto.response.InformationDTO;
@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,16 +52,16 @@ public class GoodsController {
     }
 
     /**
-     * Обработчик GET запроса для получения товаров по наименованию
+     * Обработчик GET запроса для получения товаров по названию
      *
-     * @param name наименование товара {@link String}
-     * @return {@link List} список, содержащий товары {@link GoodsResponseDTO} с наименованием {@code name}
+     * @param name название товара {@link String}
+     * @return {@link List} список, содержащий товары {@link GoodsResponseDTO} с названием {@code name}
      */
     @GetMapping(value = "/name", params = "name")
-    @Operation(summary = "Получение товара по наименованию",
-            description = "Позволяет получить товар по его наименованию")
+    @Operation(summary = "Получение товара по названию",
+            description = "Позволяет получить товар по его названию")
     public List<GoodsResponseDTO> getGoodsByName(@RequestParam String name) {
-        return goodsFacadeService.findAllGoodsByName(name);
+        return goodsFacadeService.findAllByName(name);
     }
 
     /**
@@ -69,6 +70,7 @@ public class GoodsController {
      * @param goodsCreationDTO DTO {@link GoodsCreationDTO}, содержащая информацию для добавления нового товара
      * @return DTO {@link GoodsResponseDTO}, содержащий информацию о новом товаре
      */
+    @PreAuthorize("hasAuthority('CREATE_GOODS')")
     @PostMapping
     @Operation(summary = "Добавление нового товара в интернет-магазин",
             description = "Позволяет добавить новый товар в интернет-магазин")
@@ -76,27 +78,14 @@ public class GoodsController {
         return goodsFacadeService.addNew(goodsCreationDTO);
     }
 
-//    /**
-//     * Обработчик POST запроса для добавления товара в корзину покупателя
-//     *
-//     * @param goodsId идентификатор товара {@link UUID}
-//     * @param customerId идентификатор покупателя {@link UUID}
-//     * @return {@link List} список товаров {@link GoodsResponseDTO} в корзине покупателя
-//     */
-//    @PostMapping(value = "/{goodsId}", params = "customerId")
-//    @Operation(summary = "Добавление товара в корзину покупателя",
-//            description = "Позволяет добавить товар в корзину покупателя")
-//    public List<GoodsResponseDTO> addGoodsToCustomerCart(@PathVariable UUID goodsId, @RequestParam UUID customerId) {
-//        return goodsFacadeService.addGoodsToCustomerCart(goodsId, customerId);
-//    }
-
     /**
      * Обработчик PUT запроса для обновления информации о товаре
      *
-     * @param id идентификатор товара {@link UUID}
+     * @param id             идентификатор товара {@link UUID}
      * @param goodsUpdateDTO DTO {@link GoodsUpdateDTO}, содержащий новую информацию о товаре
-     * @return DTO {@link CustomerResponseDTO} с обновленной информацией о товаре
+     * @return DTO {@link UserResponseDTO} с обновленной информацией о товаре
      */
+    @PreAuthorize("hasAuthority('EDIT_ALL_GOODS')")
     @PutMapping("/{id}")
     @Operation(summary = "Изменение информации о товаре",
             description = "Позволяет изменить информацию о товаре")
@@ -110,25 +99,12 @@ public class GoodsController {
      * @param id идентификатор товара {@link UUID}
      * @return {@link InformationDTO} с сообщением о результате
      */
+    @PreAuthorize("hasAuthority('DELETE_ALL_GOODS')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление товара из интернет-магазина",
             description = "Позволяет удалить товар из интернет-магазина по его ID")
     public InformationDTO deleteGoods(@PathVariable UUID id) {
         return goodsFacadeService.deleteById(id);
     }
-
-//    /**
-//     * Обработчик DELETE запроса для удаления товара из корзины покупателя
-//     *
-//     * @param goodsId идентификатор товара {@link UUID}
-//     * @param customerId идентификатор покупателя {@link UUID}
-//     * @return {@link InformationDTO} с сообщением о результате
-//     */
-//    @DeleteMapping(value = "/{goodsId}", params = "customerId")
-//    @Operation(summary = "Удаление товара из корзины покупателя",
-//            description = "Позволяет удалить товар из корзины покупателя")
-//    public InformationDTO removeGoodsFromCustomerCart(@PathVariable UUID goodsId, @RequestParam UUID customerId) {
-//        return goodsFacadeService.removeGoodsFromCustomerCart(goodsId, customerId);
-//    }
 
 }
