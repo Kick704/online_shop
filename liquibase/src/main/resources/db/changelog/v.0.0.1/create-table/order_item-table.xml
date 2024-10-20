@@ -6,6 +6,12 @@
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
     <changeSet id="create-table-order_item" author="Kick704">
+        <preConditions>
+            <not>
+                <tableExists tableName="order_item" />
+            </not>
+        </preConditions>
+
         <createTable tableName="order_item"
                      remarks="Дополнительная таблица для организации связи между заказами и товарами">
             <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">

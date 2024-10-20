@@ -9,9 +9,11 @@ import com.online.shop.entity.User;
 import com.online.shop.mapper.UserMapper;
 import com.online.shop.mapper.GoodsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,12 +58,24 @@ public class UserFacadeServiceImpl implements UserFacadeService {
     /**
      * Выборка всех товаров в корзине пользователя
      *
+     * @param id идентификатор пользователя {@link UUID}
      * @return {@link List} - список всех товаров {@link GoodsResponseDTO} в корзине пользователя
      */
     @Override
     @Transactional(readOnly = true)
     public List<GoodsResponseDTO> findAllGoodsInUserCart(UUID id) {
         return goodsMapper.toDTOList(userService.findAllGoodsInUserCart(id));
+    }
+
+    /**
+     * Выборка всех товаров в корзине пользователя
+     *
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     * @return {@link List} - список всех товаров {@link GoodsResponseDTO} в корзине пользователя
+     */
+    @Override
+    public List<GoodsResponseDTO> findAllGoodsInMyCart(Principal principal) {
+        return goodsMapper.toDTOList(userService.findAllGoodsInMyCart(principal));
     }
 
     /**
@@ -89,7 +103,7 @@ public class UserFacadeServiceImpl implements UserFacadeService {
         User newUser = userMapper.toEntity(userCreationDTO);
         userService.validatePhoneNumberUniqueness(newUser.getPhoneNumber());
         userService.validateEmailUniqueness(newUser.getEmail());
-        userService.save(newUser);
+        userService.create(newUser);
         return userMapper.toDTO(newUser);
     }
 
@@ -113,7 +127,7 @@ public class UserFacadeServiceImpl implements UserFacadeService {
             userService.validateEmailUniqueness(userUpdateDTO.getEmail());
         }
         userMapper.updateEntityFromDto(userUpdateDTO, user);
-        userService.save(user);
+        userService.update(user);
         return userMapper.toDTO(user);
     }
 

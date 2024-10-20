@@ -4,6 +4,7 @@ import com.online.shop.entity.User;
 import com.online.shop.entity.Goods;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +22,14 @@ public interface UserService extends BaseService<User>, UserDetailsService {
     List<Goods> findAllGoodsInUserCart(UUID id);
 
     /**
+     * Выборка всех товаров в корзине пользователя
+     *
+     * @param principal авторизованный пользователь {@link Principal}
+     * @return {@link List} - список всех товаров {@link Goods} в корзине пользователя
+     */
+    List<Goods> findAllGoodsInMyCart(Principal principal);
+
+    /**
      * Получение общей стоимости товаров в корзине пользователя
      * @param id идентификатор пользователя {@link UUID}
      * @return Общая стоимость товаров в корзине пользователя
@@ -36,11 +45,18 @@ public interface UserService extends BaseService<User>, UserDetailsService {
     List<User> findAllByEnabled(boolean enabled);
 
     /**
-     * Добавление/обновление пользователя в БД
+     * Добавление нового пользователя в БД
      *
      * @param user сущность Пользователь {@link User}
      */
-    void save(User user);
+    void create(User user);
+
+    /**
+     * Обновление пользователя в БД
+     *
+     * @param user сущность Пользователь {@link User}
+     */
+    void update(User user);
 
     /**
      * Проверка номера телефона пользователя на уникальность в БД

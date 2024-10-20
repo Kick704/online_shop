@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,7 +55,7 @@ public class UserController {
     }
 
     /**
-     * Обработчик GET запроса для получения информации о корзине пользователе по его {@code id}
+     * Обработчик GET запроса для получения информации о корзине пользователя по его {@code id}
      *
      * @param id идентификатор пользователя {@link UUID}
      * @return {@link List} список товаров {@link GoodsResponseDTO} в корзине пользователя
@@ -66,6 +67,21 @@ public class UserController {
     public List<GoodsResponseDTO> getUserCart(@RequestParam UUID id) {
         return userFacadeService.findAllGoodsInUserCart(id);
     }
+
+    /**
+     * Обработчик GET запроса для получения информации о корзине авторизованного пользователя
+     *
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     * @return {@link List} список товаров {@link GoodsResponseDTO} в корзине пользователя
+     */
+    @PreAuthorize("hasAuthority('READ_CART')")
+    @GetMapping(value = "/my-cart")
+    @Operation(summary = "Получение своей корзины",
+            description = "Позволяет получить список товаров в корзине авторизованного пользователя")
+    public List<GoodsResponseDTO> getMyCart(Principal principal) {
+        return userFacadeService.findAllGoodsInMyCart(principal);
+    }
+
 
     /**
      * Обработчик GET запроса для получения списка пользователей по состоянию(активен или заблокирован) аккаунта

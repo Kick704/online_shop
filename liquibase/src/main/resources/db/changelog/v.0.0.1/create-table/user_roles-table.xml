@@ -6,6 +6,12 @@
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
     <changeSet id="create-table-user_roles" author="Kick704">
+        <preConditions>
+            <not>
+                <tableExists tableName="user_roles" />
+            </not>
+        </preConditions>
+
         <createTable tableName="user_roles"
                      remarks="Дополнительная таблица для организации связи между пользователями и ролями">
             <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">

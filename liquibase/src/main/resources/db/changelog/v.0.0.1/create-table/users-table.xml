@@ -6,6 +6,12 @@
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
     <changeSet id="create-table-users" author="Kick704">
+        <preConditions>
+            <not>
+                <tableExists tableName="users" />
+            </not>
+        </preConditions>
+
         <createTable tableName="users" remarks="Таблица пользователей интернет-магазина">
             <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>

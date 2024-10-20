@@ -6,6 +6,12 @@
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
     <changeSet id="create-table-cart" author="Kick704">
+        <preConditions>
+            <not>
+                <tableExists tableName="cart" />
+            </not>
+        </preConditions>
+
         <createTable tableName="cart"
                      remarks="Дополнительная таблица для организации связи между пользователями и товарами - корзина">
             <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">

@@ -83,12 +83,18 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void create(Order order) {
+        if (order == null) {
+            throw new CommonRuntimeException(
+                    ErrorCode.OBJECT_REFERENCE_IS_NULL,
+                    "Order: предан пустой объект для сохранения"
+            );
+        }
         User user = order.getUser();
         List<Goods> goodsInCart = new ArrayList<>(user.getGoodsInCart());
         order.setGoodsInOrder(goodsInCart);
         orderRepository.save(order);
         user.getGoodsInCart().clear();
-        userService.save(user);
+        userService.update(user);
     }
 
     /**

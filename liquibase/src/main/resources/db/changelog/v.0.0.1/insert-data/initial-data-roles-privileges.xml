@@ -6,6 +6,10 @@
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
     <changeSet id="insert-into-roles" author="Kick704">
+        <preConditions>
+            <tableIsEmpty tableName="roles" />
+        </preConditions>
+
         <sql>
             INSERT INTO roles (name)
             VALUES
@@ -16,22 +20,37 @@
     </changeSet>
 
     <changeSet id="insert-into-privileges" author="Kick704">
+        <preConditions>
+            <tableIsEmpty tableName="privileges" />
+        </preConditions>
+
         <sql>
             INSERT INTO privileges (name)
             VALUES
-                ('READ_GOODS'),
                 ('CREATE_GOODS'),
+                ('EDIT_ALL_GOODS'),
                 ('EDIT_GOODS'),
                 ('DELETE_GOODS'),
+                ('DELETE_ALL_GOODS'),
+                ('READ_CART'),
                 ('READ_ORDER'),
+                ('READ_ALL_ORDERS'),
                 ('CREATE_ORDER'),
                 ('EDIT_ORDER'),
-                ('DELETE_ORDER'),
+                ('EDIT_ALL_ORDERS'),
+                ('DELETE_ALL_ORDERS'),
+                ('CREATE_GOODS_CATEGORY'),
+                ('EDIT_GOODS_CATEGORY'),
+                ('DELETE_GOODS_CATEGORY'),
                 ('MANAGE_USERS');
         </sql>
     </changeSet>
 
     <changeSet id="insert-into-role_privileges" author="Kick704">
+        <preConditions>
+            <tableIsEmpty tableName="role_privileges" />
+        </preConditions>
+
         <sql>
             INSERT INTO role_privileges (role_id, privilege_id)
             SELECT
@@ -44,14 +63,14 @@
             SELECT
                 (SELECT id FROM roles WHERE name = 'SELLER'),
                 p.id
-            FROM privileges p WHERE p.name in ('READ_GOODS', 'CREATE_GOODS', 'EDIT_GOODS', 'READ_ORDER', 'EDIT_ORDER');
+            FROM privileges p WHERE p.name in ('CREATE_GOODS', 'EDIT_GOODS', 'DELETE_GOODS', 'READ_ORDER', 'EDIT_ORDER');
         </sql>
         <sql>
             INSERT INTO role_privileges (role_id, privilege_id)
             SELECT
                 (SELECT id FROM roles WHERE name = 'CUSTOMER'),
                 p.id
-            FROM privileges p WHERE p.name in ('READ_GOODS', 'CREATE_ORDER');
+            FROM privileges p WHERE p.name in ('READ_CART', 'CREATE_ORDER', 'READ_ORDER');
         </sql>
     </changeSet>
 

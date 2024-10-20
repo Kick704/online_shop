@@ -6,6 +6,12 @@
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
     <changeSet id="create-table-privileges" author="Kick704">
+        <preConditions>
+            <not>
+                <tableExists tableName="privileges" />
+            </not>
+        </preConditions>
+
         <createTable tableName="privileges" remarks="Таблица привилегий ролей">
             <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints primaryKey="true" nullable="false"/>

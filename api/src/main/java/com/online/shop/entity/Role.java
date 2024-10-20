@@ -86,7 +86,6 @@ public class Role extends AbstractEntity {
         return "Role{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", privileges=" + privileges +
                 '}';
     }
 

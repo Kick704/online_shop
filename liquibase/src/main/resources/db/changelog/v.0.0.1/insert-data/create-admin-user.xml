@@ -6,6 +6,10 @@
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
     <changeSet id="insert-admin-user" author="Kick704">
+        <preConditions>
+            <tableIsEmpty tableName="users" />
+        </preConditions>
+        
         <insert tableName="users">
             <column name="id" valueComputed="gen_random_uuid()" />
             <column name="surname" value="Федоров" />
@@ -21,6 +25,10 @@
     </changeSet>
 
     <changeSet id="set-admin-role" author="Kick704">
+        <preConditions>
+            <tableIsEmpty tableName="user_roles" />
+        </preConditions>
+
         <insert tableName="user_roles">
             <column name="user_id" valueComputed="(SELECT id FROM users WHERE email = 'sprint.text@mail.ru')" />
             <column name="role_id" valueComputed="(SELECT id FROM roles WHERE name = 'ADMIN')" />

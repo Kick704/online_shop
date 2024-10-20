@@ -32,7 +32,6 @@ public class GoodsController {
      *
      * @return {@link List} список товаров {@link GoodsResponseDTO}
      */
-    @PreAuthorize("hasAuthority('READ_GOODS')")
     @GetMapping
     @Operation(summary = "Получение всех товаров",
             description = "Позволяет получить список всех товаров интернет-магазина")
@@ -46,7 +45,6 @@ public class GoodsController {
      * @param id идентификатор товара {@link UUID}
      * @return DTO {@link GoodsResponseDTO}, содержащий информацию о товаре
      */
-    @PreAuthorize("hasAuthority('READ_GOODS')")
     @GetMapping("/{id}")
     @Operation(summary = "Получение товара по ID", description = "Позволяет получить товар по его ID")
     public GoodsResponseDTO getGoods(@PathVariable UUID id) {
@@ -59,7 +57,6 @@ public class GoodsController {
      * @param name название товара {@link String}
      * @return {@link List} список, содержащий товары {@link GoodsResponseDTO} с названием {@code name}
      */
-    @PreAuthorize("hasAuthority('READ_GOODS')")
     @GetMapping(value = "/name", params = "name")
     @Operation(summary = "Получение товара по названию",
             description = "Позволяет получить товар по его названию")
@@ -88,7 +85,7 @@ public class GoodsController {
      * @param goodsUpdateDTO DTO {@link GoodsUpdateDTO}, содержащий новую информацию о товаре
      * @return DTO {@link UserResponseDTO} с обновленной информацией о товаре
      */
-    @PreAuthorize("hasAuthority('EDIT_GOODS')")
+    @PreAuthorize("hasAuthority('EDIT_ALL_GOODS')")
     @PutMapping("/{id}")
     @Operation(summary = "Изменение информации о товаре",
             description = "Позволяет изменить информацию о товаре")
@@ -102,7 +99,7 @@ public class GoodsController {
      * @param id идентификатор товара {@link UUID}
      * @return {@link InformationDTO} с сообщением о результате
      */
-    @PreAuthorize("hasAuthority('DELETE_GOODS')")
+    @PreAuthorize("hasAuthority('DELETE_ALL_GOODS')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление товара из интернет-магазина",
             description = "Позволяет удалить товар из интернет-магазина по его ID")
