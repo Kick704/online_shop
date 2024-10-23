@@ -72,7 +72,7 @@ public class RoleServiceImpl implements RoleService {
     public void deleteById(UUID id) {
         if (roleRepository.deleteRoleById(id) == 0) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_NOT_FOUND,
+                    ErrorCode.ENTITY_DELETION_FAILED,
                     String.format("Роль с ID %s не найдена или не может быть удалена", id)
             );
         }

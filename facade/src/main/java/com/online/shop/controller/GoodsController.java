@@ -70,7 +70,7 @@ public class GoodsController {
      * @param goodsCreationDTO DTO {@link GoodsCreationDTO}, содержащая информацию для добавления нового товара
      * @return DTO {@link GoodsResponseDTO}, содержащий информацию о новом товаре
      */
-    @PreAuthorize("hasAuthority('CREATE_GOODS')")
+    @PreAuthorize("hasAuthority('MANAGE_GOODS')")
     @PostMapping
     @Operation(summary = "Добавление нового товара в интернет-магазин",
             description = "Позволяет добавить новый товар в интернет-магазин")
@@ -85,7 +85,7 @@ public class GoodsController {
      * @param goodsUpdateDTO DTO {@link GoodsUpdateDTO}, содержащий новую информацию о товаре
      * @return DTO {@link UserResponseDTO} с обновленной информацией о товаре
      */
-    @PreAuthorize("hasAuthority('EDIT_ALL_GOODS')")
+    @PreAuthorize("hasAuthority('MANAGE_GOODS')")
     @PutMapping("/{id}")
     @Operation(summary = "Изменение информации о товаре",
             description = "Позволяет изменить информацию о товаре")
@@ -99,7 +99,7 @@ public class GoodsController {
      * @param id идентификатор товара {@link UUID}
      * @return {@link InformationDTO} с сообщением о результате
      */
-    @PreAuthorize("hasAuthority('DELETE_ALL_GOODS')")
+    @PreAuthorize("hasAuthority('MANAGE_GOODS')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление товара из интернет-магазина",
             description = "Позволяет удалить товар из интернет-магазина по его ID")

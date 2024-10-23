@@ -2,6 +2,7 @@ package com.online.shop.service;
 
 import com.online.shop.entity.User;
 import com.online.shop.entity.Goods;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.security.Principal;
@@ -14,6 +15,14 @@ import java.util.UUID;
 public interface UserService extends BaseService<User>, UserDetailsService {
 
     /**
+     * Получение вошедшего в систему (авторизованного) пользователя
+     *
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     * @return сущность {@link User} - пользователь, вошедший в систему
+     */
+    User getCurrentUser(Principal principal);
+
+    /**
      * Выборка всех товаров в корзине пользователя
      *
      * @param id идентификатор пользователя {@link UUID}
@@ -22,12 +31,12 @@ public interface UserService extends BaseService<User>, UserDetailsService {
     List<Goods> findAllGoodsInUserCart(UUID id);
 
     /**
-     * Выборка всех товаров в корзине пользователя
+     * Выборка всех товаров в корзине авторизованного пользователя
      *
      * @param principal авторизованный пользователь {@link Principal}
-     * @return {@link List} - список всех товаров {@link Goods} в корзине пользователя
+     * @return {@link List} - список всех товаров {@link Goods} в корзине авторизованного пользователя
      */
-    List<Goods> findAllGoodsInMyCart(Principal principal);
+    List<Goods> findAllGoodsInCurrentUserCart(Principal principal);
 
     /**
      * Получение общей стоимости товаров в корзине пользователя
@@ -57,6 +66,14 @@ public interface UserService extends BaseService<User>, UserDetailsService {
      * @param user сущность Пользователь {@link User}
      */
     void update(User user);
+
+    /**
+     * Удаление авторизованного пользователя с завершением сессии
+     *
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     * @param request {@link HttpServletRequest} для завершения сессии
+     */
+    void deleteCurrentUser(Principal principal, HttpServletRequest request);
 
     /**
      * Проверка номера телефона пользователя на уникальность в БД

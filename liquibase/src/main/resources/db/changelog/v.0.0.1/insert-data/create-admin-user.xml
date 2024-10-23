@@ -6,7 +6,7 @@
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
     <changeSet id="insert-admin-user" author="Kick704">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <tableIsEmpty tableName="users" />
         </preConditions>
         
@@ -25,7 +25,7 @@
     </changeSet>
 
     <changeSet id="set-admin-role" author="Kick704">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <tableIsEmpty tableName="user_roles" />
         </preConditions>
 

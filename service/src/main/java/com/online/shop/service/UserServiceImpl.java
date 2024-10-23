@@ -6,9 +6,11 @@ import com.online.shop.entity.User;
 import com.online.shop.entity.Goods;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -27,20 +29,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleService roleService;
-
-    /**
-     * Получение вошедшего в систему (авторизованного) пользователя
-     *
-     * @param principal информация об авторизованном пользователе {@link Principal}
-     * @return сущность {@link User} - пользователь, вошедший в систему
-     */
-    private User getAuthenticatedUser(Principal principal) {
-        return userRepository.findUserByEmail(principal.getName())
-                .orElseThrow(() -> new CommonRuntimeException(
-                        ErrorCode.AUTHENTICATION_FAILED,
-                        String.format("Ошибка аутентификации пользователя с email %s", principal.getName()))
-                );
-    }
 
     /**
      * Выборка пользователя по id
@@ -74,6 +62,21 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * Получение вошедшего в систему (авторизованного) пользователя
+     *
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     * @return сущность {@link User} - пользователь, вошедший в систему
+     */
+    @Override
+    public User getCurrentUser(Principal principal) {
+        return userRepository.findUserByEmail(principal.getName())
+                .orElseThrow(() -> new CommonRuntimeException(
+                        ErrorCode.AUTHENTICATION_FAILED,
+                        String.format("Ошибка аутентификации пользователя с email %s", principal.getName()))
+                );
+    }
+
+    /**
      * Выборка всех товаров в корзине пользователя
      *
      * @param id идентификатор пользователя {@link UUID}
@@ -94,14 +97,14 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Выборка всех товаров в корзине пользователя
+     * Выборка всех товаров в корзине авторизованного пользователя
      *
      * @param principal авторизованный пользователь {@link Principal}
-     * @return {@link List} - список всех товаров {@link Goods} в корзине пользователя
+     * @return {@link List} - список всех товаров {@link Goods} в корзине авторизованного пользователя
      */
     @Override
-    public List<Goods> findAllGoodsInMyCart(Principal principal) {
-        User user = getAuthenticatedUser(principal);
+    public List<Goods> findAllGoodsInCurrentUserCart(Principal principal) {
+        User user = getCurrentUser(principal);
         List<Goods> goodsInCart = user.getGoodsInCart();
         if (goodsInCart.isEmpty()) {
             throw new CommonRuntimeException(
@@ -187,10 +190,28 @@ public class UserServiceImpl implements UserService {
     public void deleteById(UUID id) {
         if (userRepository.deleteUserById(id) == 0) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_NOT_FOUND,
+                    ErrorCode.ENTITY_DELETION_FAILED,
                     String.format("Пользователь с ID %s не найден или не может быть удалён", id)
             );
         }
+    }
+
+    /**
+     * Удаление авторизованного пользователя с завершением сессии
+     *
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     * @param request {@link HttpServletRequest} для завершения сессии
+     */
+    @Override
+    public void deleteCurrentUser(Principal principal, HttpServletRequest request) {
+        UUID currentUserId = getCurrentUser(principal).getId();
+        if (userRepository.deleteUserById(currentUserId) == 0) {
+            throw new CommonRuntimeException(
+                    ErrorCode.ENTITY_DELETION_FAILED,
+                    "Аккаунт не найден или не может быть удалён"
+            );
+        }
+        new SecurityContextLogoutHandler().logout(request, null, null);
     }
 
     /**

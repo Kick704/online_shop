@@ -91,7 +91,7 @@ public class GoodsServiceImpl implements GoodsService {
     public void deleteById(UUID id) {
         if (goodsRepository.deleteGoodsById(id) == 0) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_NOT_FOUND,
+                    ErrorCode.ENTITY_DELETION_FAILED,
                     String.format("Товар с ID %s не найден или не может быть удалён", id)
             );
         }

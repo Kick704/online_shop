@@ -122,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
     public void deleteById(UUID id) {
         if (orderRepository.deleteOrderById(id) == 0) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_NOT_FOUND,
+                    ErrorCode.ENTITY_DELETION_FAILED,
                     String.format("Заказ с ID %s не найден или не может быть удалён", id)
             );
         }

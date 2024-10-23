@@ -6,9 +6,9 @@
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
     <changeSet id="create-table-cart" author="Kick704">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="cart" />
+                <tableExists tableName="cart"/>
             </not>
         </preConditions>
 

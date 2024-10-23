@@ -88,7 +88,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     public void deleteById(UUID id) {
         if (categoryRepository.deleteGoodsCategoryById(id) == 0) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_NOT_FOUND,
+                    ErrorCode.ENTITY_DELETION_FAILED,
                     String.format("Категория товаров с ID %s не найдена или не может быть удалена", id)
             );
         }

@@ -71,7 +71,7 @@ public class GoodsCategoryController {
      * категории товаров
      * @return DTO {@link GoodsCategoryResponseDTO}, содержащий информацию о категории товаров
      */
-    @PreAuthorize("hasAuthority('CREATE_GOODS_CATEGORY')")
+    @PreAuthorize("hasAuthority('MANAGE_GOODS_CATEGORIES')")
     @PostMapping
     @Operation(summary = "Добавление категории товаров", description = "Позволяет добавить новую категорию товаров")
     public GoodsCategoryResponseDTO addNewGoodsCategory(@Valid @RequestBody GoodsCategoryCreationDTO categoryCreationDTO) {
@@ -85,7 +85,7 @@ public class GoodsCategoryController {
      * @param categoryUpdateDTO DTO {@link GoodsCategoryUpdateDTO}, содержащий новую информацию о категории товаров
      * @return DTO {@link GoodsCategoryResponseDTO} с обновленной информацией о категории товаров
      */
-    @PreAuthorize("hasAuthority('EDIT_GOODS_CATEGORY')")
+    @PreAuthorize("hasAuthority('MANAGE_GOODS_CATEGORIES')")
     @PutMapping("/{id}")
     @Operation(summary = "Изменение информации о категории товаров",
             description = "Позволяет изменить информацию о категории товаров")
@@ -100,7 +100,7 @@ public class GoodsCategoryController {
      * @param id идентификатор категории товаров {@link UUID}
      * @return {@link InformationDTO} с сообщением о результате
      */
-    @PreAuthorize("hasAuthority('DELETE_GOODS_CATEGORY')")
+    @PreAuthorize("hasAuthority('MANAGE_GOODS_CATEGORIES')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление категории товаров", description = "Позволяет удалить категорию товаров по его ID")
     public InformationDTO deleteGoodsCategory(@PathVariable UUID id) {
