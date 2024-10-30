@@ -3,13 +3,16 @@ package com.online.shop.service;
 import com.online.shop.dto.request.creation.UserCreationDTO;
 import com.online.shop.dto.request.update.UserUpdateDTO;
 import com.online.shop.dto.response.InformationDTO;
+import com.online.shop.dto.response.SelectedGoodsDTO;
 import com.online.shop.dto.response.UserResponseDTO;
 import com.online.shop.dto.response.GoodsResponseDTO;
 import com.online.shop.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -32,7 +35,7 @@ public interface UserFacadeService
      * @param id идентификатор пользователя {@link UUID}
      * @return {@link List} - список всех товаров {@link GoodsResponseDTO} в корзине пользователя
      */
-    List<GoodsResponseDTO> findAllGoodsInUserCart(UUID id);
+    Set<SelectedGoodsDTO> findAllGoodsInUserCart(UUID id);
 
     /**
      * Выборка всех товаров в корзине авторизованного пользователя
@@ -40,7 +43,7 @@ public interface UserFacadeService
      * @param principal информация об авторизованном пользователе {@link Principal}
      * @return {@link List} - список всех товаров {@link GoodsResponseDTO} в корзине авторизованного пользователя
      */
-    List<GoodsResponseDTO> findAllGoodsInCurrentUserCart(Principal principal);
+    Set<SelectedGoodsDTO> findAllGoodsInCurrentUserCart(Principal principal);
 
     /**
      * Выборка пользователей по состоянию(активен или заблокирован) аккаунта
@@ -50,6 +53,14 @@ public interface UserFacadeService
      * {@code enabled}
      */
     List<UserResponseDTO> findAllByEnabled(boolean enabled);
+
+    /**
+     * Добавление нового пользователя в БД
+     *
+     * @param userCreationDTO DTO новый Пользователь {@link UserCreationDTO}
+     * @return DTO Пользователь {@link UserResponseDTO}
+     */
+    UserResponseDTO addNew(UserCreationDTO userCreationDTO);
 
     /**
      * Обновление авторизованного пользователя в БД

@@ -35,14 +35,6 @@ public interface BaseFacadeService<CreationRequestDTO extends CreationDTO,
     List<ResponseDTO> findAll();
 
     /**
-     * Добавление нового объекта в БД
-     *
-     * @param creationRequestDTO новый объект для создания {@link CreationRequestDTO}
-     * @return Созданный объект {@link ResponseDTO}
-     */
-    ResponseDTO addNew(CreationRequestDTO creationRequestDTO);
-
-    /**
      * Обновление объекта в БД
      *
      * @param id               идентификатор объекта {@link UUID}

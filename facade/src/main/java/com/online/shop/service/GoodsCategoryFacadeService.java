@@ -4,6 +4,7 @@ import com.online.shop.dto.request.creation.GoodsCategoryCreationDTO;
 import com.online.shop.dto.request.update.GoodsCategoryUpdateDTO;
 import com.online.shop.dto.response.GoodsCategoryResponseDTO;
 import com.online.shop.entity.GoodsCategory;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Фасад-сервис для управления DTO на основе сущности {@link GoodsCategory}
@@ -18,5 +19,13 @@ public interface GoodsCategoryFacadeService
      * @return {@link GoodsCategoryResponseDTO} - категория товаров по указанному названию {@code name}
      */
     GoodsCategoryResponseDTO findByName(String name);
+
+    /**
+     * Добавление новой категории товаров
+     *
+     * @param categoryCreationDTO DTO новая Категория товаров {@link GoodsCategoryCreationDTO}
+     * @return DTO Категория товаров {@link GoodsCategoryResponseDTO}
+     */
+    GoodsCategoryResponseDTO addNew(GoodsCategoryCreationDTO categoryCreationDTO);
 
 }

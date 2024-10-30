@@ -39,13 +39,6 @@ public interface UserService extends BaseService<User>, UserDetailsService {
     List<Goods> findAllGoodsInCurrentUserCart(Principal principal);
 
     /**
-     * Получение общей стоимости товаров в корзине пользователя
-     * @param id идентификатор пользователя {@link UUID}
-     * @return Общая стоимость товаров в корзине пользователя
-     */
-    double getAmountOfGoodsInUserCart(UUID id);
-
-    /**
      * Выборка пользователей по состоянию(активен или заблокирован) аккаунта
      *
      * @param enabled состояние аккаунта {@link boolean}

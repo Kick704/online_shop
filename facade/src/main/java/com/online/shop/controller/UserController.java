@@ -2,6 +2,7 @@ package com.online.shop.controller;
 
 import com.online.shop.dto.request.creation.UserCreationDTO;
 import com.online.shop.dto.request.update.UserUpdateDTO;
+import com.online.shop.dto.response.SelectedGoodsDTO;
 import com.online.shop.dto.response.UserResponseDTO;
 import com.online.shop.dto.response.GoodsResponseDTO;
 import com.online.shop.dto.response.InformationDTO;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -79,7 +81,7 @@ public class UserController {
     @GetMapping(value = "/cart", params = "id")
     @Operation(summary = "Получение корзины пользователя",
             description = "Позволяет получить список товаров в корзине по ID пользователя")
-    public List<GoodsResponseDTO> getUserCart(@RequestParam UUID id) {
+    public Set<SelectedGoodsDTO> getUserCart(@RequestParam UUID id) {
         return userFacadeService.findAllGoodsInUserCart(id);
     }
 
@@ -93,7 +95,7 @@ public class UserController {
     @GetMapping(value = "/current/cart")
     @Operation(summary = "Получение корзины текущего пользователя",
             description = "Позволяет получить список товаров в корзине авторизованного пользователя")
-    public List<GoodsResponseDTO> getCurrentUserCart(Principal principal) {
+    public Set<SelectedGoodsDTO> getCurrentUserCart(Principal principal) {
         return userFacadeService.findAllGoodsInCurrentUserCart(principal);
     }
 
