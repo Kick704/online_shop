@@ -2,6 +2,7 @@ package com.online.shop.service;
 
 import com.online.shop.dto.request.creation.UserCreationDTO;
 import com.online.shop.dto.request.update.UserUpdateDTO;
+import com.online.shop.dto.response.SelectedGoodsDTO;
 import com.online.shop.dto.response.UserResponseDTO;
 import com.online.shop.dto.response.GoodsResponseDTO;
 import com.online.shop.dto.response.InformationDTO;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -75,8 +77,8 @@ public class UserFacadeServiceImpl implements UserFacadeService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<GoodsResponseDTO> findAllGoodsInUserCart(UUID id) {
-        return goodsMapper.toDTOList(userService.findAllGoodsInUserCart(id));
+    public Set<SelectedGoodsDTO> findAllGoodsInUserCart(UUID id) {
+        return goodsMapper.toSelectedGoodsDTOSet(userService.findAllGoodsInUserCart(id));
     }
 
     /**
@@ -87,8 +89,8 @@ public class UserFacadeServiceImpl implements UserFacadeService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<GoodsResponseDTO> findAllGoodsInCurrentUserCart(Principal principal) {
-        return goodsMapper.toDTOList(userService.findAllGoodsInCurrentUserCart(principal));
+    public Set<SelectedGoodsDTO> findAllGoodsInCurrentUserCart(Principal principal) {
+        return goodsMapper.toSelectedGoodsDTOSet(userService.findAllGoodsInCurrentUserCart(principal));
     }
 
     /**

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -76,9 +77,9 @@ public class OrderFacadeServiceImpl implements OrderFacadeService {
      */
     @Override
     @Transactional
-    public OrderResponseDTO addNew(OrderCreationDTO orderCreationDTO) {
+    public OrderResponseDTO addNew(OrderCreationDTO orderCreationDTO, Principal principal) {
         Order newOrder = orderMapper.toEntity(orderCreationDTO);
-        User user = userService.findById(orderCreationDTO.getUserId());
+        User user = userService.getCurrentUser(principal);
         newOrder.setUser(user);
         orderService.create(newOrder);
         return orderMapper.toDTO(newOrder);

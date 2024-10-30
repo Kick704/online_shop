@@ -27,6 +27,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private GoodsService goodsService;
+
     /**
      * Выборка заказа по id
      *
@@ -76,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Создание заказа в БД
      * <p> Заказ формируется из корзины пользователя, который оформляет заказ
-     * <p> При этом корзина пользователя очищается от товаров
+     * <p> При этом корзина пользователя очищается от товаров, а количество приобретенных товаров уменьшается на складе
      *
      * @param order сущность Заказ {@link Order}
      */
@@ -91,9 +94,18 @@ public class OrderServiceImpl implements OrderService {
         }
         User user = order.getUser();
         List<Goods> goodsInCart = new ArrayList<>(user.getGoodsInCart());
+        if (goodsInCart.isEmpty()) {
+            throw new CommonRuntimeException(
+                    ErrorCode.EMPTY_CART,
+                    "В корзине нет товаров для создания заказа"
+            );
+        }
+        double cartTotalPrice = goodsService.getCartTotalPrice(goodsInCart);
         order.setGoodsInOrder(goodsInCart);
-        orderRepository.save(order);
         user.getGoodsInCart().clear();
+        order.setAmount(cartTotalPrice);
+        goodsService.deductGoodsCount(goodsInCart);
+        orderRepository.save(order);
         userService.update(user);
     }
 
@@ -127,4 +139,5 @@ public class OrderServiceImpl implements OrderService {
             );
         }
     }
+
 }

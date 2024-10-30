@@ -3,7 +3,8 @@ package com.online.shop.dto.response;
 import com.online.shop.entity.Order;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * DTO Заказ на основе сущности {@link Order}
@@ -11,10 +12,11 @@ import java.util.List;
 @Schema(description = "DTO Заказ")
 public class OrderResponseDTO extends AbstractResponseDTO {
 
-    private UserResponseDTO user;
+    @Schema(description = "ID пользователя")
+    private UUID userId;
 
     @Schema(description = "Список товаров в заказе")
-    private List<GoodsResponseDTO> goodsInOrder;
+    private Set<SelectedGoodsDTO> goodsInOrder;
 
     @Schema(description = "Итоговая стоимость в рублях")
     private double amount;
@@ -22,19 +24,19 @@ public class OrderResponseDTO extends AbstractResponseDTO {
     @Schema(description = "Адрес доставки")
     private String deliveryAddress;
 
-    public UserResponseDTO getUser() {
-        return user;
+    public UUID getUserId() {
+        return userId;
     }
 
-    public void setUser(UserResponseDTO user) {
-        this.user = user;
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
-    public List<GoodsResponseDTO> getGoodsInOrder() {
+    public Set<SelectedGoodsDTO> getGoodsInOrder() {
         return goodsInOrder;
     }
 
-    public void setGoodsInOrder(List<GoodsResponseDTO> goodsInOrder) {
+    public void setGoodsInOrder(Set<SelectedGoodsDTO> goodsInOrder) {
         this.goodsInOrder = goodsInOrder;
     }
 
@@ -58,11 +60,10 @@ public class OrderResponseDTO extends AbstractResponseDTO {
     public String toString() {
         return "OrderResponseDTO{" +
                 "id=" + id +
-                ", user=" + user +
+                ", userId=" + userId +
                 ", goodsInOrder=" + goodsInOrder +
                 ", amount=" + amount +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 '}';
     }
-
 }

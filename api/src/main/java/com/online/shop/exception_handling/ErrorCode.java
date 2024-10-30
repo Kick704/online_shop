@@ -12,10 +12,11 @@ public enum ErrorCode {
     OBJECT_REFERENCE_IS_NULL(1003, "Объект ссылается на null", HttpStatus.PRECONDITION_FAILED),
     UNIQUE_CONSTRAINT_VIOLATION(1004, "Нарушение ограничения уникальности", HttpStatus.CONFLICT),
     EMPTY_CART(1005, "Корзина пользователя пуста", HttpStatus.NOT_FOUND),
-    ENTITY_DELETION_FAILED(1006, "Ошибка при попытке удаления сущности", HttpStatus.INTERNAL_SERVER_ERROR),
-    AUTHENTICATION_FAILED(1007, "Ошибка аутентификации", HttpStatus.UNAUTHORIZED),
-    AUTHORIZATION_FAILED(1008, "Отказано в доступе", HttpStatus.FORBIDDEN),
-    INTERNAL_SERVER_ERROR(1009, "Внутренняя ошибка сервера", HttpStatus.INTERNAL_SERVER_ERROR);
+    INSUFFICIENT_STOCK(1006, "Недостаточно товаров на складе", HttpStatus.CONFLICT),
+    ENTITY_DELETION_FAILED(1007, "Ошибка при попытке удаления сущности", HttpStatus.INTERNAL_SERVER_ERROR),
+    AUTHENTICATION_FAILED(1008, "Ошибка аутентификации", HttpStatus.UNAUTHORIZED),
+    AUTHORIZATION_FAILED(1009, "Отказано в доступе", HttpStatus.FORBIDDEN),
+    INTERNAL_SERVER_ERROR(1010, "Внутренняя ошибка сервера", HttpStatus.INTERNAL_SERVER_ERROR);
 
     /**
      * Внутренний код ошибки

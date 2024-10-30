@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -97,6 +98,20 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
         goodsMapper.updateEntityFromDto(goodsUpdateDTO, goods);
         goodsService.save(goods);
         return goodsMapper.toDTO(goods);
+    }
+
+    /**
+     * Добавление товара по его id в корзину авторизованного пользователя
+     *
+     * @param id идентификатор товара {@link UUID}
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     * @return {@link InformationDTO} с сообщением о результате
+     */
+    @Override
+    @Transactional
+    public InformationDTO addToCart(UUID id, int quantity, Principal principal) {
+        goodsService.addToCart(id, quantity, principal);
+        return new InformationDTO(String.format("Товар с ID %s добавлен в вашу корзину", id));
     }
 
     /**

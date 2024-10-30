@@ -5,7 +5,9 @@ import com.online.shop.dto.request.update.OrderUpdateDTO;
 import com.online.shop.dto.response.OrderResponseDTO;
 import com.online.shop.entity.Order;
 import com.online.shop.enums.OrderStatus;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -20,5 +22,8 @@ public interface OrderFacadeService extends BaseFacadeService<OrderCreationDTO, 
      * @return {@link List} - список заказов {@link OrderResponseDTO} по указанному статусу {@code status}
      */
     List<OrderResponseDTO> findAllByStatus(OrderStatus status);
+
+
+    OrderResponseDTO addNew(OrderCreationDTO orderCreationDTO, Principal principal);
 
 }

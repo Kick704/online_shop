@@ -26,6 +26,8 @@
         <sql>
             INSERT INTO privileges (name)
             VALUES
+                ('ADD_TO_CART'),
+                ('REMOVE_FROM_CART'),
                 ('READ_ORDER'),
                 ('CREATE_ORDER'),
                 ('READ_USER'),
@@ -56,7 +58,8 @@
                 (SELECT id FROM roles WHERE name = 'CUSTOMER'),
                 p.id
             FROM privileges p
-            WHERE p.name in ('CREATE_ORDER', 'READ_ORDER', 'READ_USER', 'EDIT_USER', 'DELETE_USER');
+            WHERE p.name in ('ADD_TO_CART', 'REMOVE_FROM_CART', 'CREATE_ORDER', 'READ_ORDER', 'READ_USER', 'EDIT_USER',
+                'DELETE_USER');
         </sql>
     </changeSet>
 

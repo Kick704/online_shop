@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,17 +68,18 @@ public class OrderController {
     }
 
     /**
-     * Обработчик POST запроса для создания заказа
+     * Обработчик POST запроса для создания заказа авторизованному пользователя
      *
      * @param orderCreationDTO DTO {@link OrderCreationDTO}, содержащая информацию для создания заказа
+     * @param principal информация об авторизованном пользователе {@link Principal}
      * @return DTO {@link OrderResponseDTO}, содержащий информацию о заказе
      */
     @PreAuthorize("hasAuthority('CREATE_ORDER')")
     @PostMapping
     @Operation(summary = "Создание заказа",
-            description = "Позволяет создать заказ на основе корзины пользователя")
-    public OrderResponseDTO addNewOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
-        return orderFacadeService.addNew(orderCreationDTO);
+            description = "Позволяет создать заказ на основе корзины текущего пользователя")
+    public OrderResponseDTO addNewOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO, Principal principal) {
+        return orderFacadeService.addNew(orderCreationDTO, principal);
     }
 
     /**

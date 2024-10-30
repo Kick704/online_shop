@@ -116,18 +116,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Получение общей стоимости товаров в корзине пользователя
-     *
-     * @param id идентификатор пользователя {@link UUID}
-     * @return Общая стоимость товаров в корзине пользователя
-     */
-    @Override
-    public double getAmountOfGoodsInUserCart(UUID id) {
-        List<Goods> goodsInCart = findAllGoodsInUserCart(id);
-        return goodsInCart.stream().mapToDouble(Goods::getPrice).sum();
-    }
-
-    /**
      * Выборка пользователей по состоянию(активен или заблокирован) аккаунта
      *
      * @param enabled состояние аккаунта {@link boolean}

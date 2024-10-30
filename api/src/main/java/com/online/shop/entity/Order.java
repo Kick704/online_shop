@@ -62,16 +62,7 @@ public class Order extends AbstractEntity {
      */
     @PrePersist
     public void createOrder() {
-        amount = goodsInOrder.stream().mapToDouble(Goods::getPrice).sum();
         status = OrderStatus.CREATED;
-    }
-
-    /**
-     * Конфигурация заказа при его обновлении
-     */
-    @PreUpdate
-    public void updateOrder() {
-        amount = goodsInOrder.stream().mapToDouble(Goods::getPrice).sum();
     }
 
     public Order() {
