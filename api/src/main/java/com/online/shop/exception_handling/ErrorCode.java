@@ -13,6 +13,7 @@ public enum ErrorCode {
     UNIQUE_CONSTRAINT_VIOLATION(1004, "Нарушение ограничения уникальности", HttpStatus.CONFLICT),
     EMPTY_CART(1005, "Корзина пользователя пуста", HttpStatus.NOT_FOUND),
     INSUFFICIENT_STOCK(1006, "Недостаточно товаров на складе", HttpStatus.CONFLICT),
+    INSUFFICIENT_FUNDS(1007, "Недостаточно средств на счёте", HttpStatus.METHOD_NOT_ALLOWED),
     ENTITY_DELETION_FAILED(1007, "Ошибка при попытке удаления сущности", HttpStatus.INTERNAL_SERVER_ERROR),
     AUTHENTICATION_FAILED(1008, "Ошибка аутентификации", HttpStatus.UNAUTHORIZED),
     AUTHORIZATION_FAILED(1009, "Отказано в доступе", HttpStatus.FORBIDDEN),

@@ -7,6 +7,7 @@ import com.online.shop.entity.Order;
 import com.online.shop.enums.OrderStatus;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
+import com.online.shop.util.PriceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,8 +102,16 @@ public class OrderServiceImpl implements OrderService {
             );
         }
         double cartTotalPrice = goodsService.getCartTotalPrice(goodsInCart);
+        if (user.getBalance() < cartTotalPrice) {
+            throw new CommonRuntimeException(
+                    ErrorCode.INSUFFICIENT_FUNDS,
+                    String.format("Недостаточно средств на счёте, не хватает %.2f рублей",
+                            cartTotalPrice - user.getBalance())
+            );
+        }
         order.setGoodsInOrder(goodsInCart);
         user.getGoodsInCart().clear();
+        user.setBalance(user.getBalance() - cartTotalPrice);
         order.setAmount(cartTotalPrice);
         goodsService.deductGoodsCount(goodsInCart);
         orderRepository.save(order);
