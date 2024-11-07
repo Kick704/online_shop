@@ -101,8 +101,16 @@ public class OrderServiceImpl implements OrderService {
             );
         }
         double cartTotalPrice = goodsService.getCartTotalPrice(goodsInCart);
+        if (user.getBalance() < cartTotalPrice) {
+            throw new CommonRuntimeException(
+                    ErrorCode.INSUFFICIENT_FUNDS,
+                    String.format("Недостаточно средств на счёте, не хватает %.2f рублей",
+                            cartTotalPrice - user.getBalance())
+            );
+        }
         order.setGoodsInOrder(goodsInCart);
         user.getGoodsInCart().clear();
+        user.setBalance(user.getBalance() - cartTotalPrice);
         order.setAmount(cartTotalPrice);
         goodsService.deductGoodsCount(goodsInCart);
         orderRepository.save(order);
