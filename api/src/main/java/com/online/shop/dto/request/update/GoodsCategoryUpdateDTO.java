@@ -10,21 +10,21 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "DTO для обновления категории товаров")
 public class GoodsCategoryUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
 
-    @Schema(description = "Наименование категории товаров")
-    private String categoryName;
+    @Schema(description = "Название категории товаров")
+    private String name;
 
-    public String getCategoryName() {
-        return categoryName;
+    public String getName() {
+        return name;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
         return "GoodsCategoryUpdateDTO{" +
-                "categoryName='" + categoryName + '\'' +
+                "name='" + name + '\'' +
                 '}';
     }
 

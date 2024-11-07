@@ -27,7 +27,7 @@ public class GoodsCreationDTO extends AbstractRequestDTO implements CreationDTO 
     @Schema(description = "Стоимость товара в рублях")
     private Double price;
 
-    @Min(value = 1, message = "На складе должен быть минимум 1 товар при его добавлении")
+    @Min(value = 0, message = "Некорректное значение числа товаров на складе")
     @Schema(description = "Количество на складе")
     private Integer count;
 

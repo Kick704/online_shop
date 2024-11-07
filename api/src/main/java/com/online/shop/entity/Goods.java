@@ -15,7 +15,7 @@ import java.util.Objects;
 public class Goods extends AbstractEntity {
 
     /**
-     * Наименование товара
+     * Название товара
      */
     @Column(name = "name")
     private String name;
@@ -122,13 +122,12 @@ public class Goods extends AbstractEntity {
                 Double.compare(price, goods.price) == 0 &&
                 count == goods.count &&
                 Double.compare(discount, goods.discount) == 0 &&
-                Objects.equals(name, goods.name) &&
-                Objects.equals(goodsCategory, goods.goodsCategory);
+                Objects.equals(name, goods.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, goodsCategory, price, count, discount);
+        return Objects.hash(id, name, price, count, discount);
     }
 
     @Override
@@ -186,7 +185,7 @@ public class Goods extends AbstractEntity {
             if (name == null || goodsCategory == null) {
                 throw new CommonRuntimeException(
                         ErrorCode.INTERNAL_SERVER_ERROR,
-                        "Goods: одно или несколько полей (name, goodsCategory) ссылаются на null"
+                        "Goods: одно или несколько полей (name, goodsCategory) не могут быть null"
                 );
             }
             return new Goods(this);

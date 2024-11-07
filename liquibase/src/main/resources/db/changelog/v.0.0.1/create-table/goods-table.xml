@@ -6,6 +6,12 @@
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
     <changeSet id="create-table-goods" author="Kick704">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="goods" />
+            </not>
+        </preConditions>
+
         <createTable tableName="goods" remarks="Таблица товаров интернет-магазина">
             <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
@@ -34,7 +40,7 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="goods"
                                  baseColumnNames="category_id"
-                                 constraintName="goods_category_id_goods_categories_id"
+                                 constraintName="FK_goods_goods_categories"
                                  referencedTableName="goods_categories"
                                  referencedColumnNames="id"/>
     </changeSet>

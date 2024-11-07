@@ -4,33 +4,33 @@ import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
- * Класс-сущность категории товара интернет-магазина
+ * Класс-сущность привилегий для роли
  */
 @Entity
-@Table(name = "goods_categories")
-public class GoodsCategory extends AbstractEntity {
+@Table(name = "privileges")
+public class Privilege extends AbstractEntity {
 
     /**
-     * Название категории товара
+     * Название привилегии
      */
     @Column(name = "name")
     private String name;
 
     /**
-     * Список товаров данной категории
+     * Набор ролей с данной привилегией
      */
-    @OneToMany(mappedBy = "goodsCategory")
-    private List<Goods> goodsInThisCategory;
+    @ManyToMany(mappedBy = "privileges")
+    private Set<Role> roles;
 
-    public GoodsCategory() {
+    public Privilege() {
     }
 
-    private GoodsCategory(Builder builder) {
-        setName(builder.name);
+    private Privilege(Builder builder) {
+        name = builder.name;
     }
 
     public String getName() {
@@ -41,21 +41,20 @@ public class GoodsCategory extends AbstractEntity {
         this.name = name;
     }
 
-    public List<Goods> getGoodsInThisCategory() {
-        return goodsInThisCategory;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setGoodsInThisCategory(List<Goods> goodsInThisCategory) {
-        this.goodsInThisCategory = goodsInThisCategory;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GoodsCategory that = (GoodsCategory) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name);
+        if (!(o instanceof Privilege privilege)) return false;
+        return Objects.equals(id, privilege.id) &&
+                Objects.equals(name, privilege.name);
     }
 
     @Override
@@ -65,12 +64,11 @@ public class GoodsCategory extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "GoodsCategory{" +
+        return "Privilege{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
     }
-
 
     public static final class Builder {
         private String name;
@@ -82,21 +80,19 @@ public class GoodsCategory extends AbstractEntity {
             return new Builder();
         }
 
-        public Builder categoryName(String val) {
+        public Builder name(String val) {
             name = val;
             return this;
         }
 
-        public GoodsCategory build() {
+        public Privilege build() {
             if (name == null) {
                 throw new CommonRuntimeException(
                         ErrorCode.INTERNAL_SERVER_ERROR,
-                        "GoodsCategory: поле name не может быть null"
+                        "Privilege: поле name не может быть null"
                 );
             }
-            return new GoodsCategory(this);
+            return new Privilege(this);
         }
     }
-
 }
-

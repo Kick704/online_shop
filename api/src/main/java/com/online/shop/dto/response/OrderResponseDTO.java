@@ -11,7 +11,7 @@ import java.util.List;
 @Schema(description = "DTO Заказ")
 public class OrderResponseDTO extends AbstractResponseDTO {
 
-    private CustomerResponseDTO customer;
+    private UserResponseDTO user;
 
     @Schema(description = "Список товаров в заказе")
     private List<GoodsResponseDTO> goodsInOrder;
@@ -22,12 +22,12 @@ public class OrderResponseDTO extends AbstractResponseDTO {
     @Schema(description = "Адрес доставки")
     private String deliveryAddress;
 
-    public CustomerResponseDTO getCustomer() {
-        return customer;
+    public UserResponseDTO getUser() {
+        return user;
     }
 
-    public void setCustomer(CustomerResponseDTO customer) {
-        this.customer = customer;
+    public void setUser(UserResponseDTO user) {
+        this.user = user;
     }
 
     public List<GoodsResponseDTO> getGoodsInOrder() {
@@ -58,7 +58,7 @@ public class OrderResponseDTO extends AbstractResponseDTO {
     public String toString() {
         return "OrderResponseDTO{" +
                 "id=" + id +
-                ", customer=" + customer +
+                ", user=" + user +
                 ", goodsInOrder=" + goodsInOrder +
                 ", amount=" + amount +
                 ", deliveryAddress='" + deliveryAddress + '\'' +

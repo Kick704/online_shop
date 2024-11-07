@@ -3,96 +3,107 @@ package com.online.shop.entity;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
- * Класс-сущность покупателя интернет-магазина
+ * Класс-сущность пользователя интернет-магазина
  */
 @Entity
-@Table(name = "customers")
-public class Customer extends AbstractEntity {
+@Table(name = "users")
+public class User extends AbstractEntity implements UserDetails {
 
     /**
-     * Фамилия покупателя
+     * Фамилия пользователя
      */
     @Column(name = "surname")
     private String surname;
 
     /**
-     * Имя покупателя
+     * Имя пользователя
      */
     @Column(name = "firstname")
     private String firstname;
 
     /**
-     * Отчество покупателя
+     * Отчество пользователя
      */
     @Column(name = "patronymic")
     private String patronymic;
 
     /**
-     * Номер телефона покупателя
+     * Номер телефона пользователя
      */
     @Column(name = "phone_number")
     private String phoneNumber;
 
     /**
-     * E-mail покупателя
+     * Email пользователя
      */
     @Column(name = "email")
     private String email;
 
     /**
-     * Пароль покупателя
+     * Пароль пользователя
      */
     @Column(name = "password")
     private String password;
 
     /**
-     * Баланс покупателя
+     * Баланс пользователя
      * <p>При создании на уровне БД устанавливается {@code 0.0}
      */
     @Column(name = "balance")
     private double balance;
 
     /**
-     * Статус аккаунта покупателя:
-     * <p>0 - заблокирован
-     * <p>1 - активен
-     * <p>При создании на уровне БД устанавливается {@code 1}
+     * Статус аккаунта пользователя:
+     * <p>{@code false} - заблокирован
+     * <p>{@code true} - активен
      */
     @Column(name = "enabled")
     private boolean enabled;
 
     /**
-     * Список заказов покупателя
+     * Набор ролей пользователя
      */
-    @OneToMany(mappedBy = "customer")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
+    /**
+     * Список заказов пользователя
+     */
+    @OneToMany(mappedBy = "user")
     private List<Order> orders;
 
     /**
-     * Корзина покупателя
+     * Корзина пользователя
      */
     @OneToMany
     @JoinTable(name = "cart",
-            joinColumns = @JoinColumn(name = "customer_id"),
+            joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "goods_id"))
     private List<Goods> goodsInCart;
 
     /**
-     * Установка статуса активности аккаунта покупателя при его регистрации
+     * Конфигурация аккаунта при регистрации пользователя
      */
     @PrePersist
-    public void registrateCustomer() {
+    public void createUser() {
         enabled = true;
     }
 
-    public Customer() {
+    public User() {
     }
 
-    private Customer(Builder builder) {
+    private User(Builder builder) {
         setSurname(builder.surname);
         setFirstname(builder.firstname);
         setPatronymic(builder.patronymic);
@@ -133,8 +144,23 @@ public class Customer extends AbstractEntity {
         this.email = email;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles == null ? Collections.emptyList() : roles.stream()
+                .flatMap(role -> role.getPrivileges().stream()
+                        .map(Privilege::getName)
+                        .map(SimpleGrantedAuthority::new))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return getEmail();
     }
 
     public void setPassword(String password) {
@@ -155,6 +181,14 @@ public class Customer extends AbstractEntity {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public List<Order> getOrders() {
@@ -185,16 +219,16 @@ public class Customer extends AbstractEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Customer customer = (Customer) o;
-        return Objects.equals(id, customer.id) &&
-                Objects.equals(surname, customer.surname) &&
-                Objects.equals(firstname, customer.firstname) &&
-                Objects.equals(patronymic, customer.patronymic) &&
-                Objects.equals(phoneNumber, customer.phoneNumber) &&
-                Objects.equals(email, customer.email) &&
-                Objects.equals(password, customer.password) &&
-                Double.compare(balance, customer.balance) == 0 &&
-                enabled == customer.enabled;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(surname, user.surname) &&
+                Objects.equals(firstname, user.firstname) &&
+                Objects.equals(patronymic, user.patronymic) &&
+                Objects.equals(phoneNumber, user.phoneNumber) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(password, user.password) &&
+                Double.compare(balance, user.balance) == 0 &&
+                enabled == user.enabled;
     }
 
     @Override
@@ -204,7 +238,7 @@ public class Customer extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "Customer{" +
+        return "User{" +
                 "id=" + id +
                 ", surname='" + surname + '\'' +
                 ", firstname='" + firstname + '\'' +
@@ -262,15 +296,15 @@ public class Customer extends AbstractEntity {
             return this;
         }
 
-        public Customer build() {
+        public User build() {
             if (surname == null || firstname == null || phoneNumber == null || email == null || password == null) {
                 throw new CommonRuntimeException(
                         ErrorCode.INTERNAL_SERVER_ERROR,
-                        "Customer: одно или несколько полей (surname, firstname, phoneNumber, email, password) " +
+                        "User: одно или несколько полей (surname, firstname, phoneNumber, email, password) " +
                                 "ссылаются на null"
                 );
             }
-            return new Customer(this);
+            return new User(this);
         }
     }
 

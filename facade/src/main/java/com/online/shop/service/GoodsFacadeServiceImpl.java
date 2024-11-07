@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Фасад-сервис слоя представления для управления DTO на основе сущности {@link Goods}
+ * Фасад-сервис для управления DTO на основе сущности {@link Goods}
  */
 @Service
 public class GoodsFacadeServiceImpl implements GoodsFacadeService {
@@ -24,7 +24,7 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
     private GoodsService goodsService;
 
     @Autowired
-    private CustomerService customerService;
+    private UserService userService;
 
     @Autowired
     private GoodsCategoryService categoryService;
@@ -58,17 +58,17 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
     /**
      * Выборка товаров по названию
      *
-     * @param name наименование товара {@link String}
-     * @return {@link List} - список товаров {@link GoodsResponseDTO} по указанному наименованию {@code name}
+     * @param name название товара {@link String}
+     * @return {@link List} - список товаров {@link GoodsResponseDTO} по указанному названию {@code name}
      */
     @Override
     @Transactional(readOnly = true)
-    public List<GoodsResponseDTO> findAllGoodsByName(String name) {
-        return goodsMapper.toDTOList(goodsService.findAllGoodsByName(name));
+    public List<GoodsResponseDTO> findAllByName(String name) {
+        return goodsMapper.toDTOList(goodsService.findAllByName(name));
     }
 
     /**
-     * Добавление нового товара в БД
+     * Добавление нового товара
      *
      * @param goodsCreationDTO DTO новый Товар {@link GoodsCreationDTO}
      * @return DTO Товар {@link GoodsResponseDTO}
@@ -84,9 +84,9 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
     }
 
     /**
-     * Обновление товара в БД
+     * Обновление существующего товара
      *
-     * @param id             идентификатор товара {@link UUID}
+     * @param id идентификатор товара {@link UUID}
      * @param goodsUpdateDTO DTO Товар {@link GoodsUpdateDTO} с изменёнными полями
      * @return обновлённый DTO Товар {@link GoodsResponseDTO}
      */
@@ -99,23 +99,6 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
         return goodsMapper.toDTO(goods);
     }
 
-//    /**
-//     * Добавление товара в корзину покупателя
-//     *
-//     * @param goodsId    идентификатор товара {@link UUID}
-//     * @param customerId идентификатор покупателя {@link UUID}
-//     * @return {@link List} - список товаров {@link GoodsResponseDTO} в корзине покупателя
-//     */
-//    @Override
-//    @Transactional
-//    public List<GoodsResponseDTO> addGoodsToCustomerCart(UUID goodsId, UUID customerId) {
-//        Goods goods = goodsService.findById(goodsId);
-//        Customer customer = customerService.findById(customerId);
-//        customer.getGoodsInCart().add(goods);
-//        customerService.save(customer);
-//        return goodsMapper.toDTOList(customer.getGoodsInCart());
-//    }
-
     /**
      * Удаление товара по id
      *
@@ -126,34 +109,7 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
     @Transactional
     public InformationDTO deleteById(UUID id) {
         goodsService.deleteById(id);
-        return new InformationDTO(String.format("Товар с ID: %s удалён", id));
+        return new InformationDTO(String.format("Товар с ID %s удалён", id));
     }
-
-//    /**
-//     * Удаление товара из корзины покупателя
-//     *
-//     * @param goodsId    идентификатор товара {@link UUID}
-//     * @param customerId идентификатор покупателя {@link UUID}
-//     * @return {@link InformationDTO} с сообщением о результате
-//     */
-//    @Override
-//    public InformationDTO removeGoodsFromCustomerCart(UUID goodsId, UUID customerId) {
-//
-//        ////////////////////////////////f
-//        p
-//        Goods goods = goodsService.findById(goodsId);
-//        Customer customer = customerService.findById(customerId);
-//        if (customer.getGoodsInCart().isEmpty()) {
-//            throw new IllegalArgumentException("Корзина покупателя с ID: " + goodsId + " пуста");
-//        }
-//        if (!customer.getGoodsInCart().remove(goods)) {
-//            throw new IllegalStateException("Не удалось удалить товар с ID: " + goodsId +
-//                    " из корзины покупателя с ID: " + customerId);
-//        }
-//        customerService.save(customer);
-//        return new InformationDTO("Товар с ID: " + goodsId + " удалён из корзины покупателя с ID: " + customerId);
-//        // Пока нет кастомных исключений и, возможно, необходимо перенести всю логику в сервисы и не создавать новую в
-//        // фасад-сервисах
-//    }
 
 }

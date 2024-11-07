@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Репозиторий для управления сущностями {@link GoodsCategory} между приложением и БД
+ * Репозиторий для управления сущностью {@link GoodsCategory} между приложением и БД
  */
 @Repository
 public interface GoodsCategoryRepository extends JpaRepository<GoodsCategory, UUID> {
@@ -32,17 +32,17 @@ public interface GoodsCategoryRepository extends JpaRepository<GoodsCategory, UU
      * @return {@link List} - список всех категорий товаров {@link GoodsCategory}
      */
     @Query(value = "SELECT gс FROM GoodsCategory gс")
-    List<GoodsCategory> findAllGoodsCategory();
+    List<GoodsCategory> findAllGoodsCategories();
 
     /**
      * Выборка категории товаров по названию
      *
-     * @param categoryName наименование категории товаров {@link String}
+     * @param name название категории товаров {@link String}
      * @return {@link Optional} - контейнер, содержащий категорию товаров {@link GoodsCategory} по указанному
-     * наименованию {@code categoryName}
+     * названию {@code name}
      */
-    @Query(value = "SELECT gc FROM GoodsCategory gc WHERE gc.categoryName = :categoryName")
-    Optional<GoodsCategory> findGoodsCategoryByName(@Param("categoryName") String categoryName);
+    @Query(value = "SELECT gc FROM GoodsCategory gc WHERE gc.name = :name")
+    Optional<GoodsCategory> findGoodsCategoryByName(@Param("name") String name);
 
     /**
      * Удаление категории товара по id
@@ -55,10 +55,11 @@ public interface GoodsCategoryRepository extends JpaRepository<GoodsCategory, UU
     int deleteGoodsCategoryById(@Param("id") UUID id);
 
     /**
-     * Проверка существования категории товаров в БД с указанным наименованием
-     * @param categoryName наименование категории товаров
+     * Проверка существования категории товаров в БД с указанным названием
+     *
+     * @param name название категории товаров
      * @return результат проверки
      */
-    boolean existsByCategoryName(String categoryName);
+    boolean existsByName(String name);
 
 }

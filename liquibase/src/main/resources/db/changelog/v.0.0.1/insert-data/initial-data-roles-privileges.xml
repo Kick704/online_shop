@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+    <changeSet id="insert-into-roles" author="Kick704">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="roles" />
+        </preConditions>
+
+        <sql>
+            INSERT INTO roles (name)
+            VALUES
+                ('ADMIN'),
+                ('CUSTOMER');
+        </sql>
+    </changeSet>
+
+    <changeSet id="insert-into-privileges" author="Kick704">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="privileges" />
+        </preConditions>
+
+        <sql>
+            INSERT INTO privileges (name)
+            VALUES
+                ('READ_ORDER'),
+                ('CREATE_ORDER'),
+                ('READ_USER'),
+                ('EDIT_USER'),
+                ('DELETE_USER'),
+                ('MANAGE_GOODS_CATEGORIES'),
+                ('MANAGE_GOODS'),
+                ('MANAGE_ORDERS'),
+                ('MANAGE_USERS');
+        </sql>
+    </changeSet>
+
+    <changeSet id="insert-into-role_privileges" author="Kick704">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="role_privileges" />
+        </preConditions>
+
+        <sql>
+            INSERT INTO role_privileges (role_id, privilege_id)
+            SELECT
+                (SELECT id FROM roles WHERE name = 'ADMIN'),
+                p.id
+            FROM privileges p;
+        </sql>
+        <sql>
+            INSERT INTO role_privileges (role_id, privilege_id)
+            SELECT
+                (SELECT id FROM roles WHERE name = 'CUSTOMER'),
+                p.id
+            FROM privileges p
+            WHERE p.name in ('CREATE_ORDER', 'READ_ORDER', 'READ_USER', 'EDIT_USER', 'DELETE_USER');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

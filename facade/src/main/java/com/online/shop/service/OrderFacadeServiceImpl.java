@@ -4,7 +4,7 @@ import com.online.shop.dto.request.creation.OrderCreationDTO;
 import com.online.shop.dto.request.update.OrderUpdateDTO;
 import com.online.shop.dto.response.InformationDTO;
 import com.online.shop.dto.response.OrderResponseDTO;
-import com.online.shop.entity.Customer;
+import com.online.shop.entity.User;
 import com.online.shop.entity.Order;
 import com.online.shop.enums.OrderStatus;
 import com.online.shop.mapper.OrderMapper;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Фасад-сервис слоя представления для управления DTO на основе сущности {@link Order}
+ * Фасад-сервис для управления DTO на основе сущности {@link Order}
  */
 @Service
 public class OrderFacadeServiceImpl implements OrderFacadeService {
@@ -25,7 +25,7 @@ public class OrderFacadeServiceImpl implements OrderFacadeService {
     private OrderService orderService;
 
     @Autowired
-    private CustomerService customerService;
+    private UserService userService;
 
     @Autowired
     private GoodsService goodsService;
@@ -64,12 +64,12 @@ public class OrderFacadeServiceImpl implements OrderFacadeService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<OrderResponseDTO> findAllOrdersByStatus(OrderStatus status) {
-        return orderMapper.toDTOList(orderService.findAllOrdersByStatus(status));
+    public List<OrderResponseDTO> findAllByStatus(OrderStatus status) {
+        return orderMapper.toDTOList(orderService.findAllByStatus(status));
     }
 
     /**
-     * Создание заказа в БД
+     * Создание заказа
      *
      * @param orderCreationDTO DTO новый Заказ {@link OrderCreationDTO}
      * @return DTO Заказ {@link OrderResponseDTO}
@@ -78,16 +78,16 @@ public class OrderFacadeServiceImpl implements OrderFacadeService {
     @Transactional
     public OrderResponseDTO addNew(OrderCreationDTO orderCreationDTO) {
         Order newOrder = orderMapper.toEntity(orderCreationDTO);
-        Customer customer = customerService.findById(orderCreationDTO.getCustomerId());
-        newOrder.setCustomer(customer);
-        orderService.createOrder(newOrder);
+        User user = userService.findById(orderCreationDTO.getUserId());
+        newOrder.setUser(user);
+        orderService.create(newOrder);
         return orderMapper.toDTO(newOrder);
     }
 
     /**
-     * Обновление заказа в БД
+     * Обновление существующего заказа
      *
-     * @param id             идентификатор заказа {@link UUID}
+     * @param id идентификатор заказа {@link UUID}
      * @param orderUpdateDTO DTO Заказ {@link OrderUpdateDTO} с изменёнными полями
      * @return обновлённый DTO Заказ {@link OrderResponseDTO}
      */
@@ -96,7 +96,7 @@ public class OrderFacadeServiceImpl implements OrderFacadeService {
     public OrderResponseDTO update(UUID id, OrderUpdateDTO orderUpdateDTO) {
         Order order = orderService.findById(id);
         orderMapper.updateEntityFromDto(orderUpdateDTO, order);
-        orderService.updateOrder(order);
+        orderService.update(order);
         return orderMapper.toDTO(order);
     }
 
@@ -110,7 +110,7 @@ public class OrderFacadeServiceImpl implements OrderFacadeService {
     @Transactional
     public InformationDTO deleteById(UUID id) {
         orderService.deleteById(id);
-        return new InformationDTO(String.format("Заказ с ID: %s удалён", id));
+        return new InformationDTO(String.format("Заказ с ID %s удалён", id));
     }
 
 }

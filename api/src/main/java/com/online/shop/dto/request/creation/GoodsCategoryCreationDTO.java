@@ -11,22 +11,22 @@ import jakarta.validation.constraints.NotBlank;
 @Schema(description = "DTO для добавления категории товаров")
 public class GoodsCategoryCreationDTO extends AbstractRequestDTO implements CreationDTO {
 
-    @NotBlank(message = "Не введено наименование категории товаров")
-    @Schema(description = "Наименование категории товаров")
-    private String categoryName;
+    @NotBlank(message = "Не введено название категории товаров")
+    @Schema(description = "Название категории товаров")
+    private String name;
 
-    public String getCategoryName() {
-        return categoryName;
+    public String getName() {
+        return name;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
         return "GoodsCategoryCreationDTO{" +
-                "categoryName='" + categoryName + '\'' +
+                "name='" + name + '\'' +
                 '}';
     }
 

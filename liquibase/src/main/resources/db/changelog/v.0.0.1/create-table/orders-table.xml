@@ -5,28 +5,30 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
-    <changeSet id="create-table-customers" author="Kick704">
-        <createTable tableName="customers" remarks="Таблица покупателей интернет-магазина">
+    <changeSet id="create-table-orders" author="Kick704">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="orders" />
+            </not>
+        </preConditions>
+
+        <createTable tableName="orders" remarks="Таблица заказов интернет-магазина">
             <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="surname" type="varchar(255)">
+            <column name="user_id" type="UUID">
                 <constraints nullable="false"/>
             </column>
-            <column name="firstname" type="varchar(255)">
+            <column name="amount" type="double">
                 <constraints nullable="false"/>
             </column>
-            <column name="patronymic" type="varchar(255)"/>
-            <column name="phone_number" type="varchar(255)">
-                <constraints unique="true" nullable="false"/>
-            </column>
-            <column name="email" type="varchar(255)">
-                <constraints unique="true" nullable="false"/>
-            </column>
-            <column name="password" type="varchar(255)">
+            <column name="delivery_address" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="balance" type="double" defaultValue="0.0">
+            <column name="receipt_code" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="created" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
@@ -35,10 +37,12 @@
             <column name="modified" type="timestamp with time zone">
                 <constraints nullable="false"/>
             </column>
-            <column name="enabled" type="boolean" defaultValue="true">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
+        <addForeignKeyConstraint baseTableName="orders"
+                                 baseColumnNames="user_id"
+                                 constraintName="FK_orders_users"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
     </changeSet>
 
 </databaseChangeLog>

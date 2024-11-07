@@ -6,24 +6,33 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Конфигурация сваггера для отображения информации о приложении в UI документации
  */
 @Configuration
 public class OpenApiConfig {
 
-    @Value("${application-description}")
-    private String applicationDescription;
+    @Value("${api-title}")
+    private String apiTitle;
 
-    @Value("${application-version}")
-    private String applicationVersion;
+    @Value("${api-version}")
+    private String apiVersion;
+
+    @Value("${api-description}")
+    private String apiDescription;
+
+    private String decodeToUTF8(String value) {
+        return new String(value.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+    }
 
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Online shop API")
-                        .version(applicationVersion)
-                        .description(applicationDescription));
+                        .title(decodeToUTF8(apiTitle))
+                        .version(apiVersion)
+                        .description(decodeToUTF8(apiDescription)));
     }
 }
