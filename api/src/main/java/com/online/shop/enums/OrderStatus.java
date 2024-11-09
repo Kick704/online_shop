@@ -1,14 +1,14 @@
 package com.online.shop.enums;
 
 /**
- * Всевозможные статусы заказа
+ * Всевозможные статусы/состояния заказа
  */
 public enum OrderStatus {
 
     CREATED("Создан"),
     COLLECTING("Собирается"),
-    COMING("В пути"),
-    RECEIVED("Получен"),
+    SHIPPED("Отправлен"),
+    DELIVERED("Доставлен"),
     CANCELLED("Отменён");
 
     private final String value;

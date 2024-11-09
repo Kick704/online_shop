@@ -17,7 +17,8 @@ public enum ErrorCode {
     ENTITY_DELETION_FAILED(1008, "Ошибка при попытке удаления сущности", HttpStatus.INTERNAL_SERVER_ERROR),
     AUTHENTICATION_FAILED(1009, "Ошибка аутентификации", HttpStatus.UNAUTHORIZED),
     AUTHORIZATION_FAILED(10010, "Отказано в доступе", HttpStatus.FORBIDDEN),
-    INTERNAL_SERVER_ERROR(1011, "Внутренняя ошибка сервера", HttpStatus.INTERNAL_SERVER_ERROR);
+    STATE_MACHINE_ERROR(1011, "Ошибка машины состояний", HttpStatus.INTERNAL_SERVER_ERROR),
+    INTERNAL_SERVER_ERROR(1012, "Внутренняя ошибка сервера", HttpStatus.INTERNAL_SERVER_ERROR);
 
     /**
      * Внутренний код ошибки
