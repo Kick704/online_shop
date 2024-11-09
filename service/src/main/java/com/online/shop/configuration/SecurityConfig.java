@@ -1,4 +1,4 @@
-package com.online.shop.security;
+package com.online.shop.configuration;
 
 import com.online.shop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +26,6 @@ public class SecurityConfig {
     @Autowired
     UserService userService;
 
-    /**
-     * Настраивает провайдера аутентификации для загрузки данных пользователей
-     *
-     * @return объект провайдера для настройки аутентификации
-     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -39,13 +34,6 @@ public class SecurityConfig {
         return provider;
     }
 
-    /**
-     * Настраивает фильтрацию безопасности для HTTP-запросов
-     *
-     * @param httpSecurity объект конфигурации безопасности для настройки фильтров
-     * @return конфигурация настроек безопасности
-     * @throws Exception если возникает ошибка при настройке
-     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -62,11 +50,6 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
-    /**
-     * Определяет компонент для шифрования паролей с использованием алгоритма BCrypt
-     *
-     * @return объект компонента для шифрования паролей
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

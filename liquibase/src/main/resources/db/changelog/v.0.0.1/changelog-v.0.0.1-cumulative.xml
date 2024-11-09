@@ -19,8 +19,6 @@
     <include file="create-table/privileges-table.xml" relativeToChangelogFile="true"/>
     <include file="create-table/user_roles-table.xml" relativeToChangelogFile="true"/>
     <include file="create-table/roles_privileges-table.xml" relativeToChangelogFile="true"/>
-    <include file="create-table/events-table.xml" relativeToChangelogFile="true"/>
-
     <include file="insert-data/initial-data-roles-privileges.xml" relativeToChangelogFile="true"/>
     <include file="insert-data/create-admin-user.xml" relativeToChangelogFile="true"/>
 

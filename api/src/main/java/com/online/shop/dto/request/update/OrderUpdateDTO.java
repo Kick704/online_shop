@@ -2,6 +2,7 @@ package com.online.shop.dto.request.update;
 
 import com.online.shop.dto.request.AbstractRequestDTO;
 import com.online.shop.entity.Order;
+import com.online.shop.enums.OrderStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
@@ -15,6 +16,9 @@ public class OrderUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
 
     @Schema(description = "Код для получения заказа")
     private Integer receiptCode;
+
+    @Schema(description = "Статус заказа")
+    private OrderStatus status;
 
     public String getDeliveryAddress() {
         return deliveryAddress;
@@ -32,11 +36,20 @@ public class OrderUpdateDTO extends AbstractRequestDTO implements UpdateDTO {
         this.receiptCode = receiptCode;
     }
 
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "OrderUpdateDTO{" +
                 "deliveryAddress='" + deliveryAddress + '\'' +
                 ", receiptCode=" + receiptCode +
+                ", status=" + status +
                 '}';
     }
 

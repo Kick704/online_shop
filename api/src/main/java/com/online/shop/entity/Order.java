@@ -57,6 +57,14 @@ public class Order extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "goods_id"))
     private List<Goods> goodsInOrder;
 
+    /**
+     * Конфигурация заказа при его создании
+     */
+    @PrePersist
+    public void createOrder() {
+        status = OrderStatus.CREATED;
+    }
+
     public Order() {
     }
 

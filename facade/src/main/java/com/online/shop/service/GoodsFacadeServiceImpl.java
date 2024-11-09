@@ -111,7 +111,7 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
     @Transactional
     public InformationDTO addToCart(UUID id, int quantity, Principal principal) {
         goodsService.addToCart(id, quantity, principal);
-        return new InformationDTO(String.format("Товар с ID %s добавлен в вашу корзину, количество: %d", id, quantity));
+        return new InformationDTO(String.format("Товар с ID %s добавлен в вашу корзину", id));
     }
 
     /**
