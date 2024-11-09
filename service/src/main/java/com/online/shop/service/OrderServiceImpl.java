@@ -4,7 +4,6 @@ import com.online.shop.dao.OrderRepository;
 import com.online.shop.entity.User;
 import com.online.shop.entity.Goods;
 import com.online.shop.entity.Order;
-import com.online.shop.enums.OrderEvent;
 import com.online.shop.enums.OrderStatus;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;

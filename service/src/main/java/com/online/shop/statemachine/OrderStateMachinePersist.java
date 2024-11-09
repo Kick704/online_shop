@@ -9,7 +9,6 @@ import org.springframework.statemachine.StateMachineContext;
 import org.springframework.statemachine.StateMachinePersist;
 import org.springframework.statemachine.support.DefaultStateMachineContext;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Реализация интерфейса {@link StateMachinePersist} для сохранения и восстановления состояния заказа.
@@ -30,7 +29,6 @@ public class OrderStateMachinePersist implements StateMachinePersist<OrderStatus
      * @throws Exception если возникает ошибка при сохранении состояния
      */
     @Override
-    @Transactional
     public void write(StateMachineContext<OrderStatus, OrderEvent> stateMachineContext, Order order) throws Exception {
         OrderStatus currentStatus = stateMachineContext.getState();
         order.setStatus(currentStatus);
@@ -45,7 +43,6 @@ public class OrderStateMachinePersist implements StateMachinePersist<OrderStatus
      * @throws Exception если возникает ошибка при чтении состояния
      */
     @Override
-    @Transactional(readOnly = true)
     public StateMachineContext<OrderStatus, OrderEvent> read(Order order) throws Exception {
         return new DefaultStateMachineContext<>(order.getStatus(), null, null, null);
     }
