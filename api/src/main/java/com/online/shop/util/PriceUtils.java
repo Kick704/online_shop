@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * Утилитарный класс для работы с ценами на товары
+ * Утилитарный класс для работы с ценами на товары и общей стоимостью заказа
  */
 public class PriceUtils {
 

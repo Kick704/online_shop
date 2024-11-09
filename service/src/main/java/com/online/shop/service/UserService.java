@@ -61,6 +61,14 @@ public interface UserService extends BaseService<User>, UserDetailsService {
     void update(User user);
 
     /**
+     * Обновление пользователя после оформления заказа
+     *
+     * @param user сущность Пользователь {@link User}
+     * @param orderAmount сумма заказа
+     */
+    void updateAfterOrder(User user, double orderAmount);
+
+    /**
      * Удаление авторизованного пользователя с завершением сессии
      *
      * @param principal информация об авторизованном пользователе {@link Principal}

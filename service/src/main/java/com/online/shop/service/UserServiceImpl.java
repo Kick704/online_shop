@@ -6,6 +6,7 @@ import com.online.shop.entity.User;
 import com.online.shop.entity.Goods;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
+import com.online.shop.util.PriceUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -170,6 +171,19 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * Обновление пользователя после оформления заказа
+     *
+     * @param user сущность Пользователь {@link User}
+     * @param orderAmount сумма заказа
+     */
+    @Override
+    public void updateAfterOrder(User user, double orderAmount) {
+        user.getGoodsInCart().clear();
+        user.setBalance(PriceUtils.formatPrice(user.getBalance() - orderAmount));
+        update(user);
+    }
+
+    /**
      * Удаление пользователя по id
      *
      * @param id идентификатор пользователя {@link UUID}
@@ -196,7 +210,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.deleteUserById(currentUserId) == 0) {
             throw new CommonRuntimeException(
                     ErrorCode.ENTITY_DELETION_FAILED,
-                    "Аккаунт не найден или не может быть удалён"
+                    "Пользователь не найден или не может быть удалён"
             );
         }
         new SecurityContextLogoutHandler().logout(request, null, null);
