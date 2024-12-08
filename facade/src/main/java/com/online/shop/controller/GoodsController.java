@@ -66,8 +66,7 @@ public class GoodsController {
      * @return {@link List} список, содержащий товары {@link GoodsResponseDTO} с названием {@code name}
      */
     @GetMapping(value = "/name", params = "name")
-    @Operation(summary = "Получение товара по названию",
-            description = "Позволяет получить товар по его названию")
+    @Operation(summary = "Получение товара по названию", description = "Позволяет получить товар по его названию")
     public List<GoodsResponseDTO> getGoodsByName(@RequestParam String name) {
         return goodsFacadeService.findAllByName(name);
     }
@@ -80,8 +79,7 @@ public class GoodsController {
      */
     @PreAuthorize("hasAuthority('MANAGE_GOODS')")
     @PostMapping
-    @Operation(summary = "Добавление нового товара",
-            description = "Позволяет добавить новый товар в интернет-магазин")
+    @Operation(summary = "Добавление нового товара", description = "Позволяет добавить новый товар в интернет-магазин")
     public GoodsResponseDTO addNewGoods(@Valid @RequestBody GoodsCreationDTO goodsCreationDTO) {
         return goodsFacadeService.addNew(goodsCreationDTO);
     }
@@ -95,8 +93,7 @@ public class GoodsController {
      */
     @PreAuthorize("hasAuthority('MANAGE_GOODS')")
     @PutMapping("/{id}")
-    @Operation(summary = "Изменение информации о товаре",
-            description = "Позволяет изменить информацию о товаре")
+    @Operation(summary = "Изменение информации о товаре", description = "Позволяет изменить информацию о товаре")
     public GoodsResponseDTO updateGoods(@PathVariable UUID id, @Valid @RequestBody GoodsUpdateDTO goodsUpdateDTO) {
         return goodsFacadeService.update(id, goodsUpdateDTO);
     }

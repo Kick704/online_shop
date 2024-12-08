@@ -97,8 +97,7 @@ public class UserController {
      * @return DTO {@link UserResponseDTO}, содержащий информацию о зарегистрированном пользователе
      */
     @PostMapping
-    @Operation(summary = "Регистрация пользователя",
-            description = "Позволяет зарегистрировать нового пользователя")
+    @Operation(summary = "Регистрация пользователя", description = "Позволяет зарегистрировать нового пользователя")
     public UserResponseDTO addNewUser(@Valid @RequestBody UserCreationDTO userCreationDTO) {
         return userFacadeService.addNew(userCreationDTO);
     }
@@ -113,8 +112,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('MANAGE_USERS')")
     @PutMapping("/{id}")
     @Operation(summary = "Изменение информации о пользователе", description = "Позволяет изменить данные пользователя")
-    public UserResponseDTO updateUser(@PathVariable UUID id,
-                                      @Valid @RequestBody UserUpdateDTO userUpdateDTO) {
+    public UserResponseDTO updateUser(@PathVariable UUID id, @Valid @RequestBody UserUpdateDTO userUpdateDTO) {
         return userFacadeService.update(id, userUpdateDTO);
     }
 
@@ -129,8 +127,7 @@ public class UserController {
     @PutMapping("/current")
     @Operation(summary = "Изменение информации о текущем пользователе",
             description = "Позволяет изменить данные авторизованного пользователя")
-    public UserResponseDTO updateCurrentUser(Principal principal,
-                                             @Valid @RequestBody UserUpdateDTO userUpdateDTO) {
+    public UserResponseDTO updateCurrentUser(Principal principal, @Valid @RequestBody UserUpdateDTO userUpdateDTO) {
         return userFacadeService.updateCurrentUser(principal, userUpdateDTO);
     }
 

@@ -84,10 +84,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void save(Goods goods) {
         if (goods == null) {
-            throw new CommonRuntimeException(
-                    ErrorCode.BAD_REQUEST,
-                    "Goods: предан пустой объект для сохранения"
-            );
+            throw new CommonRuntimeException(ErrorCode.BAD_REQUEST, "Goods: предан пустой объект для сохранения");
         }
         goodsRepository.save(goods);
     }
@@ -104,10 +101,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional
     public List<Goods> addToCurrentUserCart(UUID id, int quantity, Principal principal) {
         if (quantity <= 0) {
-            throw new CommonRuntimeException(
-                    ErrorCode.BAD_REQUEST,
-                    "Недопустимое количество товаров: " + quantity
-            );
+            throw new CommonRuntimeException(ErrorCode.BAD_REQUEST, "Недопустимое количество товаров: " + quantity);
         }
         User user = userService.getCurrentUser(principal);
         Goods goods = findById(id);

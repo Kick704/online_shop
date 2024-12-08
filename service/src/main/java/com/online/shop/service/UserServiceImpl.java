@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -90,26 +91,25 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public List<Goods> getActualCart(User user) {
         if (user == null) {
-            throw new CommonRuntimeException(
-                    ErrorCode.INTERNAL_SERVER_ERROR,
-                    "User: ошибка обновления"
-            );
+            throw new CommonRuntimeException(ErrorCode.INTERNAL_SERVER_ERROR, "User: получен пустой объект");
         }
-        List<Goods> goodsInCart = user.getGoodsInCart();
-        if (!goodsInCart.isEmpty()) {
-            Set<Goods> uniqueGoods = new HashSet<>(goodsInCart);
+        List<Goods> originCart = user.getGoodsInCart();
+        List<Goods> actualCart = new ArrayList<>(originCart);
+        if (!originCart.isEmpty()) {
+            Set<Goods> uniqueGoods = new HashSet<>(originCart);
             uniqueGoods.forEach(goods -> {
                         int countInStock = goods.getCount();
-                        int countInCart = Collections.frequency(goodsInCart, goods);
+                        int countInCart = Collections.frequency(originCart, goods);
                         while (countInStock < countInCart) {
-                            goodsInCart.remove(goods);
+                            actualCart.remove(goods);
                             countInCart--;
                         }
                     }
             );
+            user.setGoodsInCart(actualCart);
             update(user);
         }
-        return goodsInCart;
+        return actualCart;
     }
 
     /**
@@ -143,10 +143,7 @@ public class UserServiceImpl implements UserService {
         User user = getCurrentUser(principal);
         List<Goods> goodsInCart = getActualCart(user);
         if (goodsInCart.isEmpty()) {
-            throw new CommonRuntimeException(
-                    ErrorCode.NOT_FOUND,
-                    "Ваша корзина пуста"
-            );
+            throw new CommonRuntimeException(ErrorCode.NOT_FOUND, "Ваша корзина пуста");
         }
         return goodsInCart;
     }
@@ -180,10 +177,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void create(User user) {
         if (user == null) {
-            throw new CommonRuntimeException(
-                    ErrorCode.BAD_REQUEST,
-                    "User: предан пустой объект для сохранения"
-            );
+            throw new CommonRuntimeException(ErrorCode.BAD_REQUEST, "User: предан пустой объект для сохранения");
         }
         Role role = roleService.findByName("CUSTOMER");
         user.setRoles(Set.of(role));
@@ -198,10 +192,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(User user) {
         if (user == null) {
-            throw new CommonRuntimeException(
-                    ErrorCode.BAD_REQUEST,
-                    "User: предан пустой объект для сохранения"
-            );
+            throw new CommonRuntimeException(ErrorCode.BAD_REQUEST, "User: предан пустой объект для сохранения");
         }
         userRepository.save(user);
     }
@@ -241,10 +232,7 @@ public class UserServiceImpl implements UserService {
      */
     private void clearCart(User user) {
         if (user == null) {
-            throw new CommonRuntimeException(
-                    ErrorCode.BAD_REQUEST,
-                    "Пользователь не найден"
-            );
+            throw new CommonRuntimeException(ErrorCode.BAD_REQUEST, "Пользователь не найден");
         }
         user.getGoodsInCart().clear();
     }
@@ -305,10 +293,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void validateEmailUniqueness(String email) {
         if (userRepository.existsByEmail(email)) {
-            throw new CommonRuntimeException(
-                    ErrorCode.CONFLICT,
-                    "Пользователь с таким email уже зарегистрирован"
-            );
+            throw new CommonRuntimeException(ErrorCode.CONFLICT, "Пользователь с таким email уже зарегистрирован");
         }
     }
 

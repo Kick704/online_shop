@@ -91,21 +91,19 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void create(Order order) {
         if (order == null) {
-            throw new CommonRuntimeException(
-                    ErrorCode.BAD_REQUEST,
-                    "Order: предан пустой объект для сохранения"
-            );
+            throw new CommonRuntimeException(ErrorCode.BAD_REQUEST, "Order: предан пустой объект для сохранения");
         }
 
         User user = order.getUser();
         if (user == null) {
-            throw new CommonRuntimeException(
-                    ErrorCode.BAD_REQUEST,
-                    "Order: пользователь не указан"
-            );
+            throw new CommonRuntimeException(ErrorCode.BAD_REQUEST, "Order: пользователь не указан");
         }
 
         List<Goods> goodsInCart = new ArrayList<>(userService.getActualCart(user));
+        if (goodsInCart.isEmpty()) {
+            throw new CommonRuntimeException(ErrorCode.NOT_FOUND, "Ваша корзина пуста");
+        }
+
         double orderAmount = goodsService.getCartTotalPrice(goodsInCart);
         if (user.getBalance() < orderAmount) {
             throw new CommonRuntimeException(
@@ -130,10 +128,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void update(Order order) {
         if (order == null) {
-            throw new CommonRuntimeException(
-                    ErrorCode.BAD_REQUEST,
-                    "Order: предан пустой объект для сохранения"
-            );
+            throw new CommonRuntimeException(ErrorCode.BAD_REQUEST, "Order: предан пустой объект для сохранения");
         }
         orderRepository.save(order);
     }

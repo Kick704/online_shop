@@ -194,8 +194,7 @@ public class UserFacadeServiceImpl implements UserFacadeService {
      */
     @Override
     @Transactional
-    public InformationDTO deleteCurrentUser(Principal principal,
-                                            HttpServletRequest request) {
+    public InformationDTO deleteCurrentUser(Principal principal, HttpServletRequest request) {
         userService.deleteCurrentUser(principal, request);
         return new InformationDTO("Аккаунт успешно удалён");
     }

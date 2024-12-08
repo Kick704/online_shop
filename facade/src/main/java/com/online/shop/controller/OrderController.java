@@ -99,8 +99,7 @@ public class OrderController {
      */
     @PreAuthorize("hasAuthority('MANAGE_ORDERS')")
     @PutMapping("/{id}")
-    @Operation(summary = "Изменение заказа",
-            description = "Позволяет изменить данные заказа")
+    @Operation(summary = "Изменение заказа", description = "Позволяет изменить данные заказа")
     public OrderResponseDTO updateOrder(@PathVariable UUID id, @Valid @RequestBody OrderUpdateDTO orderUpdateDTO) {
         return orderFacadeService.update(id, orderUpdateDTO);
     }
