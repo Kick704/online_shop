@@ -3,8 +3,6 @@ package com.online.shop.dto.response;
 import com.online.shop.entity.Goods;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.UUID;
-
 /**
  * DTO Товар на основе сущности {@link Goods}
  */
@@ -14,17 +12,17 @@ public class GoodsResponseDTO extends AbstractResponseDTO {
     @Schema(description = "Название")
     private String name;
 
-    @Schema(description = "ID категории товаров")
-    private UUID goodsCategoryId;
+    @Schema(description = "Категория товара")
+    private GoodsCategoryResponseDTO goodsCategory;
 
     @Schema(description = "Стоимость товара в рублях")
     private double price;
 
+    @Schema(description = "Скидка на товар в процентах")
+    private int percentageDiscount;
+
     @Schema(description = "Количество на складе")
     private int count;
-
-    @Schema(description = "Скидка на товар в процентах")
-    private int discount;
 
     public String getName() {
         return name;
@@ -34,12 +32,12 @@ public class GoodsResponseDTO extends AbstractResponseDTO {
         this.name = name;
     }
 
-    public UUID getGoodsCategoryId() {
-        return goodsCategoryId;
+    public GoodsCategoryResponseDTO getGoodsCategory() {
+        return goodsCategory;
     }
 
-    public void setGoodsCategoryId(UUID goodsCategoryId) {
-        this.goodsCategoryId = goodsCategoryId;
+    public void setGoodsCategory(GoodsCategoryResponseDTO goodsCategory) {
+        this.goodsCategory = goodsCategory;
     }
 
     public double getPrice() {
@@ -50,6 +48,14 @@ public class GoodsResponseDTO extends AbstractResponseDTO {
         this.price = price;
     }
 
+    public int getPercentageDiscount() {
+        return percentageDiscount;
+    }
+
+    public void setPercentageDiscount(int percentageDiscount) {
+        this.percentageDiscount= percentageDiscount;
+    }
+
     public int getCount() {
         return count;
     }
@@ -58,23 +64,16 @@ public class GoodsResponseDTO extends AbstractResponseDTO {
         this.count = count;
     }
 
-    public int getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(int discount) {
-        this.discount = discount;
-    }
-
     @Override
     public String toString() {
         return "GoodsResponseDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", goodsCategoryId=" + goodsCategoryId +
+                ", goodsCategory=" + goodsCategory +
                 ", price=" + price +
+                ", percentageDiscount=" + percentageDiscount +
                 ", count=" + count +
-                ", discount=" + discount +
                 '}';
     }
+
 }

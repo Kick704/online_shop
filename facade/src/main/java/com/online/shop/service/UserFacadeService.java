@@ -8,7 +8,6 @@ import com.online.shop.dto.response.UserResponseDTO;
 import com.online.shop.dto.response.GoodsResponseDTO;
 import com.online.shop.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.List;
@@ -33,7 +32,7 @@ public interface UserFacadeService
      * Выборка всех товаров в корзине пользователя
      *
      * @param id идентификатор пользователя {@link UUID}
-     * @return {@link List} - список всех товаров {@link GoodsResponseDTO} в корзине пользователя
+     * @return {@link Set} - список всех товаров {@link GoodsResponseDTO} в корзине пользователя
      */
     Set<SelectedGoodsDTO> findAllGoodsInUserCart(UUID id);
 
@@ -41,7 +40,7 @@ public interface UserFacadeService
      * Выборка всех товаров в корзине авторизованного пользователя
      *
      * @param principal информация об авторизованном пользователе {@link Principal}
-     * @return {@link List} - список всех товаров {@link GoodsResponseDTO} в корзине авторизованного пользователя
+     * @return {@link Set} - список всех товаров {@link GoodsResponseDTO} в корзине авторизованного пользователя
      */
     Set<SelectedGoodsDTO> findAllGoodsInCurrentUserCart(Principal principal);
 
@@ -70,6 +69,14 @@ public interface UserFacadeService
      * @return обновлённый DTO Пользователь {@link UserResponseDTO}
      */
     UserResponseDTO updateCurrentUser(Principal principal, UserUpdateDTO userUpdateDTO);
+
+    /**
+     * Очистка корзины авторизованного пользователя
+     *
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     * @return {@link InformationDTO} с сообщением о результате
+     */
+    InformationDTO clearCurrentUserCart(Principal principal);
 
     /**
      * Удаление авторизованного пользователя

@@ -4,7 +4,11 @@ import com.online.shop.dto.request.creation.UserCreationDTO;
 import com.online.shop.dto.request.update.UserUpdateDTO;
 import com.online.shop.dto.response.UserResponseDTO;
 import com.online.shop.entity.User;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;

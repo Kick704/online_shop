@@ -5,8 +5,6 @@ import com.online.shop.dto.request.update.UpdateDTO;
 import com.online.shop.dto.response.AbstractResponseDTO;
 import com.online.shop.entity.AbstractEntity;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 /**

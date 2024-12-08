@@ -4,8 +4,9 @@ import com.online.shop.dto.request.creation.OrderCreationDTO;
 import com.online.shop.dto.request.update.OrderUpdateDTO;
 import com.online.shop.dto.response.OrderResponseDTO;
 import com.online.shop.entity.Order;
-import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
@@ -19,8 +20,6 @@ public interface OrderMapper extends BaseMapper<Order,
         OrderUpdateDTO,
         OrderResponseDTO> {
 
-    GoodsMapper goodsMapper = Mappers.getMapper(GoodsMapper.class);
-
     /**
      * Маппинг из сущности в DTO
      *
@@ -28,8 +27,6 @@ public interface OrderMapper extends BaseMapper<Order,
      * @return ResponseDTO
      */
     @Override
-    @Mapping(target = "userId", source = "entity.user.id")
-    @Mapping(target = "goodsInOrder", expression = "java(goodsMapper.toSelectedGoodsDTOSet(entity.getGoodsInOrder()))")
     OrderResponseDTO toDTO(Order entity);
 
     /**

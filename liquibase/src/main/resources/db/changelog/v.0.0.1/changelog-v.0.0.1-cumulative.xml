@@ -24,4 +24,6 @@
     <include file="insert-data/initial-data-roles-privileges.xml" relativeToChangelogFile="true"/>
     <include file="insert-data/create-admin-user.xml" relativeToChangelogFile="true"/>
 
+    <include file="update-table/rename-column-goods-discount-to-percentage_discount.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

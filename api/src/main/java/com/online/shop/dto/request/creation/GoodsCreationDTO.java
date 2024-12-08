@@ -3,7 +3,12 @@ package com.online.shop.dto.request.creation;
 import com.online.shop.dto.request.AbstractRequestDTO;
 import com.online.shop.entity.Goods;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
@@ -27,14 +32,14 @@ public class GoodsCreationDTO extends AbstractRequestDTO implements CreationDTO 
     @Schema(description = "Стоимость товара в рублях")
     private Double price;
 
-    @Min(value = 0, message = "Некорректное значение числа товаров на складе")
-    @Schema(description = "Количество на складе")
-    private Integer count;
-
     @Min(value = 0, message = "Cкидка на товар не может быть меньше 0%")
     @Max(value = 100, message = "Cкидка на товар не может быть больше 100%")
     @Schema(description = "Скидка на товар в процентах")
-    private Integer discount;
+    private Integer percentageDiscount;
+
+    @Min(value = 0, message = "Некорректное значение числа товаров на складе")
+    @Schema(description = "Количество на складе")
+    private Integer count;
 
     public String getName() {
         return name;
@@ -60,20 +65,20 @@ public class GoodsCreationDTO extends AbstractRequestDTO implements CreationDTO 
         this.price = price;
     }
 
-    public @NotNull Integer getCount() {
+    public Integer getPercentageDiscount() {
+        return percentageDiscount;
+    }
+
+    public void setPercentageDiscount(Integer percentageDiscount) {
+        this.percentageDiscount= percentageDiscount;
+    }
+
+    public Integer getCount() {
         return count;
     }
 
     public void setCount(Integer count) {
         this.count = count;
-    }
-
-    public Integer getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Integer discount) {
-        this.discount = discount;
     }
 
     @Override
@@ -82,8 +87,8 @@ public class GoodsCreationDTO extends AbstractRequestDTO implements CreationDTO 
                 "name='" + name + '\'' +
                 ", goodsCategoryId=" + goodsCategoryId +
                 ", price=" + price +
+                ", percentageDiscount=" + percentageDiscount +
                 ", count=" + count +
-                ", discount=" + discount +
                 '}';
     }
 

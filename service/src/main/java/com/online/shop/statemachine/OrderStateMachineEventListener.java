@@ -39,7 +39,7 @@ public class OrderStateMachineEventListener extends StateMachineListenerAdapter<
                             "Ошибка регистрации статуса заказа")
                     );
             String cancelCause = (String) stateContext.getMessageHeader("cancelCause");
-            eventRepository.save(buildEvent(order, targetStatus, cancelCause));
+            eventRepository.save(buildEvent(order, cancelCause));
         }
     }
 
@@ -47,14 +47,13 @@ public class OrderStateMachineEventListener extends StateMachineListenerAdapter<
      * Формирует событие на основе {@link Event} для дальнейшего сохранения в БД
      *
      * @param order заказ {@link Order}
-     * @param status статус/состояние заказа {@link OrderStatus}
      * @param cancelCause причина отмены заказа при переходе в состояние {@link OrderStatus#CANCELLED}
      * @return событие
      */
-    private Event buildEvent(Order order, OrderStatus status, String cancelCause) {
+    private Event buildEvent(Order order, String cancelCause) {
         return Event.Builder.newBuilder()
                 .order(order)
-                .description(status == OrderStatus.DELIVERED ?
+                .description(cancelCause == null ?
                         "Успешно доставлен" :
                         String.format("Отменён по причине: %s", cancelCause))
                 .build();

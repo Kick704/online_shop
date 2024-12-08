@@ -2,7 +2,13 @@ package com.online.shop.entity;
 
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 import java.util.Objects;
 import java.util.Set;
@@ -120,4 +126,5 @@ public class Role extends AbstractEntity {
             return new Role(this);
         }
     }
+
 }

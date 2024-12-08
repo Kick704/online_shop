@@ -4,7 +4,6 @@ import com.online.shop.dto.request.creation.GoodsCategoryCreationDTO;
 import com.online.shop.dto.request.update.GoodsCategoryUpdateDTO;
 import com.online.shop.dto.response.GoodsCategoryResponseDTO;
 import com.online.shop.entity.GoodsCategory;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Фасад-сервис для управления DTO на основе сущности {@link GoodsCategory}

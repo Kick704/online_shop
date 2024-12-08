@@ -25,10 +25,10 @@
             <column name="price" type="double">
                 <constraints nullable="false"/>
             </column>
-            <column name="count" type="int">
+            <column name="discount" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="discount" type="int">
+            <column name="count" type="int">
                 <constraints nullable="false"/>
             </column>
             <column name="created" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">

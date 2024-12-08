@@ -36,9 +36,9 @@ public class ExceptionTranslator {
      */
     @ExceptionHandler
     public ResponseEntity<ErrorResponseDTO> handleValidationException(MethodArgumentNotValidException ex) {
-        ErrorCode errorCode = ErrorCode.INVALID_INPUT_DATA;
+        ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
         FieldError fieldError = ex.getBindingResult().getFieldError();
-        String message = (fieldError != null) ? fieldError.getDefaultMessage() : errorCode.getDescription();
+        String message = fieldError != null ? fieldError.getDefaultMessage() : errorCode.getDescription();
         return new ResponseEntity<>(
                 new ErrorResponseDTO(errorCode, message),
                 errorCode.getStatus()
@@ -52,7 +52,7 @@ public class ExceptionTranslator {
      */
     @ExceptionHandler
     public ResponseEntity<ErrorResponseDTO> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
-        ErrorCode errorCode = ErrorCode.AUTHORIZATION_FAILED;
+        ErrorCode errorCode = ErrorCode.ACCESS_DENIED;
         String message = errorCode.getDescription();
         return new ResponseEntity<>(
                 new ErrorResponseDTO(errorCode, message),

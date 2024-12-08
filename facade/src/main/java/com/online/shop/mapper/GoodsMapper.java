@@ -34,7 +34,6 @@ public interface GoodsMapper extends BaseMapper<Goods,
      * @return ResponseDTO
      */
     @Override
-    @Mapping(target = "goodsCategoryId", source = "entity.goodsCategory.id")
     GoodsResponseDTO toDTO(Goods entity);
 
     /**
@@ -71,12 +70,11 @@ public interface GoodsMapper extends BaseMapper<Goods,
      * @param quantity количество выбранного товара
      * @return {@link SelectedGoodsDTO} с информацией о выбранном товаре
      */
-    @Mapping(target = "goodsCategoryId", source = "goods.goodsCategory.id")
     @Mapping(target = "discountedPrice", expression = "java(PriceUtils.formatPrice(" +
-            "PriceUtils.getDiscountedPrice(goods.getPrice(), goods.getDiscount())))")
-    @Mapping(target = "totalPrice", expression = "java(PriceUtils.formatPrice(" +
-            "PriceUtils.getDiscountedPrice(goods.getPrice(), goods.getDiscount()) * quantity))")
+            "PriceUtils.getDiscountedPrice(goods.getPrice(), goods.getPercentageDiscount())))")
     @Mapping(target = "quantity", source = "quantity")
+    @Mapping(target = "totalPrice", expression = "java(PriceUtils.formatPrice(" +
+            "PriceUtils.getDiscountedPrice(goods.getPrice(), goods.getPercentageDiscount()) * quantity))")
     SelectedGoodsDTO toSelectedGoodsDTO(Goods goods, int quantity);
 
     /**
@@ -88,11 +86,11 @@ public interface GoodsMapper extends BaseMapper<Goods,
     default Set<SelectedGoodsDTO> toSelectedGoodsDTOSet(List<Goods> goodsList) {
         Set<Goods> goodsSet = new HashSet<>(goodsList);
         return goodsSet.stream()
-                .map(goods ->
-                {
-                    int quantity = Collections.frequency(goodsList, goods);
-                    return toSelectedGoodsDTO(goods, quantity);
-                })
+                .map(goods -> {
+                            int quantity = Collections.frequency(goodsList, goods);
+                            return toSelectedGoodsDTO(goods, quantity);
+                        }
+                )
                 .collect(Collectors.toSet());
     }
 

@@ -44,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
     public Order findById(UUID id) {
         return orderRepository.findOrderById(id)
                 .orElseThrow(() -> new CommonRuntimeException(
-                        ErrorCode.ENTITY_NOT_FOUND,
+                        ErrorCode.NOT_FOUND,
                         String.format("Заказ с ID %s не найден", id))
                 );
     }
@@ -58,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> findAll() {
         List<Order> orders = orderRepository.findAllOrders();
         if (orders.isEmpty()) {
-            throw new CommonRuntimeException(ErrorCode.ENTITY_NOT_FOUND, "Ни один заказ не найден в БД");
+            throw new CommonRuntimeException(ErrorCode.NOT_FOUND, "Ни один заказ не найден в БД");
         }
         return orders;
     }
@@ -74,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = orderRepository.findAllOrdersByStatus(status);
         if (orders.isEmpty()) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_NOT_FOUND, String.format("Ни один заказ не найден по статусу '%s'", status)
+                    ErrorCode.NOT_FOUND, String.format("Ни один заказ не найден по статусу '%s'", status)
             );
         }
         return orders;
@@ -92,26 +92,29 @@ public class OrderServiceImpl implements OrderService {
     public void create(Order order) {
         if (order == null) {
             throw new CommonRuntimeException(
-                    ErrorCode.OBJECT_REFERENCE_IS_NULL,
+                    ErrorCode.BAD_REQUEST,
                     "Order: предан пустой объект для сохранения"
             );
         }
+
         User user = order.getUser();
-        List<Goods> goodsInCart = new ArrayList<>(user.getGoodsInCart());
-        if (goodsInCart.isEmpty()) {
+        if (user == null) {
             throw new CommonRuntimeException(
-                    ErrorCode.EMPTY_CART,
-                    "В корзине нет товаров для создания заказа"
+                    ErrorCode.BAD_REQUEST,
+                    "Order: пользователь не указан"
             );
         }
+
+        List<Goods> goodsInCart = new ArrayList<>(userService.getActualCart(user));
         double orderAmount = goodsService.getCartTotalPrice(goodsInCart);
         if (user.getBalance() < orderAmount) {
             throw new CommonRuntimeException(
-                    ErrorCode.INSUFFICIENT_FUNDS,
+                    ErrorCode.BAD_REQUEST,
                     String.format("Недостаточно средств на счёте, не хватает %.2f рублей",
                             orderAmount - user.getBalance())
             );
         }
+
         order.setGoodsInOrder(goodsInCart);
         order.setAmount(orderAmount);
         orderStateMachineService.create(order);
@@ -128,7 +131,7 @@ public class OrderServiceImpl implements OrderService {
     public void update(Order order) {
         if (order == null) {
             throw new CommonRuntimeException(
-                    ErrorCode.OBJECT_REFERENCE_IS_NULL,
+                    ErrorCode.BAD_REQUEST,
                     "Order: предан пустой объект для сохранения"
             );
         }
@@ -144,7 +147,7 @@ public class OrderServiceImpl implements OrderService {
     public void deleteById(UUID id) {
         if (orderRepository.deleteOrderById(id) == 0) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_DELETION_FAILED,
+                    ErrorCode.INTERNAL_SERVER_ERROR,
                     String.format("Заказ с ID %s не найден или не может быть удалён", id)
             );
         }

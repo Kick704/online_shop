@@ -7,18 +7,13 @@ import org.springframework.http.HttpStatus;
  */
 public enum ErrorCode {
 
-    INVALID_INPUT_DATA(1001, "Неверные данные запроса", HttpStatus.BAD_REQUEST),
-    ENTITY_NOT_FOUND(1002, "Сущность не найдена", HttpStatus.NOT_FOUND),
-    OBJECT_REFERENCE_IS_NULL(1003, "Объект ссылается на null", HttpStatus.PRECONDITION_FAILED),
-    UNIQUE_CONSTRAINT_VIOLATION(1004, "Нарушение ограничения уникальности", HttpStatus.CONFLICT),
-    EMPTY_CART(1005, "Корзина пользователя пуста", HttpStatus.NOT_FOUND),
-    INSUFFICIENT_STOCK(1006, "Недостаточно товаров на складе", HttpStatus.CONFLICT),
-    INSUFFICIENT_FUNDS(1007, "Недостаточно средств на счёте", HttpStatus.METHOD_NOT_ALLOWED),
-    ENTITY_DELETION_FAILED(1008, "Ошибка при попытке удаления сущности", HttpStatus.INTERNAL_SERVER_ERROR),
-    AUTHENTICATION_FAILED(1009, "Ошибка аутентификации", HttpStatus.UNAUTHORIZED),
-    AUTHORIZATION_FAILED(10010, "Отказано в доступе", HttpStatus.FORBIDDEN),
-    STATE_MACHINE_ERROR(1011, "Ошибка машины состояний", HttpStatus.INTERNAL_SERVER_ERROR),
-    INTERNAL_SERVER_ERROR(1012, "Внутренняя ошибка сервера", HttpStatus.INTERNAL_SERVER_ERROR);
+    BAD_REQUEST(1000, "Некорректный запрос", HttpStatus.BAD_REQUEST),
+    NOT_FOUND(1001, "Ресурс не найден", HttpStatus.NOT_FOUND),
+    VALIDATION_ERROR(1002, "Ошибка валидации", HttpStatus.UNPROCESSABLE_ENTITY),
+    AUTHENTICATION_ERROR(1003, "Ошибка аутентификации", HttpStatus.UNAUTHORIZED),
+    ACCESS_DENIED(1004, "Доступ запрещен", HttpStatus.FORBIDDEN),
+    CONFLICT(1005, "Конфликт данных", HttpStatus.CONFLICT),
+    INTERNAL_SERVER_ERROR (1006, "Внутренняя ошибка сервера", HttpStatus.INTERNAL_SERVER_ERROR);
 
     /**
      * Внутренний код ошибки

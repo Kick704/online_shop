@@ -29,7 +29,7 @@ public class RoleServiceImpl implements RoleService {
     public Role findById(UUID id) {
         return roleRepository.findById(id)
                 .orElseThrow(() -> new CommonRuntimeException(
-                        ErrorCode.ENTITY_NOT_FOUND,
+                        ErrorCode.NOT_FOUND,
                         String.format("Роль с ID %s не найдена", id))
                 );
     }
@@ -43,7 +43,7 @@ public class RoleServiceImpl implements RoleService {
     public List<Role> findAll() {
         List<Role> roles = roleRepository.findAll();
         if (roles.isEmpty()) {
-            throw new CommonRuntimeException(ErrorCode.ENTITY_NOT_FOUND, "Ни одна роль не найдена в БД");
+            throw new CommonRuntimeException(ErrorCode.NOT_FOUND, "Ни одна роль не найдена в БД");
         }
         return roles;
     }
@@ -58,7 +58,7 @@ public class RoleServiceImpl implements RoleService {
     public Role findByName(String name) {
         return roleRepository.findRoleByName(name)
                 .orElseThrow(() -> new CommonRuntimeException(
-                        ErrorCode.ENTITY_NOT_FOUND,
+                        ErrorCode.NOT_FOUND,
                         String.format("Роль с названием '%s' не найдена", name))
                 );
     }
@@ -72,7 +72,7 @@ public class RoleServiceImpl implements RoleService {
     public void deleteById(UUID id) {
         if (roleRepository.deleteRoleById(id) == 0) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_DELETION_FAILED,
+                    ErrorCode.INTERNAL_SERVER_ERROR,
                     String.format("Роль с ID %s не найдена или не может быть удалена", id)
             );
         }

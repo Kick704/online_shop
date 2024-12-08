@@ -11,14 +11,21 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * REST-контроллер для управления с товарами интернет-магазина
+ * REST-контроллер для управления товарами интернет-магазина
  */
 @RestController
 @RequestMapping(ApiPath.API_BASE + "/goods")
@@ -77,24 +84,6 @@ public class GoodsController {
             description = "Позволяет добавить новый товар в интернет-магазин")
     public GoodsResponseDTO addNewGoods(@Valid @RequestBody GoodsCreationDTO goodsCreationDTO) {
         return goodsFacadeService.addNew(goodsCreationDTO);
-    }
-
-    /**
-     * Обработчик POST запроса для добавления товара по его id в корзину авторизованного пользователя
-     *
-     * @param id идентификатор товара {@link UUID}
-     * @param quantity количество товара
-     * @param principal информация об авторизованном пользователе {@link Principal}
-     * @return DTO {@link GoodsResponseDTO}, содержащий информацию о новом товаре
-     */
-    @PreAuthorize("hasAuthority('ADD_TO_CART')")
-    @PostMapping(value = "/to-cart/{id}", params = "quantity")
-    @Operation(summary = "Добавление товара в корзину",
-            description = "Позволяет текущему пользователю добавить товар в корзину")
-    public InformationDTO addGoodsToCurrentUserCart(@PathVariable UUID id,
-                                                    @RequestParam int quantity,
-                                                    Principal principal) {
-        return goodsFacadeService.addToCart(id, quantity, principal);
     }
 
     /**

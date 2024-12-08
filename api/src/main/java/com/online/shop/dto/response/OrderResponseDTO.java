@@ -1,10 +1,10 @@
 package com.online.shop.dto.response;
 
 import com.online.shop.entity.Order;
+import com.online.shop.enums.OrderStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * DTO Заказ на основе сущности {@link Order}
@@ -12,8 +12,8 @@ import java.util.UUID;
 @Schema(description = "DTO Заказ")
 public class OrderResponseDTO extends AbstractResponseDTO {
 
-    @Schema(description = "ID пользователя")
-    private UUID userId;
+    @Schema(description = "Пользователь")
+    private UserResponseDTO user;
 
     @Schema(description = "Список товаров в заказе")
     private Set<SelectedGoodsDTO> goodsInOrder;
@@ -24,12 +24,15 @@ public class OrderResponseDTO extends AbstractResponseDTO {
     @Schema(description = "Адрес доставки")
     private String deliveryAddress;
 
-    public UUID getUserId() {
-        return userId;
+    @Schema(description = "Статус заказа")
+    private OrderStatus status;
+
+    public UserResponseDTO getUser() {
+        return user;
     }
 
-    public void setUserId(UUID userId) {
-        this.userId = userId;
+    public void setUser(UserResponseDTO user) {
+        this.user = user;
     }
 
     public Set<SelectedGoodsDTO> getGoodsInOrder() {
@@ -56,14 +59,24 @@ public class OrderResponseDTO extends AbstractResponseDTO {
         this.deliveryAddress = deliveryAddress;
     }
 
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "OrderResponseDTO{" +
                 "id=" + id +
-                ", userId=" + userId +
+                ", user=" + user +
                 ", goodsInOrder=" + goodsInOrder +
                 ", amount=" + amount +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
+                ", status=" + status +
                 '}';
     }
+
 }

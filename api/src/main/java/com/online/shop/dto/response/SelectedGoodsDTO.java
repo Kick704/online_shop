@@ -2,33 +2,31 @@ package com.online.shop.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.UUID;
-
 /**
  * DTO Товар с дополнительной информацией, включая количество, для отображения в корзине и заказе покупателя
  */
-public class SelectedGoodsDTO extends AbstractResponseDTO{
+public class SelectedGoodsDTO extends AbstractResponseDTO {
 
     @Schema(description = "Название")
     private String name;
 
-    @Schema(description = "ID категории товаров")
-    private UUID goodsCategoryId;
+    @Schema(description = "Категории товара")
+    private GoodsCategoryResponseDTO goodsCategory;
 
     @Schema(description = "Стоимость товара в рублях")
     private double price;
 
     @Schema(description = "Скидка на товар в процентах")
-    private int discount;
+    private int percentageDiscount;
 
     @Schema(description = "Стоимость товара в рублях c учётом скидки")
     private double discountedPrice;
 
-    @Schema(description = "Итоговая стоимость в рублях с учётом количества")
-    private double totalPrice;
-
     @Schema(description = "Выбранное количество")
     private int quantity;
+
+    @Schema(description = "Итоговая стоимость в рублях с учётом количества")
+    private double totalPrice;
 
     public String getName() {
         return name;
@@ -38,12 +36,12 @@ public class SelectedGoodsDTO extends AbstractResponseDTO{
         this.name = name;
     }
 
-    public UUID getGoodsCategoryId() {
-        return goodsCategoryId;
+    public GoodsCategoryResponseDTO getGoodsCategory() {
+        return goodsCategory;
     }
 
-    public void setGoodsCategoryId(UUID goodsCategoryId) {
-        this.goodsCategoryId = goodsCategoryId;
+    public void setGoodsCategory(GoodsCategoryResponseDTO goodsCategory) {
+        this.goodsCategory = goodsCategory;
     }
 
     public double getPrice() {
@@ -54,12 +52,12 @@ public class SelectedGoodsDTO extends AbstractResponseDTO{
         this.price = price;
     }
 
-    public int getDiscount() {
-        return discount;
+    public int getPercentageDiscount() {
+        return percentageDiscount;
     }
 
-    public void setDiscount(int discount) {
-        this.discount = discount;
+    public void setPercentageDiscount(int percentageDiscount) {
+        this.percentageDiscount= percentageDiscount;
     }
 
     public double getDiscountedPrice() {
@@ -70,14 +68,6 @@ public class SelectedGoodsDTO extends AbstractResponseDTO{
         this.discountedPrice = discountedPrice;
     }
 
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
     public int getQuantity() {
         return quantity;
     }
@@ -86,17 +76,25 @@ public class SelectedGoodsDTO extends AbstractResponseDTO{
         this.quantity = quantity;
     }
 
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     @Override
     public String toString() {
         return "SelectedGoodsDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", goodsCategoryId=" + goodsCategoryId +
+                ", goodsCategory=" + goodsCategory +
                 ", price=" + price +
-                ", discount=" + discount +
+                ", percentageDiscount=" + percentageDiscount+
                 ", discountedPrice=" + discountedPrice +
-                ", totalPrice=" + totalPrice +
                 ", quantity=" + quantity +
+                ", totalPrice=" + totalPrice +
                 '}';
     }
 

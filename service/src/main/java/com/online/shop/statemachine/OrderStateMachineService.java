@@ -37,8 +37,8 @@ public class OrderStateMachineService {
             stateMachinePersister.persist(stateMachine, order);
         } catch (Exception e) {
             throw new CommonRuntimeException(
-                    ErrorCode.STATE_MACHINE_ERROR,
-                    String.format("Ошибка создания машины состояний: %s", e)
+                    ErrorCode.INTERNAL_SERVER_ERROR,
+                    String.format("Ошибка создания заказа: %s", e)
             );
         }
     }
@@ -60,7 +60,7 @@ public class OrderStateMachineService {
             stateMachinePersister.persist(stateMachine, order);
         } catch (Exception e) {
             throw new CommonRuntimeException(
-                    ErrorCode.STATE_MACHINE_ERROR,
+                    ErrorCode.INTERNAL_SERVER_ERROR,
                     String.format("Ошибка изменения статуса заказа: %s", e)
             );
         }

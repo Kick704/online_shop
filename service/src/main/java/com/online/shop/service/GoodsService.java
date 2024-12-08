@@ -32,8 +32,9 @@ public interface GoodsService extends BaseService<Goods> {
      * @param id идентификатор товара {@link UUID}
      * @param quantity количество товара для добавления
      * @param principal информация об авторизованном пользователе {@link Principal}
+     * @return {@link List} - список всех товаров {@link Goods} в корзине авторизованного пользователя
      */
-    void addToCart(UUID id, int quantity, Principal principal);
+    List<Goods> addToCurrentUserCart(UUID id, int quantity, Principal principal);
 
     /**
      * Получение общей стоимости товаров в корзине покупателя

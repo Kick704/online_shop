@@ -27,11 +27,11 @@ public class PriceUtils {
      * Вычисление стоимости товара с учётом установленной скидки
      *
      * @param price стоимость товара
-     * @param discount скидка на товар
+     * @param percentageDiscount скидка на товар
      * @return стоимость товара с учётом скидки
      */
-    public static double getDiscountedPrice(double price, int discount) {
-        return price * (1 - discount / 100.0);
+    public static double getDiscountedPrice(double price, int percentageDiscount) {
+        return price * (1 - percentageDiscount/ 100.0);
     }
 
 }

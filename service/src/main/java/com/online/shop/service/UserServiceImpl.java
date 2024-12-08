@@ -13,8 +13,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -42,7 +45,7 @@ public class UserServiceImpl implements UserService {
     public User findById(UUID id) {
         return userRepository.findUserById(id)
                 .orElseThrow(() -> new CommonRuntimeException(
-                        ErrorCode.ENTITY_NOT_FOUND,
+                        ErrorCode.NOT_FOUND,
                         String.format("Пользователь с ID %s не найден", id))
                 );
     }
@@ -57,7 +60,7 @@ public class UserServiceImpl implements UserService {
     public List<User> findAll() {
         List<User> users = userRepository.findAllUsers();
         if (users.isEmpty()) {
-            throw new CommonRuntimeException(ErrorCode.ENTITY_NOT_FOUND, "Ни один пользователь не найден в БД");
+            throw new CommonRuntimeException(ErrorCode.NOT_FOUND, "Ни один пользователь не найден в БД");
         }
         return users;
     }
@@ -72,9 +75,41 @@ public class UserServiceImpl implements UserService {
     public User getCurrentUser(Principal principal) {
         return userRepository.findUserByEmail(principal.getName())
                 .orElseThrow(() -> new CommonRuntimeException(
-                        ErrorCode.AUTHENTICATION_FAILED,
+                        ErrorCode.AUTHENTICATION_ERROR,
                         String.format("Ошибка аутентификации пользователя с email %s", principal.getName()))
                 );
+    }
+
+    /**
+     * Получение актуальной корзины с учетом количества товаров на складе
+     *
+     * @param user сущность Пользователь
+     * @return {@link List} - список всех товаров {@link Goods} в корзине пользователя после актуализации
+     */
+    @Override
+    @Transactional
+    public List<Goods> getActualCart(User user) {
+        if (user == null) {
+            throw new CommonRuntimeException(
+                    ErrorCode.INTERNAL_SERVER_ERROR,
+                    "User: ошибка обновления"
+            );
+        }
+        List<Goods> goodsInCart = user.getGoodsInCart();
+        if (!goodsInCart.isEmpty()) {
+            Set<Goods> uniqueGoods = new HashSet<>(goodsInCart);
+            uniqueGoods.forEach(goods -> {
+                        int countInStock = goods.getCount();
+                        int countInCart = Collections.frequency(goodsInCart, goods);
+                        while (countInStock < countInCart) {
+                            goodsInCart.remove(goods);
+                            countInCart--;
+                        }
+                    }
+            );
+            update(user);
+        }
+        return goodsInCart;
     }
 
     /**
@@ -87,10 +122,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Goods> findAllGoodsInUserCart(UUID id) {
         User user = findById(id);
-        List<Goods> goodsInCart = user.getGoodsInCart();
+        List<Goods> goodsInCart = getActualCart(user);
         if (goodsInCart.isEmpty()) {
             throw new CommonRuntimeException(
-                    ErrorCode.EMPTY_CART,
+                    ErrorCode.NOT_FOUND,
                     String.format("Корзина пользователя c ID %s пуста", id)
             );
         }
@@ -106,10 +141,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Goods> findAllGoodsInCurrentUserCart(Principal principal) {
         User user = getCurrentUser(principal);
-        List<Goods> goodsInCart = user.getGoodsInCart();
+        List<Goods> goodsInCart = getActualCart(user);
         if (goodsInCart.isEmpty()) {
             throw new CommonRuntimeException(
-                    ErrorCode.EMPTY_CART,
+                    ErrorCode.NOT_FOUND,
                     "Ваша корзина пуста"
             );
         }
@@ -128,7 +163,7 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findAllUsersByEnabled(enabled);
         if (users.isEmpty()) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_NOT_FOUND,
+                    ErrorCode.NOT_FOUND,
                     String.format("Ни один пользователь не найден по указанному состоянию аккаунта '%s'",
                             enabled ? "Активен" : "Заблокирован")
             );
@@ -142,10 +177,11 @@ public class UserServiceImpl implements UserService {
      * @param user сущность Пользователь {@link User}
      */
     @Override
+    @Transactional
     public void create(User user) {
         if (user == null) {
             throw new CommonRuntimeException(
-                    ErrorCode.OBJECT_REFERENCE_IS_NULL,
+                    ErrorCode.BAD_REQUEST,
                     "User: предан пустой объект для сохранения"
             );
         }
@@ -163,7 +199,7 @@ public class UserServiceImpl implements UserService {
     public void update(User user) {
         if (user == null) {
             throw new CommonRuntimeException(
-                    ErrorCode.OBJECT_REFERENCE_IS_NULL,
+                    ErrorCode.BAD_REQUEST,
                     "User: предан пустой объект для сохранения"
             );
         }
@@ -178,9 +214,39 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void updateAfterOrder(User user, double orderAmount) {
-        user.getGoodsInCart().clear();
-        user.setBalance(PriceUtils.formatPrice(user.getBalance() - orderAmount));
+        clearCart(user);
+        double updatedBalance = PriceUtils.formatPrice(user.getBalance() - orderAmount);
+        user.setBalance(updatedBalance);
         update(user);
+    }
+
+    /**
+     * Очистка корзины авторизованного пользователя
+     *
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     */
+    @Override
+    public void clearCurrentUserCart(Principal principal) {
+        findAllGoodsInCurrentUserCart(principal);
+        User user = getCurrentUser(principal);
+        clearCart(user);
+        update(user);
+    }
+
+    /**
+     * Очистка корзины пользователя.
+     * <p>Для внутреннего использования во избежание дублирования кода
+     *
+     * @param user сущность Пользователь
+     */
+    private void clearCart(User user) {
+        if (user == null) {
+            throw new CommonRuntimeException(
+                    ErrorCode.BAD_REQUEST,
+                    "Пользователь не найден"
+            );
+        }
+        user.getGoodsInCart().clear();
     }
 
     /**
@@ -192,7 +258,7 @@ public class UserServiceImpl implements UserService {
     public void deleteById(UUID id) {
         if (userRepository.deleteUserById(id) == 0) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_DELETION_FAILED,
+                    ErrorCode.INTERNAL_SERVER_ERROR,
                     String.format("Пользователь с ID %s не найден или не может быть удалён", id)
             );
         }
@@ -209,7 +275,7 @@ public class UserServiceImpl implements UserService {
         UUID currentUserId = getCurrentUser(principal).getId();
         if (userRepository.deleteUserById(currentUserId) == 0) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_DELETION_FAILED,
+                    ErrorCode.INTERNAL_SERVER_ERROR,
                     "Пользователь не найден или не может быть удалён"
             );
         }
@@ -225,7 +291,7 @@ public class UserServiceImpl implements UserService {
     public void validatePhoneNumberUniqueness(String phoneNumber) {
         if (userRepository.existsByPhoneNumber(phoneNumber)) {
             throw new CommonRuntimeException(
-                    ErrorCode.UNIQUE_CONSTRAINT_VIOLATION,
+                    ErrorCode.CONFLICT,
                     "Пользователь с таким номером телефона уже зарегистрирован"
             );
         }
@@ -240,7 +306,7 @@ public class UserServiceImpl implements UserService {
     public void validateEmailUniqueness(String email) {
         if (userRepository.existsByEmail(email)) {
             throw new CommonRuntimeException(
-                    ErrorCode.UNIQUE_CONSTRAINT_VIOLATION,
+                    ErrorCode.CONFLICT,
                     "Пользователь с таким email уже зарегистрирован"
             );
         }

@@ -2,7 +2,10 @@ package com.online.shop.entity;
 
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import java.util.List;
 import java.util.Objects;

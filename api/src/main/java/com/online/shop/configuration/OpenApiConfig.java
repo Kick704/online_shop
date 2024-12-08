@@ -35,4 +35,5 @@ public class OpenApiConfig {
                         .version(apiVersion)
                         .description(decodeToUTF8(apiDescription)));
     }
+
 }

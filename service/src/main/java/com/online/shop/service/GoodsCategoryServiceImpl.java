@@ -29,7 +29,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     public GoodsCategory findById(UUID id) {
         return categoryRepository.findGoodsCategoryById(id)
                 .orElseThrow(() -> new CommonRuntimeException(
-                        ErrorCode.ENTITY_NOT_FOUND,
+                        ErrorCode.NOT_FOUND,
                         String.format("Категория товаров с ID %s не найдена", id))
                 );
     }
@@ -43,7 +43,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     public List<GoodsCategory> findAll() {
         List<GoodsCategory> categories = categoryRepository.findAllGoodsCategories();
         if (categories.isEmpty()) {
-            throw new CommonRuntimeException(ErrorCode.ENTITY_NOT_FOUND, "Ни одна категория товаров не найдена в БД");
+            throw new CommonRuntimeException(ErrorCode.NOT_FOUND, "Ни одна категория товаров не найдена в БД");
         }
         return categories;
     }
@@ -58,7 +58,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     public GoodsCategory findByName(String name) {
         return categoryRepository.findGoodsCategoryByName(name)
                 .orElseThrow(() -> new CommonRuntimeException(
-                        ErrorCode.ENTITY_NOT_FOUND,
+                        ErrorCode.NOT_FOUND,
                         String.format("Категория товаров с названием '%s' не найдена", name))
                 );
     }
@@ -72,7 +72,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     public void save(GoodsCategory category) {
         if (category == null) {
             throw new CommonRuntimeException(
-                    ErrorCode.OBJECT_REFERENCE_IS_NULL,
+                    ErrorCode.BAD_REQUEST,
                     "GoodsCategory: предан пустой объект для сохранения"
             );
         }
@@ -88,7 +88,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     public void deleteById(UUID id) {
         if (categoryRepository.deleteGoodsCategoryById(id) == 0) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_DELETION_FAILED,
+                    ErrorCode.INTERNAL_SERVER_ERROR,
                     String.format("Категория товаров с ID %s не найдена или не может быть удалена", id)
             );
         }
@@ -103,7 +103,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     public void validateNameUniqueness(String name) {
         if (categoryRepository.existsByName(name)) {
             throw new CommonRuntimeException(
-                    ErrorCode.UNIQUE_CONSTRAINT_VIOLATION,
+                    ErrorCode.CONFLICT,
                     String.format("Категория товаров с названием '%s' уже существует", name)
             );
         }

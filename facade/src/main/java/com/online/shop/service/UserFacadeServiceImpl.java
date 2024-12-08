@@ -73,7 +73,7 @@ public class UserFacadeServiceImpl implements UserFacadeService {
      * Выборка всех товаров в корзине пользователя
      *
      * @param id идентификатор пользователя {@link UUID}
-     * @return {@link List} - список всех товаров {@link GoodsResponseDTO} в корзине пользователя
+     * @return {@link Set} - список всех товаров {@link GoodsResponseDTO} в корзине пользователя
      */
     @Override
     @Transactional(readOnly = true)
@@ -85,7 +85,7 @@ public class UserFacadeServiceImpl implements UserFacadeService {
      * Выборка всех товаров в корзине авторизованного пользователя
      *
      * @param principal информация об авторизованном пользователе {@link Principal}
-     * @return {@link List} - список всех товаров {@link GoodsResponseDTO} в корзине авторизованного пользователя
+     * @return {@link Set} - список всех товаров {@link GoodsResponseDTO} в корзине авторизованного пользователя
      */
     @Override
     @Transactional(readOnly = true)
@@ -158,6 +158,18 @@ public class UserFacadeServiceImpl implements UserFacadeService {
     public UserResponseDTO updateCurrentUser(Principal principal, UserUpdateDTO userUpdateDTO) {
         UUID currentUserId = userService.getCurrentUser(principal).getId();
         return update(currentUserId, userUpdateDTO);
+    }
+
+    /**
+     * Очистка корзины авторизованного пользователя
+     *
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     * @return {@link InformationDTO} с сообщением о результате
+     */
+    @Override
+    public InformationDTO clearCurrentUserCart(Principal principal) {
+        userService.clearCurrentUserCart(principal);
+        return new InformationDTO("Ваша корзина очищена");
     }
 
     /**
