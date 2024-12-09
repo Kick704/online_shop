@@ -6,7 +6,6 @@ import com.online.shop.entity.User;
 import com.online.shop.entity.Goods;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
-import com.online.shop.util.PriceUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -198,43 +197,19 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Обновление пользователя после оформления заказа
-     *
-     * @param user сущность Пользователь {@link User}
-     * @param orderAmount сумма заказа
-     */
-    @Override
-    public void updateAfterOrder(User user, double orderAmount) {
-        clearCart(user);
-        double updatedBalance = PriceUtils.formatPrice(user.getBalance() - orderAmount);
-        user.setBalance(updatedBalance);
-        update(user);
-    }
-
-    /**
      * Очистка корзины авторизованного пользователя
      *
      * @param principal информация об авторизованном пользователе {@link Principal}
      */
     @Override
     public void clearCurrentUserCart(Principal principal) {
-        findAllGoodsInCurrentUserCart(principal);
         User user = getCurrentUser(principal);
-        clearCart(user);
-        update(user);
-    }
-
-    /**
-     * Очистка корзины пользователя.
-     * <p>Для внутреннего использования во избежание дублирования кода
-     *
-     * @param user сущность Пользователь
-     */
-    private void clearCart(User user) {
-        if (user == null) {
-            throw new CommonRuntimeException(ErrorCode.BAD_REQUEST, "Пользователь не найден");
+        List<Goods> goodsInCart = user.getGoodsInCart();
+        if (goodsInCart.isEmpty()) {
+            throw new CommonRuntimeException(ErrorCode.NOT_FOUND, "Ваша корзина пуста");
         }
-        user.getGoodsInCart().clear();
+        goodsInCart.clear();
+        update(user);
     }
 
     /**

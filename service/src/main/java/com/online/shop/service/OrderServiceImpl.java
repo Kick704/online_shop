@@ -8,12 +8,15 @@ import com.online.shop.enums.OrderStatus;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
 import com.online.shop.statemachine.OrderStateMachineService;
+import com.online.shop.util.PriceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -104,11 +107,11 @@ public class OrderServiceImpl implements OrderService {
             throw new CommonRuntimeException(ErrorCode.NOT_FOUND, "Ваша корзина пуста");
         }
 
-        double orderAmount = goodsService.getCartTotalPrice(goodsInCart);
+        double orderAmount = goodsService.getGoodsListTotalPrice(goodsInCart);
         if (user.getBalance() < orderAmount) {
             throw new CommonRuntimeException(
                     ErrorCode.BAD_REQUEST,
-                    String.format("Недостаточно средств на счёте, не хватает %.2f рублей",
+                    String.format("Недостаточно средств на счёте, не хватает %.2f руб.",
                             orderAmount - user.getBalance())
             );
         }
@@ -116,8 +119,40 @@ public class OrderServiceImpl implements OrderService {
         order.setGoodsInOrder(goodsInCart);
         order.setAmount(orderAmount);
         orderStateMachineService.create(order);
-        goodsService.deductGoodsCount(goodsInCart);
-        userService.updateAfterOrder(user, orderAmount);
+        deductGoodsCount(goodsInCart);
+        updateUserAfterOrder(user, orderAmount);
+    }
+
+    /**
+     * Вычитание товаров на складе на основе списка приобретаемых покупателем
+     *
+     * @param goodsList список товаров для приобретения {@link List}
+     */
+    private void deductGoodsCount(List<Goods> goodsList) {
+        goodsList.forEach(goods -> {
+            if (goods.getCount() <= 0) {
+                throw new CommonRuntimeException(
+                        ErrorCode.CONFLICT,
+                        String.format("Товар %s отсутствует на складе", goods.getName())
+                );
+            }
+            goods.setCount(goods.getCount() - 1);
+        });
+        Set<Goods> uniqueGoods = new HashSet<>(goodsList);
+        uniqueGoods.forEach(goods -> goodsService.save(goods));
+    }
+
+    /**
+     * Обновление пользователя после оформления заказа
+     *
+     * @param user сущность Пользователь {@link User}
+     * @param orderAmount сумма заказа
+     */
+    private void updateUserAfterOrder(User user, double orderAmount) {
+        user.getGoodsInCart().clear();
+        double updatedBalance = PriceUtils.formatPrice(user.getBalance() - orderAmount);
+        user.setBalance(updatedBalance);
+        userService.update(user);
     }
 
     /**

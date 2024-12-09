@@ -37,18 +37,11 @@ public interface GoodsService extends BaseService<Goods> {
     List<Goods> addToCurrentUserCart(UUID id, int quantity, Principal principal);
 
     /**
-     * Получение общей стоимости товаров в корзине покупателя
+     * Получение общей стоимости товаров из списка
      *
-     * @param goodsList список товаров в корзине {@link List}
-     * @return общая стоимость товаров в корзине
+     * @param goodsList список товаров {@link List}
+     * @return общая стоимость товаров
      */
-    double getCartTotalPrice(List<Goods> goodsList);
-
-    /**
-     * Вычитание товаров на складе на основе списка приобретаемых покупателем
-     *
-     * @param goodsList список товаров для приобретения {@link List}
-     */
-    void deductGoodsCount(List<Goods> goodsList);
+    double getGoodsListTotalPrice(List<Goods> goodsList);
 
 }

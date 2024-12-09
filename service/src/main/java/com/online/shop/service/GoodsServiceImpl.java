@@ -12,9 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -136,36 +134,16 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     /**
-     * Получение общей стоимости товаров в корзине покупателя
+     * Получение общей стоимости товаров из списка
      *
-     * @param goodsList список товаров в корзине {@link List}
-     * @return общая стоимость товаров в корзине
+     * @param goodsList список товаров {@link List}
+     * @return общая стоимость товаров
      */
     @Override
-    public double getCartTotalPrice(List<Goods> goodsList) {
+    public double getGoodsListTotalPrice(List<Goods> goodsList) {
         return PriceUtils.formatPrice(goodsList.stream()
                 .mapToDouble(goods -> PriceUtils.getDiscountedPrice(goods.getPrice(), goods.getPercentageDiscount()))
                 .sum());
-    }
-
-    /**
-     * Вычитание товаров на складе на основе списка приобретаемых покупателем
-     *
-     * @param goodsList список товаров для приобретения {@link List}
-     */
-    @Override
-    public void deductGoodsCount(List<Goods> goodsList) {
-        goodsList.forEach(goods -> {
-            if (goods.getCount() <= 0) {
-                throw new CommonRuntimeException(
-                        ErrorCode.BAD_REQUEST,
-                        String.format("Товар %s отсутствует на складе", goods.getName())
-                );
-            }
-            goods.setCount(goods.getCount() - 1);
-        });
-        Set<Goods> uniqueGoods = new HashSet<>(goodsList);
-        goodsRepository.saveAll(uniqueGoods);
     }
 
 }
