@@ -31,7 +31,7 @@ public class PriceUtils {
      * @return стоимость товара с учётом скидки
      */
     public static double getDiscountedPrice(double price, int percentageDiscount) {
-        return price * (1 - percentageDiscount/ 100.0);
+        return price * (1 - percentageDiscount / 100.0);
     }
 
 }

@@ -5,15 +5,15 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
 
-    <changeSet id="rename-column-goods-discount-to-percentage_discount" author="Kick704">
+    <changeSet id="rename-table-events-to-completed_order_events" author="Kick704">
         <preConditions onFail="MARK_RAN">
-            <columnExists tableName="goods" columnName="discount" />
+            <not>
+                <tableExists tableName="completed_order_events" />
+            </not>
         </preConditions>
 
-        <renameColumn tableName="goods"
-                      oldColumnName="discount"
-                      newColumnName="percentage_discount"
-                      columnDataType="int"/>
+        <renameTable oldTableName="events"
+                     newTableName="completed_order_events" />
 
     </changeSet>
 

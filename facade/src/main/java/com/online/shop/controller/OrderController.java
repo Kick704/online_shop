@@ -70,7 +70,7 @@ public class OrderController {
      */
     @PreAuthorize("hasAuthority('MANAGE_ORDERS')")
     @GetMapping(value = "/status", params = "status")
-    @Operation(summary = "Получение заказа по статусу", description = "Позволяет получить заказ по текущему статусу")
+    @Operation(summary = "Получение заказов по статусу", description = "Позволяет получить заказы по текущему статусу")
     public List<OrderResponseDTO> getOrdersByStatus(@RequestParam OrderStatus status) {
         return orderFacadeService.findAllByStatus(status);
     }

@@ -25,5 +25,6 @@
     <include file="insert-data/create-admin-user.xml" relativeToChangelogFile="true"/>
 
     <include file="update-table/rename-column-goods-discount-to-percentage_discount.xml" relativeToChangelogFile="true"/>
+    <include file="update-table/rename-table-events-to-completed_order_events.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

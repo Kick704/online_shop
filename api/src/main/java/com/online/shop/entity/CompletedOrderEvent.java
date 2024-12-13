@@ -14,8 +14,8 @@ import java.util.Objects;
  * Класс-сущность Событие для регистрации завершенных заказов
  */
 @Entity
-@Table(name = "events")
-public class Event extends AbstractEntity {
+@Table(name = "completed_order_events")
+public class CompletedOrderEvent extends AbstractEntity {
 
     /**
      * Заказ
@@ -30,10 +30,10 @@ public class Event extends AbstractEntity {
     @Column(name = "description")
     private String description;
 
-    public Event() {
+    public CompletedOrderEvent() {
     }
 
-    private Event(Builder builder) {
+    private CompletedOrderEvent(Builder builder) {
         setOrder(builder.order);
         setDescription(builder.description);
     }
@@ -57,7 +57,7 @@ public class Event extends AbstractEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Event event)) return false;
+        if (!(o instanceof CompletedOrderEvent event)) return false;
         return Objects.equals(order, event.order) && Objects.equals(description, event.description);
     }
 
@@ -68,7 +68,7 @@ public class Event extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "Event{" +
+        return "CompletedOrderEvent{" +
                 "id=" + id +
                 ", order=" + order +
                 ", description='" + description + '\'' +
@@ -96,8 +96,8 @@ public class Event extends AbstractEntity {
             return this;
         }
 
-        public Event build() {
-            return new Event(this);
+        public CompletedOrderEvent build() {
+            return new CompletedOrderEvent(this);
         }
     }
 

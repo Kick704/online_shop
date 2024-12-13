@@ -1,7 +1,7 @@
 package com.online.shop.statemachine;
 
-import com.online.shop.dao.EventRepository;
-import com.online.shop.entity.Event;
+import com.online.shop.dao.CompletedOrderEventRepository;
+import com.online.shop.entity.CompletedOrderEvent;
 import com.online.shop.entity.Order;
 import com.online.shop.enums.OrderEvent;
 import com.online.shop.enums.OrderStatus;
@@ -21,7 +21,7 @@ import java.util.Optional;
 public class OrderStateMachineEventListener extends StateMachineListenerAdapter<OrderStatus, OrderEvent> {
 
     @Autowired
-    private EventRepository eventRepository;
+    private CompletedOrderEventRepository completedOrderEventRepository;
 
     /**
      * Обрабатывает контекст машины состояний, отлавливая конечные состояния {@link OrderStatus#DELIVERED}
@@ -36,22 +36,22 @@ public class OrderStateMachineEventListener extends StateMachineListenerAdapter<
             Order order = Optional.ofNullable((Order) stateContext.getMessageHeader("order"))
                     .orElseThrow(() -> new CommonRuntimeException(
                             ErrorCode.INTERNAL_SERVER_ERROR,
-                            "Ошибка регистрации статуса заказа")
+                            "Ошибка регистрации завершенного заказа")
                     );
             String cancelCause = (String) stateContext.getMessageHeader("cancelCause");
-            eventRepository.save(buildEvent(order, cancelCause));
+            completedOrderEventRepository.save(buildEvent(order, cancelCause));
         }
     }
 
     /**
-     * Формирует событие на основе {@link Event} для дальнейшего сохранения в БД
+     * Формирует событие на основе {@link CompletedOrderEvent} для дальнейшего сохранения в БД
      *
      * @param order заказ {@link Order}
      * @param cancelCause причина отмены заказа при переходе в состояние {@link OrderStatus#CANCELLED}
      * @return событие
      */
-    private Event buildEvent(Order order, String cancelCause) {
-        return Event.Builder.newBuilder()
+    private CompletedOrderEvent buildEvent(Order order, String cancelCause) {
+        return CompletedOrderEvent.Builder.newBuilder()
                 .order(order)
                 .description(cancelCause == null ?
                         "Успешно доставлен" :
