@@ -19,7 +19,12 @@
     <include file="create-table/privileges-table.xml" relativeToChangelogFile="true"/>
     <include file="create-table/user_roles-table.xml" relativeToChangelogFile="true"/>
     <include file="create-table/roles_privileges-table.xml" relativeToChangelogFile="true"/>
+    <include file="create-table/events-table.xml" relativeToChangelogFile="true"/>
+
     <include file="insert-data/initial-data-roles-privileges.xml" relativeToChangelogFile="true"/>
     <include file="insert-data/create-admin-user.xml" relativeToChangelogFile="true"/>
+
+    <include file="update-table/rename-column-goods-discount-to-percentage_discount.xml" relativeToChangelogFile="true"/>
+    <include file="update-table/rename-table-events-to-completed_order_events.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

@@ -2,7 +2,9 @@ package com.online.shop.service;
 
 import com.online.shop.entity.Goods;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Сервис для управления сущностью {@link Goods}
@@ -23,5 +25,23 @@ public interface GoodsService extends BaseService<Goods> {
      * @param goods сущность Товар {@link Goods}
      */
     void save(Goods goods);
+
+    /**
+     * Добавление товара в корзину текущего покупателя
+     *
+     * @param id идентификатор товара {@link UUID}
+     * @param quantity количество товара для добавления
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     * @return {@link List} - список всех товаров {@link Goods} в корзине авторизованного пользователя
+     */
+    List<Goods> addToCurrentUserCart(UUID id, int quantity, Principal principal);
+
+    /**
+     * Получение общей стоимости товаров из списка
+     *
+     * @param goodsList список товаров {@link List}
+     * @return общая стоимость товаров
+     */
+    double getGoodsListTotalPrice(List<Goods> goodsList);
 
 }

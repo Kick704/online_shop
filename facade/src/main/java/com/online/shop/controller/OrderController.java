@@ -11,8 +11,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,23 +70,24 @@ public class OrderController {
      */
     @PreAuthorize("hasAuthority('MANAGE_ORDERS')")
     @GetMapping(value = "/status", params = "status")
-    @Operation(summary = "Получение заказа по статусу", description = "Позволяет получить заказ по текущему статусу")
+    @Operation(summary = "Получение заказов по статусу", description = "Позволяет получить заказы по текущему статусу")
     public List<OrderResponseDTO> getOrdersByStatus(@RequestParam OrderStatus status) {
         return orderFacadeService.findAllByStatus(status);
     }
 
     /**
-     * Обработчик POST запроса для создания заказа
+     * Обработчик POST запроса для создания заказа авторизованному пользователя
      *
      * @param orderCreationDTO DTO {@link OrderCreationDTO}, содержащая информацию для создания заказа
+     * @param principal информация об авторизованном пользователе {@link Principal}
      * @return DTO {@link OrderResponseDTO}, содержащий информацию о заказе
      */
     @PreAuthorize("hasAuthority('CREATE_ORDER')")
     @PostMapping
     @Operation(summary = "Создание заказа",
-            description = "Позволяет создать заказ на основе корзины пользователя")
-    public OrderResponseDTO addNewOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO) {
-        return orderFacadeService.addNew(orderCreationDTO);
+            description = "Позволяет создать заказ на основе корзины текущего пользователя")
+    public OrderResponseDTO addNewOrder(@Valid @RequestBody OrderCreationDTO orderCreationDTO, Principal principal) {
+        return orderFacadeService.addNew(orderCreationDTO, principal);
     }
 
     /**
@@ -89,8 +99,7 @@ public class OrderController {
      */
     @PreAuthorize("hasAuthority('MANAGE_ORDERS')")
     @PutMapping("/{id}")
-    @Operation(summary = "Изменение заказа",
-            description = "Позволяет изменить данные заказа")
+    @Operation(summary = "Изменение заказа", description = "Позволяет изменить данные заказа")
     public OrderResponseDTO updateOrder(@PathVariable UUID id, @Valid @RequestBody OrderUpdateDTO orderUpdateDTO) {
         return orderFacadeService.update(id, orderUpdateDTO);
     }

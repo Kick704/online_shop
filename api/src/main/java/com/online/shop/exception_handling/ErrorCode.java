@@ -7,15 +7,13 @@ import org.springframework.http.HttpStatus;
  */
 public enum ErrorCode {
 
-    INVALID_INPUT_DATA(1001, "Неверные данные запроса", HttpStatus.BAD_REQUEST),
-    ENTITY_NOT_FOUND(1002, "Сущность не найдена", HttpStatus.NOT_FOUND),
-    OBJECT_REFERENCE_IS_NULL(1003, "Объект ссылается на null", HttpStatus.PRECONDITION_FAILED),
-    UNIQUE_CONSTRAINT_VIOLATION(1004, "Нарушение ограничения уникальности", HttpStatus.CONFLICT),
-    EMPTY_CART(1005, "Корзина пользователя пуста", HttpStatus.NOT_FOUND),
-    ENTITY_DELETION_FAILED(1006, "Ошибка при попытке удаления сущности", HttpStatus.INTERNAL_SERVER_ERROR),
-    AUTHENTICATION_FAILED(1007, "Ошибка аутентификации", HttpStatus.UNAUTHORIZED),
-    AUTHORIZATION_FAILED(1008, "Отказано в доступе", HttpStatus.FORBIDDEN),
-    INTERNAL_SERVER_ERROR(1009, "Внутренняя ошибка сервера", HttpStatus.INTERNAL_SERVER_ERROR);
+    BAD_REQUEST(1000, "Некорректный запрос", HttpStatus.BAD_REQUEST),
+    NOT_FOUND(1001, "Ресурс не найден", HttpStatus.NOT_FOUND),
+    VALIDATION_ERROR(1002, "Ошибка валидации", HttpStatus.UNPROCESSABLE_ENTITY),
+    AUTHENTICATION_ERROR(1003, "Ошибка аутентификации", HttpStatus.UNAUTHORIZED),
+    ACCESS_DENIED(1004, "Доступ запрещен", HttpStatus.FORBIDDEN),
+    CONFLICT(1005, "Конфликт данных", HttpStatus.CONFLICT),
+    INTERNAL_SERVER_ERROR (1006, "Внутренняя ошибка сервера", HttpStatus.INTERNAL_SERVER_ERROR);
 
     /**
      * Внутренний код ошибки

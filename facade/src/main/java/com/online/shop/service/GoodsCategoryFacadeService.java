@@ -19,4 +19,12 @@ public interface GoodsCategoryFacadeService
      */
     GoodsCategoryResponseDTO findByName(String name);
 
+    /**
+     * Добавление новой категории товаров
+     *
+     * @param categoryCreationDTO DTO новая Категория товаров {@link GoodsCategoryCreationDTO}
+     * @return DTO Категория товаров {@link GoodsCategoryResponseDTO}
+     */
+    GoodsCategoryResponseDTO addNew(GoodsCategoryCreationDTO categoryCreationDTO);
+
 }

@@ -12,16 +12,17 @@ public class GoodsResponseDTO extends AbstractResponseDTO {
     @Schema(description = "Название")
     private String name;
 
+    @Schema(description = "Категория товара")
     private GoodsCategoryResponseDTO goodsCategory;
 
     @Schema(description = "Стоимость товара в рублях")
     private double price;
 
+    @Schema(description = "Скидка на товар в процентах")
+    private int percentageDiscount;
+
     @Schema(description = "Количество на складе")
     private int count;
-
-    @Schema(description = "Скидка на товар в процентах")
-    private int discount;
 
     public String getName() {
         return name;
@@ -47,20 +48,20 @@ public class GoodsResponseDTO extends AbstractResponseDTO {
         this.price = price;
     }
 
+    public int getPercentageDiscount() {
+        return percentageDiscount;
+    }
+
+    public void setPercentageDiscount(int percentageDiscount) {
+        this.percentageDiscount= percentageDiscount;
+    }
+
     public int getCount() {
         return count;
     }
 
     public void setCount(int count) {
         this.count = count;
-    }
-
-    public int getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(int discount) {
-        this.discount = discount;
     }
 
     @Override
@@ -70,8 +71,8 @@ public class GoodsResponseDTO extends AbstractResponseDTO {
                 ", name='" + name + '\'' +
                 ", goodsCategory=" + goodsCategory +
                 ", price=" + price +
+                ", percentageDiscount=" + percentageDiscount +
                 ", count=" + count +
-                ", discount=" + discount +
                 '}';
     }
 

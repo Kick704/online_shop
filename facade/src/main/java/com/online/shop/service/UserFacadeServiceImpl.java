@@ -2,6 +2,7 @@ package com.online.shop.service;
 
 import com.online.shop.dto.request.creation.UserCreationDTO;
 import com.online.shop.dto.request.update.UserUpdateDTO;
+import com.online.shop.dto.response.SelectedGoodsDTO;
 import com.online.shop.dto.response.UserResponseDTO;
 import com.online.shop.dto.response.GoodsResponseDTO;
 import com.online.shop.dto.response.InformationDTO;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -71,24 +73,24 @@ public class UserFacadeServiceImpl implements UserFacadeService {
      * Выборка всех товаров в корзине пользователя
      *
      * @param id идентификатор пользователя {@link UUID}
-     * @return {@link List} - список всех товаров {@link GoodsResponseDTO} в корзине пользователя
+     * @return {@link Set} - список всех товаров {@link GoodsResponseDTO} в корзине пользователя
      */
     @Override
     @Transactional(readOnly = true)
-    public List<GoodsResponseDTO> findAllGoodsInUserCart(UUID id) {
-        return goodsMapper.toDTOList(userService.findAllGoodsInUserCart(id));
+    public Set<SelectedGoodsDTO> findAllGoodsInUserCart(UUID id) {
+        return goodsMapper.toSelectedGoodsDTOSet(userService.findAllGoodsInUserCart(id));
     }
 
     /**
      * Выборка всех товаров в корзине авторизованного пользователя
      *
      * @param principal информация об авторизованном пользователе {@link Principal}
-     * @return {@link List} - список всех товаров {@link GoodsResponseDTO} в корзине авторизованного пользователя
+     * @return {@link Set} - список всех товаров {@link GoodsResponseDTO} в корзине авторизованного пользователя
      */
     @Override
     @Transactional(readOnly = true)
-    public List<GoodsResponseDTO> findAllGoodsInCurrentUserCart(Principal principal) {
-        return goodsMapper.toDTOList(userService.findAllGoodsInCurrentUserCart(principal));
+    public Set<SelectedGoodsDTO> findAllGoodsInCurrentUserCart(Principal principal) {
+        return goodsMapper.toSelectedGoodsDTOSet(userService.findAllGoodsInCurrentUserCart(principal));
     }
 
     /**
@@ -159,6 +161,18 @@ public class UserFacadeServiceImpl implements UserFacadeService {
     }
 
     /**
+     * Очистка корзины авторизованного пользователя
+     *
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     * @return {@link InformationDTO} с сообщением о результате
+     */
+    @Override
+    public InformationDTO clearCurrentUserCart(Principal principal) {
+        userService.clearCurrentUserCart(principal);
+        return new InformationDTO("Ваша корзина очищена");
+    }
+
+    /**
      * Удаление пользователя по id
      *
      * @param id идентификатор пользователя {@link UUID}
@@ -180,8 +194,7 @@ public class UserFacadeServiceImpl implements UserFacadeService {
      */
     @Override
     @Transactional
-    public InformationDTO deleteCurrentUser(Principal principal,
-                                            HttpServletRequest request) {
+    public InformationDTO deleteCurrentUser(Principal principal, HttpServletRequest request) {
         userService.deleteCurrentUser(principal, request);
         return new InformationDTO("Аккаунт успешно удалён");
     }

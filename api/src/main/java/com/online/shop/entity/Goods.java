@@ -2,7 +2,14 @@ package com.online.shop.entity;
 
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,16 +41,16 @@ public class Goods extends AbstractEntity {
     private double price;
 
     /**
+     * Установленная скидка на товар в процентах от 0% до 100%
+     */
+    @Column(name = "percentageDiscount")
+    private int percentageDiscount;
+
+    /**
      * Оставшееся количество товаров на складе
      */
     @Column(name = "count")
     private int count;
-
-    /**
-     * Установленная скидка на товар в процентах от 0% до 100%
-     */
-    @Column(name = "discount")
-    private int discount;
 
     /**
      * Список заказов, в которых присутствует данный товар
@@ -61,8 +68,8 @@ public class Goods extends AbstractEntity {
         setName(builder.name);
         setGoodsCategory(builder.goodsCategory);
         setPrice(builder.price);
+        setPercentageDiscount(builder.percentageDiscount);
         setCount(builder.count);
-        setDiscount(builder.discount);
     }
 
     public String getName() {
@@ -89,20 +96,20 @@ public class Goods extends AbstractEntity {
         this.price = price;
     }
 
+    public int getPercentageDiscount() {
+        return percentageDiscount;
+    }
+
+    public void setPercentageDiscount(int percentageDiscount) {
+        this.percentageDiscount= percentageDiscount;
+    }
+
     public int getCount() {
         return count;
     }
 
     public void setCount(int count) {
         this.count = count;
-    }
-
-    public int getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(int discount) {
-        this.discount = discount;
     }
 
     public List<Order> getOrdersWithThisGoods() {
@@ -119,15 +126,15 @@ public class Goods extends AbstractEntity {
         if (o == null || getClass() != o.getClass()) return false;
         Goods goods = (Goods) o;
         return Objects.equals(id, goods.id) &&
+                Objects.equals(name, goods.name) &&
                 Double.compare(price, goods.price) == 0 &&
-                count == goods.count &&
-                Double.compare(discount, goods.discount) == 0 &&
-                Objects.equals(name, goods.name);
+                Double.compare(percentageDiscount, goods.percentageDiscount) == 0 &&
+                count == goods.count;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, price, count, discount);
+        return Objects.hash(id, name, price, percentageDiscount, count);
     }
 
     @Override
@@ -137,8 +144,8 @@ public class Goods extends AbstractEntity {
                 ", name='" + name + '\'' +
                 ", goodsCategory=" + goodsCategory +
                 ", price=" + price +
+                ", percentageDiscount=" + percentageDiscount +
                 ", count=" + count +
-                ", discount=" + discount +
                 '}';
     }
 
@@ -146,8 +153,8 @@ public class Goods extends AbstractEntity {
         private String name;
         private GoodsCategory goodsCategory;
         private double price;
+        private int percentageDiscount;
         private int count;
-        private int discount;
 
         private Builder() {
         }
@@ -171,13 +178,13 @@ public class Goods extends AbstractEntity {
             return this;
         }
 
-        public Builder count(int val) {
-            count = val;
+        public Builder percentageDiscount(int val) {
+            percentageDiscount= val;
             return this;
         }
 
-        public Builder discount(int val) {
-            discount = val;
+        public Builder count(int val) {
+            count = val;
             return this;
         }
 
@@ -191,4 +198,5 @@ public class Goods extends AbstractEntity {
             return new Goods(this);
         }
     }
+
 }

@@ -3,7 +3,10 @@ package com.online.shop.dto.request.creation;
 import com.online.shop.dto.request.AbstractRequestDTO;
 import com.online.shop.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import static com.online.shop.dto.request.ValidationConstants.MIN_USER_PASSWORD_LENGTH;
 import static com.online.shop.dto.request.ValidationConstants.PHONE_NUMBER_REGEXP;
@@ -100,4 +103,5 @@ public class UserCreationDTO extends AbstractRequestDTO implements CreationDTO {
                 ", password='" + password + '\'' +
                 '}';
     }
+
 }

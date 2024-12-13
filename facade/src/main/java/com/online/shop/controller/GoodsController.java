@@ -11,13 +11,21 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
 
 /**
- * REST-контроллер для управления с товарами интернет-магазина
+ * REST-контроллер для управления товарами интернет-магазина
  */
 @RestController
 @RequestMapping(ApiPath.API_BASE + "/goods")
@@ -58,8 +66,7 @@ public class GoodsController {
      * @return {@link List} список, содержащий товары {@link GoodsResponseDTO} с названием {@code name}
      */
     @GetMapping(value = "/name", params = "name")
-    @Operation(summary = "Получение товара по названию",
-            description = "Позволяет получить товар по его названию")
+    @Operation(summary = "Получение товара по названию", description = "Позволяет получить товар по его названию")
     public List<GoodsResponseDTO> getGoodsByName(@RequestParam String name) {
         return goodsFacadeService.findAllByName(name);
     }
@@ -72,8 +79,7 @@ public class GoodsController {
      */
     @PreAuthorize("hasAuthority('MANAGE_GOODS')")
     @PostMapping
-    @Operation(summary = "Добавление нового товара в интернет-магазин",
-            description = "Позволяет добавить новый товар в интернет-магазин")
+    @Operation(summary = "Добавление нового товара", description = "Позволяет добавить новый товар в интернет-магазин")
     public GoodsResponseDTO addNewGoods(@Valid @RequestBody GoodsCreationDTO goodsCreationDTO) {
         return goodsFacadeService.addNew(goodsCreationDTO);
     }
@@ -87,8 +93,7 @@ public class GoodsController {
      */
     @PreAuthorize("hasAuthority('MANAGE_GOODS')")
     @PutMapping("/{id}")
-    @Operation(summary = "Изменение информации о товаре",
-            description = "Позволяет изменить информацию о товаре")
+    @Operation(summary = "Изменение информации о товаре", description = "Позволяет изменить информацию о товаре")
     public GoodsResponseDTO updateGoods(@PathVariable UUID id, @Valid @RequestBody GoodsUpdateDTO goodsUpdateDTO) {
         return goodsFacadeService.update(id, goodsUpdateDTO);
     }

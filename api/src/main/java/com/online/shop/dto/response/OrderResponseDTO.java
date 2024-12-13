@@ -1,9 +1,10 @@
 package com.online.shop.dto.response;
 
 import com.online.shop.entity.Order;
+import com.online.shop.enums.OrderStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * DTO Заказ на основе сущности {@link Order}
@@ -11,16 +12,20 @@ import java.util.List;
 @Schema(description = "DTO Заказ")
 public class OrderResponseDTO extends AbstractResponseDTO {
 
+    @Schema(description = "Пользователь")
     private UserResponseDTO user;
 
     @Schema(description = "Список товаров в заказе")
-    private List<GoodsResponseDTO> goodsInOrder;
+    private Set<SelectedGoodsDTO> goodsInOrder;
 
     @Schema(description = "Итоговая стоимость в рублях")
     private double amount;
 
     @Schema(description = "Адрес доставки")
     private String deliveryAddress;
+
+    @Schema(description = "Статус заказа")
+    private OrderStatus status;
 
     public UserResponseDTO getUser() {
         return user;
@@ -30,11 +35,11 @@ public class OrderResponseDTO extends AbstractResponseDTO {
         this.user = user;
     }
 
-    public List<GoodsResponseDTO> getGoodsInOrder() {
+    public Set<SelectedGoodsDTO> getGoodsInOrder() {
         return goodsInOrder;
     }
 
-    public void setGoodsInOrder(List<GoodsResponseDTO> goodsInOrder) {
+    public void setGoodsInOrder(Set<SelectedGoodsDTO> goodsInOrder) {
         this.goodsInOrder = goodsInOrder;
     }
 
@@ -54,6 +59,14 @@ public class OrderResponseDTO extends AbstractResponseDTO {
         this.deliveryAddress = deliveryAddress;
     }
 
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "OrderResponseDTO{" +
@@ -62,6 +75,7 @@ public class OrderResponseDTO extends AbstractResponseDTO {
                 ", goodsInOrder=" + goodsInOrder +
                 ", amount=" + amount +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
+                ", status=" + status +
                 '}';
     }
 

@@ -3,7 +3,6 @@ package com.online.shop.controller;
 import com.online.shop.dto.request.creation.UserCreationDTO;
 import com.online.shop.dto.request.update.UserUpdateDTO;
 import com.online.shop.dto.response.UserResponseDTO;
-import com.online.shop.dto.response.GoodsResponseDTO;
 import com.online.shop.dto.response.InformationDTO;
 import com.online.shop.service.UserFacadeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +11,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.List;
@@ -70,35 +77,6 @@ public class UserController {
     }
 
     /**
-     * Обработчик GET запроса для получения информации о корзине пользователя по его {@code id}
-     *
-     * @param id идентификатор пользователя {@link UUID}
-     * @return {@link List} список товаров {@link GoodsResponseDTO} в корзине пользователя
-     */
-    @PreAuthorize("hasAuthority('MANAGE_USERS')")
-    @GetMapping(value = "/cart", params = "id")
-    @Operation(summary = "Получение корзины пользователя",
-            description = "Позволяет получить список товаров в корзине по ID пользователя")
-    public List<GoodsResponseDTO> getUserCart(@RequestParam UUID id) {
-        return userFacadeService.findAllGoodsInUserCart(id);
-    }
-
-    /**
-     * Обработчик GET запроса для получения информации о корзине авторизованного пользователя
-     *
-     * @param principal информация об авторизованном пользователе {@link Principal}
-     * @return {@link List} список товаров {@link GoodsResponseDTO} в корзине пользователя
-     */
-    @PreAuthorize("hasAuthority('READ_USER')")
-    @GetMapping(value = "/current/cart")
-    @Operation(summary = "Получение корзины текущего пользователя",
-            description = "Позволяет получить список товаров в корзине авторизованного пользователя")
-    public List<GoodsResponseDTO> getCurrentUserCart(Principal principal) {
-        return userFacadeService.findAllGoodsInCurrentUserCart(principal);
-    }
-
-
-    /**
      * Обработчик GET запроса для получения списка пользователей по состоянию(активен или заблокирован) аккаунта
      *
      * @param enabled состояние аккаунта {@link boolean}
@@ -119,8 +97,7 @@ public class UserController {
      * @return DTO {@link UserResponseDTO}, содержащий информацию о зарегистрированном пользователе
      */
     @PostMapping
-    @Operation(summary = "Регистрация пользователя",
-            description = "Позволяет зарегистрировать нового пользователя")
+    @Operation(summary = "Регистрация пользователя", description = "Позволяет зарегистрировать нового пользователя")
     public UserResponseDTO addNewUser(@Valid @RequestBody UserCreationDTO userCreationDTO) {
         return userFacadeService.addNew(userCreationDTO);
     }
@@ -135,8 +112,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('MANAGE_USERS')")
     @PutMapping("/{id}")
     @Operation(summary = "Изменение информации о пользователе", description = "Позволяет изменить данные пользователя")
-    public UserResponseDTO updateUser(@PathVariable UUID id,
-                                      @Valid @RequestBody UserUpdateDTO userUpdateDTO) {
+    public UserResponseDTO updateUser(@PathVariable UUID id, @Valid @RequestBody UserUpdateDTO userUpdateDTO) {
         return userFacadeService.update(id, userUpdateDTO);
     }
 
@@ -151,8 +127,7 @@ public class UserController {
     @PutMapping("/current")
     @Operation(summary = "Изменение информации о текущем пользователе",
             description = "Позволяет изменить данные авторизованного пользователя")
-    public UserResponseDTO updateCurrentUser(Principal principal,
-                                             @Valid @RequestBody UserUpdateDTO userUpdateDTO) {
+    public UserResponseDTO updateCurrentUser(Principal principal, @Valid @RequestBody UserUpdateDTO userUpdateDTO) {
         return userFacadeService.updateCurrentUser(principal, userUpdateDTO);
     }
 
@@ -183,6 +158,5 @@ public class UserController {
     public InformationDTO deleteCurrentUser(Principal principal, HttpServletRequest request) {
         return userFacadeService.deleteCurrentUser(principal, request);
     }
-
 
 }

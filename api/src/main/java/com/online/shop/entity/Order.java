@@ -3,7 +3,15 @@ package com.online.shop.entity;
 import com.online.shop.enums.OrderStatus;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 import java.util.List;
 import java.util.Objects;
@@ -56,23 +64,6 @@ public class Order extends AbstractEntity {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "goods_id"))
     private List<Goods> goodsInOrder;
-
-    /**
-     * Конфигурация заказа при его создании
-     */
-    @PrePersist
-    public void createOrder() {
-        amount = goodsInOrder.stream().mapToDouble(Goods::getPrice).sum();
-        status = OrderStatus.CREATED;
-    }
-
-    /**
-     * Конфигурация заказа при его обновлении
-     */
-    @PreUpdate
-    public void updateOrder() {
-        amount = goodsInOrder.stream().mapToDouble(Goods::getPrice).sum();
-    }
 
     public Order() {
     }
@@ -198,4 +189,5 @@ public class Order extends AbstractEntity {
             return new Order(this);
         }
     }
+
 }

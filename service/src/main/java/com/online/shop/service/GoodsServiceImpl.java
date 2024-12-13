@@ -2,11 +2,16 @@ package com.online.shop.service;
 
 import com.online.shop.dao.GoodsRepository;
 import com.online.shop.entity.Goods;
+import com.online.shop.entity.User;
 import com.online.shop.exception_handling.CommonRuntimeException;
 import com.online.shop.exception_handling.ErrorCode;
+import com.online.shop.util.PriceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +24,9 @@ public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private GoodsRepository goodsRepository;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * Выборка товара по id
      *
@@ -29,7 +37,7 @@ public class GoodsServiceImpl implements GoodsService {
     public Goods findById(UUID id) {
         return goodsRepository.findGoodsById(id)
                 .orElseThrow(() -> new CommonRuntimeException(
-                        ErrorCode.ENTITY_NOT_FOUND,
+                        ErrorCode.NOT_FOUND,
                         String.format("Товар с ID %s не найден", id))
                 );
     }
@@ -43,7 +51,7 @@ public class GoodsServiceImpl implements GoodsService {
     public List<Goods> findAll() {
         List<Goods> goods = goodsRepository.findAllGoods();
         if (goods.isEmpty()) {
-            throw new CommonRuntimeException(ErrorCode.ENTITY_NOT_FOUND, "Ни один товар не найден в БД");
+            throw new CommonRuntimeException(ErrorCode.NOT_FOUND, "Ни один товар не найден в БД");
         }
         return goods;
     }
@@ -59,7 +67,7 @@ public class GoodsServiceImpl implements GoodsService {
         List<Goods> goods = goodsRepository.findAllGoodsByName(name);
         if (goods.isEmpty()) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_NOT_FOUND,
+                    ErrorCode.NOT_FOUND,
                     String.format("Ни один товар не найден по названию '%s'", name)
             );
         }
@@ -74,12 +82,40 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void save(Goods goods) {
         if (goods == null) {
-            throw new CommonRuntimeException(
-                    ErrorCode.OBJECT_REFERENCE_IS_NULL,
-                    "Goods: предан пустой объект для сохранения"
-            );
+            throw new CommonRuntimeException(ErrorCode.BAD_REQUEST, "Goods: предан пустой объект для сохранения");
         }
         goodsRepository.save(goods);
+    }
+
+    /**
+     * Добавление товара в корзину текущего покупателя
+     *
+     * @param id идентификатор товара {@link UUID}
+     * @param quantity количество товара для добавления
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     * {@link List} - список всех товаров {@link Goods} в корзине авторизованного пользователя
+     */
+    @Override
+    @Transactional
+    public List<Goods> addToCurrentUserCart(UUID id, int quantity, Principal principal) {
+        if (quantity <= 0) {
+            throw new CommonRuntimeException(ErrorCode.BAD_REQUEST, "Недопустимое количество товаров: " + quantity);
+        }
+        User user = userService.getCurrentUser(principal);
+        Goods goods = findById(id);
+        int goodsQuantityInCart = Collections.frequency(userService.getActualCart(user), goods);
+        if (goods.getCount() < (goodsQuantityInCart + quantity)) {
+            throw new CommonRuntimeException(
+                    ErrorCode.BAD_REQUEST,
+                    String.format("Недостаточно товаров на складе: доступно %d, требуется %d",
+                            goods.getCount() - goodsQuantityInCart,
+                            quantity)
+            );
+        }
+        List<Goods> goodsInCart = user.getGoodsInCart();
+        goodsInCart.addAll(Collections.nCopies(quantity, goods));
+        userService.update(user);
+        return user.getGoodsInCart();
     }
 
     /**
@@ -91,9 +127,23 @@ public class GoodsServiceImpl implements GoodsService {
     public void deleteById(UUID id) {
         if (goodsRepository.deleteGoodsById(id) == 0) {
             throw new CommonRuntimeException(
-                    ErrorCode.ENTITY_DELETION_FAILED,
+                    ErrorCode.INTERNAL_SERVER_ERROR,
                     String.format("Товар с ID %s не найден или не может быть удалён", id)
             );
         }
     }
+
+    /**
+     * Получение общей стоимости товаров из списка
+     *
+     * @param goodsList список товаров {@link List}
+     * @return общая стоимость товаров
+     */
+    @Override
+    public double getGoodsListTotalPrice(List<Goods> goodsList) {
+        return PriceUtils.formatPrice(goodsList.stream()
+                .mapToDouble(goods -> PriceUtils.getDiscountedPrice(goods.getPrice(), goods.getPercentageDiscount()))
+                .sum());
+    }
+
 }

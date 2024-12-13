@@ -23,6 +23,14 @@ public interface UserService extends BaseService<User>, UserDetailsService {
     User getCurrentUser(Principal principal);
 
     /**
+     * Получение актуальной корзины с учетом количества товаров на складе
+     *
+     * @param user сущность Пользователь
+     * @return {@link List} - список всех товаров {@link Goods} в корзине пользователя после актуализации
+     */
+    List<Goods> getActualCart(User user);
+
+    /**
      * Выборка всех товаров в корзине пользователя
      *
      * @param id идентификатор пользователя {@link UUID}
@@ -37,13 +45,6 @@ public interface UserService extends BaseService<User>, UserDetailsService {
      * @return {@link List} - список всех товаров {@link Goods} в корзине авторизованного пользователя
      */
     List<Goods> findAllGoodsInCurrentUserCart(Principal principal);
-
-    /**
-     * Получение общей стоимости товаров в корзине пользователя
-     * @param id идентификатор пользователя {@link UUID}
-     * @return Общая стоимость товаров в корзине пользователя
-     */
-    double getAmountOfGoodsInUserCart(UUID id);
 
     /**
      * Выборка пользователей по состоянию(активен или заблокирован) аккаунта
@@ -66,6 +67,13 @@ public interface UserService extends BaseService<User>, UserDetailsService {
      * @param user сущность Пользователь {@link User}
      */
     void update(User user);
+
+    /**
+     * Очистка корзины авторизованного пользователя
+     *
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     */
+    void clearCurrentUserCart(Principal principal);
 
     /**
      * Удаление авторизованного пользователя с завершением сессии

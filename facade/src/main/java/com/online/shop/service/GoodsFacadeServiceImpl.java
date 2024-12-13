@@ -4,6 +4,7 @@ import com.online.shop.dto.request.creation.GoodsCreationDTO;
 import com.online.shop.dto.request.update.GoodsUpdateDTO;
 import com.online.shop.dto.response.GoodsResponseDTO;
 import com.online.shop.dto.response.InformationDTO;
+import com.online.shop.dto.response.SelectedGoodsDTO;
 import com.online.shop.entity.Goods;
 import com.online.shop.entity.GoodsCategory;
 import com.online.shop.mapper.GoodsMapper;
@@ -11,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -97,6 +100,20 @@ public class GoodsFacadeServiceImpl implements GoodsFacadeService {
         goodsMapper.updateEntityFromDto(goodsUpdateDTO, goods);
         goodsService.save(goods);
         return goodsMapper.toDTO(goods);
+    }
+
+    /**
+     * Добавление товара по его id в корзину авторизованного пользователя
+     *
+     * @param id идентификатор товара {@link UUID}
+     * @param quantity количество товара
+     * @param principal информация об авторизованном пользователе {@link Principal}
+     * @return {@link Set} - список всех товаров {@link GoodsResponseDTO} в корзине пользователя
+     */
+    @Override
+    @Transactional
+    public Set<SelectedGoodsDTO> addToCurrentUserCart(UUID id, int quantity, Principal principal) {
+        return goodsMapper.toSelectedGoodsDTOSet(goodsService.addToCurrentUserCart(id, quantity, principal));
     }
 
     /**
